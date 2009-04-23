@@ -1,0 +1,17 @@
+<config>
+    <site name="*">
+        <option name="searchpath">
+            /home/simeng/aether/;
+        </option>
+        <option name="version">1.0</option>
+        <urlRules>
+            <rule match="">
+                <option name="additive" mode="add">ugh;agh</option>
+                <option name="additive" mode="del">agh</option>
+                <template id="98">splash_controller</template>
+                <section>Generic</section>
+                <module>AetherSplashScreen</module>
+            </rule>
+        </urlRules>
+    </site>
+</config>
