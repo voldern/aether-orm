@@ -25,7 +25,6 @@ dojo.declare("modules.AutoSave", null, {
     attachEvents: function() {
         for (var field in this.fields) {
             dojo.forEach(this.fields[field], dojo.hitch(this, function(node) {
-                console.log(node);
                 dojo.connect(node, "onblur", dojo.hitch(this, "save"));
             }));
         }
@@ -37,9 +36,15 @@ dojo.declare("modules.AutoSave", null, {
         while (form.tagName != "FORM") {
             form = form.parentNode;
         }
-        dojo.xhrPost({
+
+        dojo.xhr(dojo.attr(form, "method"), {
+            handleAs: "json",
+            url: dojo.attr(form, "action"),
             form: form,
-            url: dojo.attr(form, "action")
+            handle: function(response) {
+                console.log(form);
+                console.log(response);
+            }
         });
     },
 });
