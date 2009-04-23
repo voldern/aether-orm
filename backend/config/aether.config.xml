@@ -8,7 +8,7 @@
             <rule match="">
                 <option name="additive" mode="add">ugh;agh</option>
                 <option name="additive" mode="del">agh</option>
-                <template id="98">splash_controller</template>
+                <template>splash_controller.tpl</template>
                 <section>Generic</section>
                 <module>AetherSplashScreen</module>
             </rule>
