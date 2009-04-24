@@ -7,4 +7,4 @@
  * @author Espen Volden
  */
 
-exit(1);
+exit(0);
