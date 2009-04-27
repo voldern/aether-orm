@@ -60,7 +60,9 @@ class PriceguideUser extends ActiveRecord {
     }
 
     /**
-     * Log the user out and unset all authInfo
+     * Log the user out and unset all authInfo.
+     * NB: This function exits the current execution of the script and
+     * redirects back to the $referer via auth.tek.no.
      *
      * @param string $referer
      */
