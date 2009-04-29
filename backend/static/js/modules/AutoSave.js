@@ -39,12 +39,11 @@ dojo.declare("modules.AutoSave", null, {
 
         dojo.xhr(dojo.attr(form, "method"), {
             handleAs: "json",
-            url: dojo.attr(form, "action"),
             form: form,
             handle: function(response) {
                 console.log(form);
                 console.log(response);
             }
-        });
+        }, (dojo.attr(form, "method") == "post") ? true : false);
     },
 });
