@@ -1,11 +1,17 @@
 <config>
     <site name="*">
         <option name="searchpath">
-            /home/simeng/aether/;
+            /home/raymond/aether-free/;
+            /home/raymond/prisguide/backend/;
         </option>
-        <option name="version">1.0</option>
         <urlRules>
             <rule match="">
+                <template>generic.tpl</template>
+                <section>Generic</section>
+                <module>Header</module>
+                <module>Footer</module>
+            </rule>
+            <rule match="splash">
                 <option name="additive" mode="add">ugh;agh</option>
                 <option name="additive" mode="del">agh</option>
                 <template>splash_controller.tpl</template>
