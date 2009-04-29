@@ -1,13 +1,13 @@
 <?php
 
 class PriceguideEntity extends ActiveRecord {
-    private $id;
-    private $created_at;
-    private $replaced_by_entity_id;
-    private $published_at;
-    private $modified_at;
-    private $deleted_at;
-    private $title;
+    protected $id;
+    protected $created_at;
+    protected $replaced_by_entity_id;
+    protected $published_at;
+    protected $modified_at;
+    protected $deleted_at;
+    protected $title;
 
     public $tableInfo = array(
         'database' => 'pg2_backend',
