@@ -58,7 +58,7 @@ dojo.declare("modules.AutoSave", null, {
                 dojo.removeAttr(tNode, "disabled");
             }
         }, (dojo.attr(form, "method") == "post"));
-        if (this.evt)
+        if (this.ev)
             dojo.disconnect(this.ev);
     },
 });
