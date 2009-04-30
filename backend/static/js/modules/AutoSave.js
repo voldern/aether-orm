@@ -27,8 +27,10 @@ dojo.declare("modules.AutoSave", null, {
         for (var field in this.fields) {
             dojo.forEach(this.fields[field], dojo.hitch(this, function(node) {
                 dojo.connect(node, "onchange", dojo.hitch(this, function(evt) {
-                    if (node.type == "checkbox" || (node.type == "radio" && node.checked === true)) {
-                        this.save(evt);
+                    if (node.type == "checkbox" || 
+                            (node.type == "radio" && node.checked === true) ||
+                            node.tagName == "SELECT") {
+                                this.save(evt);
                     }
                     else {
                         this.ev = dojo.connect(node, "onblur", dojo.hitch(this, "save"));
@@ -41,6 +43,8 @@ dojo.declare("modules.AutoSave", null, {
         var tNode = evt.target,
         form = tNode.parentNode,
         load = dojo.place(dojo.create("img", { src: "http://mads.zerg.no/projects/pg2/backend/static/js/modules/spin.gif" }), tNode, "after");
+
+        // Traverse to find the correct parentNode
         while (form.tagName != "FORM")
             form = form.parentNode;
 
