@@ -26,8 +26,13 @@ dojo.declare("modules.AutoSave", null, {
     attachEvents: function() {
         for (var field in this.fields) {
             dojo.forEach(this.fields[field], dojo.hitch(this, function(node) {
-                dojo.connect(node, "onchange", dojo.hitch(this, function() {
-                    this.ev = dojo.connect(node, "onblur", dojo.hitch(this, "save"));
+                dojo.connect(node, "onchange", dojo.hitch(this, function(evt) {
+                    if (node.type == "checkbox" || (node.type == "radio" && node.checked === true)) {
+                        this.save(evt);
+                    }
+                    else {
+                        this.ev = dojo.connect(node, "onblur", dojo.hitch(this, "save"));
+                    }
                 }));
             }));
         }
@@ -35,7 +40,7 @@ dojo.declare("modules.AutoSave", null, {
     save: function(evt) {
         var tNode = evt.target,
         form = tNode.parentNode,
-        load = dojo.place(dojo.create("img", { src: "http://static.tek.no/images/main/spinner.gif" }), tNode, "after");
+        load = dojo.place(dojo.create("img", { src: "http://mads.zerg.no/projects/pg2/backend/static/js/modules/spin.gif" }), tNode, "after");
         while (form.tagName != "FORM")
             form = form.parentNode;
 
@@ -46,8 +51,10 @@ dojo.declare("modules.AutoSave", null, {
                 console.log(form);
                 console.log(response);
                 dojo.destroy(load);
+                dojo.removeAttr(tNode, "disabled");
             }
         }, (dojo.attr(form, "method") == "post") ? true : false);
-        dojo.disconnect(this.ev);
+        if (this.evt)
+            dojo.disconnect(this.ev);
     },
 });
