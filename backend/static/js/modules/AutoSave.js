@@ -25,7 +25,9 @@ dojo.declare("modules.AutoSave", null, {
     attachEvents: function() {
         for (var field in this.fields) {
             dojo.forEach(this.fields[field], dojo.hitch(this, function(node) {
-                dojo.connect(node, "onblur", dojo.hitch(this, "save"));
+                dojo.connect(node, "onchange", dojo.hitch(this, function() {
+                    dojo.connect(node, "onblur", dojo.hitch(this, "save"));
+                }));
             }));
         }
     },
