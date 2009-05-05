@@ -16,21 +16,33 @@ require_once(PG_PATH . 'backend/lib/Work.php');
 
 class Manifestation extends ActiveRecord {
     protected $id;
+    protected $workId;
+    protected $title;
+    protected $createdAt;
+    protected $modifiedAt;
+    protected $publishedAt;
+    protected $deletedAt;
+    protected $replaces;
 
     public $tableInfo = array(
         'database' => 'pg2_backend',
         'table' => 'manifestation_view',
         'keys' => array(
-            'id' => 'id',
-            'work_id' => 'work_id'
+            'id' => 'id'
         ),
         'indexes' => array(
             'id' => 'id',
-            'work_id' => 'work_id'
+            'work_id' => 'workId'
         ),
         'fields' => array(
             'id' => 'id',
-            'work_id' => 'work_id'
+            'work_id' => 'workId',
+            'title' => 'title',
+            'created_at' => 'createdAt',
+            'modified_at' => 'modifiedAt',
+            'published_at' => 'publishedAt',
+            'deleted_at' => 'deletedAt',
+            'replaces_entity_id' => 'replaces'
         ),
         'relations' => array(
             'entity' => array(

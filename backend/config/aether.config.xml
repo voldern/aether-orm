@@ -15,6 +15,11 @@
                     <section>Generic</section>
                     <module provides="content">ProductAdd</module>
                 </rule>
+                <rule pattern="/[0-9]+/" store="product_id">
+                    <template>generic.tpl</template>
+                    <section>Generic</section>
+                    <module provides="content">Product</module>
+                </rule>
                 <rule match="">
                     <template>splash_controller.tpl</template>
                     <section>Generic</section>
