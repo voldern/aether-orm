@@ -1,3 +1,15 @@
+/**
+ * PRICEGUIDE BACKEND CSS
+ *
+ * Author: Mads Erik Forberg <mads@hardware.no>
+ *
+ */
+
+
+/**
+ * General element styling
+ *
+ */
 * {
     margin: 0;
     padding: 0;
@@ -5,6 +17,11 @@
     font-family: Georgia, sans-serif;
     font-size: 10pt;
 }
+
+body {
+    font-family: Arial, Verdana, sans-serif;
+}
+
 a {
     font-size: 14pt;
     text-decoration: none;
@@ -12,6 +29,42 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+
+/**
+ * Helper classes
+ *
+ */
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+html[xmlns] .clearfix {
+    display: block;
+}
+
+* html .clearfix {
+    height: 1%;
+}
+
+.clear {
+    clear: both;
+}
+
+.clearL {
+    clear: left;
+}
+
 #header {
     width: 100%;
     height: 50px;
@@ -31,7 +84,4 @@ a:hover {
 /* CONTENT */
 #content {
     padding: 15px;
-}
-h1 {
-    font-size: 20pt;
 }
