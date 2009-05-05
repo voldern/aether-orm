@@ -74,5 +74,23 @@ class Manifestation extends ActiveRecord {
             throw new Exception("Work has no ID, halting");
         }
     }
+    
+    /**
+     * Disable save for now
+     *
+     * @return void
+     */
+    public function save() {
+        throw new Exception("Saving is disabled");
+    }
+    
+    /**
+     * Disable delete
+     *
+     * @return void
+     */
+    public function delete() {
+        throw new Exception("Deleting is disabled");
+    }
 }
 ?>
