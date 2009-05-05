@@ -5,21 +5,22 @@ require_once('PHPUnit/Framework.php');
 require_once(PG_PATH . 'backend/lib/Work.php');
 require_once(LIB_PATH . 'Database.php');
 
-class PriceguideWorkTest extends PHPUnit_Framework_TestCase {
+class WorkTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Test the PriceguideWork::create function
      */
     public function testCreateWork() {
         $db = new Database('pg2_backend');
-        $work = new PriceguideWork;
+        $work = new Work;
         $published_at = '2010-01-01';
         $created_at = date('Y-m-d');
-        $id = $work->create('GeForce 6600', $published_at);
+        $title = 'GeForce 6600';
+        $work = Work::create($title);
+        $id = $work->get('id');
 
-        $entity = $db->queryRowf('SELECT * FROM entity WHERE id = ?', $id);
-        $this->assertEquals('GeForce 6600', $entity['title']);
-        $this->assertEquals($published_at, $entity['published_at']);
+        $entity = $db->queryRowf('SELECT * FROM work_view WHERE id = ?', $id);
+        $this->assertEquals($title, $entity['title']);
         $this->assertEquals($created_at, $entity['created_at']);
         $this->assertEquals($created_at, $entity['modified_at']);
         // Delete entry
