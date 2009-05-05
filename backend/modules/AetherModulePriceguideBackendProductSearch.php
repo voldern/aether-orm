@@ -10,10 +10,17 @@ require_once(LIB_PATH . 'image/NewImage.php');
  * 
  * Created: 2009-05-04
  * @author Simen Graaten
- * @package
+ * @package pg2.backend
  */
 
 class AetherModulePriceguideBackendProductSearch extends AetherModule {
+    /**
+     * Search service:
+     *   GET: service=qs
+     *        module=PriceguideBackendProductSearch
+     *        query=te (part of keyword)
+     *        limit=5 (limit)
+     */
     public function service($name) {
         $return = array();
         $options = $this->sl->get('aetherConfig')->getOptions();
@@ -35,6 +42,13 @@ class AetherModulePriceguideBackendProductSearch extends AetherModule {
         return new AetherXMLResponse(array('return' => $return));
     }
 
+    /**
+     * Do a quicksearch query against netsprint for parts of the productname
+     *
+     * @param string $query
+     * @param int $limit
+     * @return array
+     */
     private function doProductSearch($query, $limit = 6) {
         // Create completing query string
         $query .= "*";
