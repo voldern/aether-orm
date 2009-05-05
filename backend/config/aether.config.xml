@@ -5,11 +5,23 @@
             /home/raymond/prisguide/backend/;
         </option>
         <urlRules>
+            <section>Generic</section>
+            <module provides="header">Header</module>
+            <module provides="footer">Footer</module>
             <rule match="">
                 <template>generic.tpl</template>
-                <section>Generic</section>
-                <module>Header</module>
-                <module>Footer</module>
+            </rule>
+            <rule match="product">
+                <rule match="add">
+                    <template>generic.tpl</template>
+                    <section>Generic</section>
+                    <module provides="content">ProductAdd</module>
+                </rule>
+                <rule match="">
+                    <template>splash_controller.tpl</template>
+                    <section>Generic</section>
+                    <module>AetherSplashScreen</module>
+                </rule>
             </rule>
             <rule match="splash">
                 <option name="additive" mode="add">ugh;agh</option>
