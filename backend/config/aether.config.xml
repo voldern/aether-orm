@@ -1,8 +1,8 @@
 <config>
     <site name="*">
         <option name="searchpath">
-            /home/raymond/aether-free/;
-            /home/raymond/prisguide/backend/;
+            /home/simeng/aether/;
+            /home/simeng/public_html/pg2/backend/aether/;
         </option>
         <urlRules>
             <section>Generic</section>
@@ -21,6 +21,7 @@
                     <template>splash_controller.tpl</template>
                     <section>Generic</section>
                     <module>AetherSplashScreen</module>
+                    <module>PriceguideBackendProductSearch</module>
                 </rule>
             </rule>
             <rule match="splash">
