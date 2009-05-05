@@ -7,14 +7,26 @@ require_once(PG_PATH . 'backend/lib/Entity.php');
 
 class Work extends ActiveRecord {
     protected $id;
+    protected $title;
+    protected $createdAt;
+    protected $replacesEntityId;
+    protected $modifiedAt;
+    protected $deletedAt;
+    protected $publishedAt;
 
     public $tableInfo = array(
         'database' => 'pg2_backend',
-        'table' => 'work',
-        'keys' => array('entity_id' => 'id'),
-        'indexes' => array('entity_id' => 'id'),
+        'table' => 'work_view',
+        'keys' => array('id' => 'id'),
+        'indexes' => array('id' => 'id'),
         'fields' => array(
-            'entity_id' => 'id',
+            'id' => 'id',
+            'title' => 'title',
+            'created_at' => 'createdAt',
+            'replaces_entity_id' => 'replacesEntityId',
+            'modified_at' => 'modifiedAt',
+            'deleted_at' => 'deletedAt',
+            'published_at' => 'publishedAt'
             ),
         'relations' => array(
             'entity' => array(
@@ -27,11 +39,11 @@ class Work extends ActiveRecord {
         );
     
     /**
-     * Creates a new work and returns the entity_id
+     * Creates a new work and returns it
      *
      * @param $title string
      * @param $published_at string
-     * @return id The id of the entity
+     * @return work Work
      */
     static public function create($title, $published_at = null) {
         $db = new Database('pg2_backend');
@@ -44,7 +56,6 @@ class Work extends ActiveRecord {
         // The object now represents a row in the database
         $work = new Work;
         $work->set('id', $id);
-        $work->untaint();
 
         return $work;
     }
