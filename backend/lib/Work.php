@@ -5,7 +5,7 @@ require_once(LIB_PATH . 'Database.php');
 require_once(LIB_PATH . 'ActiveRecord.php');
 require_once(PG_PATH . 'backend/lib/Entity.php');
 
-class PriceguideWork extends ActiveRecord {
+class Work extends ActiveRecord {
     protected $id;
 
     public $tableInfo = array(
@@ -33,17 +33,19 @@ class PriceguideWork extends ActiveRecord {
      * @param $published_at string
      * @return id The id of the entity
      */
-    public function create($title, $published_at = 'NULL') {
+    static public function create($title, $published_at = null) {
         $db = new Database('pg2_backend');
         // Creation time is now obviously
         $created_at = date('Y-m-d');
-        $this->id = $db->queryValuef("SELECT create_work(?, ?, ?)",
+        $id = $db->queryValuef("SELECT create_work(?, ?, ?)",
                                      $title, $created_at, $published_at);
 
         // We have all the information we need at this point.
         // The object now represents a row in the database
-        $this->untaint();
+        $work = new Work;
+        $work->set('id', $id);
+        $work->untaint();
 
-        return $this->id;
+        return $work;
     }
 }
