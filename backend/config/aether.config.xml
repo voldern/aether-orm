@@ -1,9 +1,6 @@
 <config>
     <site name="*">
-        <option name="searchpath">
-            /home/simeng/aether/;
-            /home/simeng/public_html/pg2/backend/;
-        </option>
+        <import>searchpath.xml</import>
         <urlRules>
             <section>Generic</section>
             <module provides="header">Header</module>
