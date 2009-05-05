@@ -1,3 +1,15 @@
+/**
+ * Dojo module for attaching autosaving
+ * Use:
+ * dojo.require("modules.AutoSave");
+ * dojo.addOnLoad(function() {
+ *  var auto = new modules.AutoSave;
+ *  auto.findNodes();
+ *  auto.attachEvents();
+ * });
+ *
+ */
+
 dojo.provide("modules.AutoSave");
 
 dojo.declare("modules.AutoSave", null, {
@@ -10,6 +22,8 @@ dojo.declare("modules.AutoSave", null, {
     constructor: function() {
     },
     ev: null,
+
+    // Find all nodes with autosave class inside a form with autosaveForm class
     findNodes: function() {
         dojo.query("form.autosaveForm")
             .forEach(dojo.hitch(this, function(form) {
@@ -23,6 +37,8 @@ dojo.declare("modules.AutoSave", null, {
                     }));
         }));
     },
+
+    // Attach saving method on all elements with found in this.findNodes. But only save if element has changed value
     attachEvents: function() {
         for (var field in this.fields) {
             dojo.forEach(this.fields[field], dojo.hitch(this, function(node) {
@@ -39,6 +55,8 @@ dojo.declare("modules.AutoSave", null, {
             }));
         }
     },
+
+    // Save method, xhrGet/Post based on the parent form action attr
     save: function(evt) {
         var tNode = evt.target,
         form = tNode.parentNode,

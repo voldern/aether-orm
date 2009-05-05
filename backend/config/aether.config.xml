@@ -1,15 +1,13 @@
 <config>
     <site name="*">
-        <option name="searchpath">
-            /home/raymond/aether-free/;
-            /home/raymond/prisguide/backend/;
-        </option>
+        <import>searchpath.xml</import>
         <urlRules>
             <section>Generic</section>
             <module provides="header">Header</module>
             <module provides="footer">Footer</module>
             <rule match="">
                 <template>generic.tpl</template>
+                <module>PriceguideBackendProductSearch</module>
             </rule>
             <rule match="product">
                 <rule match="add">
