@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>{$title}</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css" />
 </head>
 <body>
 <div id="header">
@@ -10,3 +11,4 @@
         <li><a href="/product/add">Add product</a></li>
     </ul>
 </div>
+<div id="content">
