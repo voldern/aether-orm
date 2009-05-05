@@ -15,7 +15,7 @@ class WorkTest extends PHPUnit_Framework_TestCase {
         $work = new Work;
         $published_at = '2010-01-01';
         $created_at = date('Y-m-d');
-        $title= ' GeForce 6600';
+        $title = 'GeForce 6600';
         $work = Work::create($title);
         $id = $work->get('id');
 
