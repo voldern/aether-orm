@@ -1,6 +1,6 @@
 <?php
 
-class PriceguideEntity extends ActiveRecord {
+class Entity extends ActiveRecord {
     protected $id;
     protected $created_at;
     protected $replaced_by_entity_id;
