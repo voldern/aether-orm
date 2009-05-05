@@ -39,7 +39,7 @@ class AetherModulePriceguideBackendProductSearch extends AetherModule {
             }
         }
 
-        return new AetherXMLResponse(array('return' => $return));
+        return new AetherJSONResponse(array('return' => $return));
     }
 
     /**

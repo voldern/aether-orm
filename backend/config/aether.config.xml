@@ -2,7 +2,7 @@
     <site name="*">
         <option name="searchpath">
             /home/simeng/aether/;
-            /home/simeng/public_html/pg2/backend/aether/;
+            /home/simeng/public_html/pg2/backend/;
         </option>
         <urlRules>
             <section>Generic</section>
@@ -10,6 +10,7 @@
             <module provides="footer">Footer</module>
             <rule match="">
                 <template>generic.tpl</template>
+                <module>PriceguideBackendProductSearch</module>
             </rule>
             <rule match="product">
                 <rule match="add">
@@ -21,7 +22,6 @@
                     <template>splash_controller.tpl</template>
                     <section>Generic</section>
                     <module>AetherSplashScreen</module>
-                    <module>PriceguideBackendProductSearch</module>
                 </rule>
             </rule>
             <rule match="splash">
