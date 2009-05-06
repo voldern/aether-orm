@@ -146,7 +146,14 @@ html[xmlns] .clearfix {
 }
 
 #header #menu a {
+    display: block;
     color: #fff;
+}
+
+#header #menu .selected {
+    background-color: #fff;
+    color: #000;
+    padding: 6px;
 }
 
 /* CONTENT */
