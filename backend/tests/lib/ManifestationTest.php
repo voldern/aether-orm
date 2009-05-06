@@ -16,13 +16,16 @@ class ManifestationTest extends PHPUnit_Framework_TestCase {
         $work = Work::create('GeForce 6600');
         $manifestation = Manifestation::create($work, $title);
         $id = $manifestation->get('id');
+        $workId = $work->get('id');
 
         $entity = $db->queryRowf(
             'SELECT * FROM manifestation_view WHERE id = ?',$id);
 
         $this->assertEquals($title, $entity['title']);
         // Delete entry
-        $db->query("DELETE FROM manifestation WHERE entity_id = $id");
         $db->query("DELETE FROM entity WHERE id = $id");
+        $db->query("DELETE FROM entity WHERE id = $workId");
+        $db->query("DELETE FROM manifestation WHERE entity_id = $id");
+        $db->query("DELETE FROM work WHERE entity_id = $workId");
     }
 }
