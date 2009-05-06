@@ -114,8 +114,20 @@ html[xmlns] .clearfix {
     width: 500px;
 }
 
+.grid.four {
+    width: 300px;
+}
+
 .grid.half {
     width: 50%;
+}
+
+.grid.twoThirds {
+    width: 70%;
+}
+
+.grid.oneThirds {
+    width: 30%;
 }
 
 .grid.stdMarginL {
