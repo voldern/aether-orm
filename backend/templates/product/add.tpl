@@ -15,3 +15,4 @@
     </fieldset>
 </form>
 </div>
+<div class="clear"></div>

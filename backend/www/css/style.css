@@ -173,3 +173,18 @@ html[xmlns] .clearfix {
     padding: 15px;
 }
 
+ul {
+    list-style: none;
+}
+ul>li {
+    padding-top: 5px;
+}
+ul li ul {
+    margin-left: 2em;
+}
+ul span {
+    padding-top: 5px;
+    color: #999;
+    left: 180px;
+    position:absolute;
+}

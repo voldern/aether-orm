@@ -25,7 +25,27 @@ class AetherModuleProductLatest extends AetherModule {
                 'created_at' => 'desc')
             )
         );
-        var_dump($works);
+        $wrks = array();
+        foreach ($works->getAll() as $w) {
+            $manifestations = $w->get('manifestations')->getAll();
+            $manis = array();
+            if (count($manifestations) > 1) {
+                foreach ($manifestations as $m) {
+                    $manis[] = array(
+                        'id' => $m->get('id'),
+                        'title' => $m->get('title'),
+                        'created' => $m->get('createdAt'),
+                    );
+                }
+            }
+            $wrks[] = array(
+                'id' => $w->get('id'),
+                'title' => $w->get('title'),
+                'created' => $w->get('createdAt'),
+                'manifestations' => $manis
+            );
+        }
+        $tpl->set('works', $wrks);
         return $tpl->fetch('product/latest.tpl');
     }
 }
