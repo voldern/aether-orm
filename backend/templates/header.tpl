@@ -11,4 +11,4 @@
         <li><a href="/product/add">Add product</a></li>
     </ul>
 </div>
-<div id="content">
+<div id="content" class="clearfix">

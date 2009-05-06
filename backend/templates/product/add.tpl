@@ -1,3 +1,4 @@
+<div class="grid one">
 <form action="/product/add" method="get">
     <fieldset>
         <legend>Add product</legend>
@@ -11,3 +12,4 @@
         <button type="submit">Save</button>
     </fieldset>
 </form>
+</div>
