@@ -29,6 +29,30 @@ a:hover {
     text-decoration: underline;
 }
 
+fieldset {
+    border: 1px solid #000;
+    padding: 15px;
+}
+
+fieldset legend {
+    border: 1px solid #ccc;
+    background-color: #eee;
+    padding: 4px 6px;
+    font-weight: bold;
+}
+
+label {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+input {
+    margin: 0 0 10px 6px;
+}
+
+input[type=submit] {
+}
+
 
 /**
  * Helper classes
