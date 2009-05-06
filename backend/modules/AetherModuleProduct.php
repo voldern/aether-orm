@@ -2,7 +2,7 @@
 require_once(PG_PATH . 'backend/lib/Manifestation.php');
 /**
  * 
- * Raymond Julin was too lazy to write a description and owes you a beer.
+ * Show a single product for editing
  * 
  * Created: 2009-05-05
  * @author Raymond Julin
@@ -21,9 +21,12 @@ class AetherModuleProduct extends AetherModule {
         $config = $this->sl->get('aetherConfig');
         $pid = $config->getUrlVar('product_id');
         if (isset($pid) AND is_numeric($pid)) {
-            $manifestation = new Manifestation($pid);
-            $title = $manifestation->get('title');
-            $tpl->set('title', $title);
+            $work = new Work($pid);
+            // Get manifestations
+            $manifestations = $work->get('manifestations')->getAll();
+            $tpl->set('manifestations', $manifestations);
+            $tpl->set('id', $work->get('id'));
+            $tpl->set('title', $work->get('title'));
         }
         return $tpl->fetch('product/product.tpl');
     }

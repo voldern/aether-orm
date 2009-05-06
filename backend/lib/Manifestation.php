@@ -22,7 +22,8 @@ class Manifestation extends ActiveRecord {
     protected $modifiedAt;
     protected $publishedAt;
     protected $deletedAt;
-    protected $replaces;
+    protected $replacedBy;
+    protected $neverEverCache = true;
 
     public $tableInfo = array(
         'database' => 'pg2_backend',
@@ -42,7 +43,7 @@ class Manifestation extends ActiveRecord {
             'modified_at' => 'modifiedAt',
             'published_at' => 'publishedAt',
             'deleted_at' => 'deletedAt',
-            'replaces_entity_id' => 'replaces'
+            'replaced_by_entity_id' => 'replacedBy'
         ),
         'relations' => array(
             'entity' => array(
