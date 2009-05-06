@@ -46,24 +46,20 @@ class Work extends ActiveRecord {
      * @return work Work
      */
     static public function create($title, $published_at = null) {
-        $db = new Database('pg2_backend');
-        // Creation time is now obviously
-        $created_at = date('Y-m-d');
-        $id = $db->queryValuef("SELECT create_work(?, ?, ?)",
-                                     $title, $created_at, $published_at);
-
-        // We have all the information we need at this point.
-        // The object now represents a row in the database
+        $created_at = date('Y-m-d H:i:s');
+        
         $work = new Work;
-        $work->set('id', $id);
-
+        $work->set('title', $title);
+        $work->set('createdAt', $created_at);
+        $work->set('modifiedAt', $created_at);
+        $work->set('publishedAt', $published_at);
+        $work->save();
+        
         return $work;
     }
 
     /**
      * Persist record to database
-     * Cannot use AR save function because its not possible
-     * to write to views
      *
      * @access public
      * @return bool
@@ -71,9 +67,7 @@ class Work extends ActiveRecord {
     public function save() {
         if ($this->dirty) {
             if ($this->tableInfoIsValid()) {
-                // Hack to get the tableinfo from the entity class
-                $info = new Entity;
-                $info = $info->tableInfo;
+                $info = $this->tableInfo;
                 if (count($info['keys']) == 1 AND current($info['keys']) == 'id') {
                     $primary = $this->get(current($info['keys']));
 
@@ -110,8 +104,12 @@ class Work extends ActiveRecord {
                     }
                 }
                 foreach ($info['fields'] as $key => $name) {
-                    if ($name !== 'id' AND ($mode == 'update' OR 
-                                            ($mode == 'insert' AND isset($this->$name)))) {
+                    if ($name !== 'id' AND 
+                            (
+                                $mode == 'update' OR 
+                                ($mode=='insert' AND isset($this->$name))
+                            )
+                        ) {
                         if ($this->$name !== null)
                             $qb->addSet($key, $this->$name);
                         else
@@ -130,7 +128,7 @@ class Work extends ActiveRecord {
                  * so this object is usable afterwards
                  */
                 if ($mode == 'insert' && in_array('id', $info['fields'])) {
-                    $this->set('id', $db->getLastInsertId());
+                    $this->set('id', $db->getLastInsertId('id', 'entity'));
                     $this->untaint();
                 }
                 $this->postSave();
