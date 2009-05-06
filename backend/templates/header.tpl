@@ -7,8 +7,8 @@
 <body>
 <div id="header">
     <ul id="menu">
-        <li><a href="/">Home</a></li>
-        <li><a href="/product/add">Add product</a></li>
+        <li><a href="/"{if $aether.options.selectedSection == 'home'} class="selected"{/if}>Home</a></li>
+        <li><a href="/product/add"{if $aether.options.selectedSection == 'addProduct'} class="selected"{/if}>Add product</a></li>
     </ul>
 </div>
 <div id="content" class="clearfix">

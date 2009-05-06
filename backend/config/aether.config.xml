@@ -9,11 +9,13 @@
                 <template>generic.tpl</template>
                 <module>PriceguideBackendProductSearch</module>
             </rule>
+            <option name="selectedSection">home</option>
             <rule match="product">
                 <rule match="add">
                     <template>generic.tpl</template>
                     <section>Generic</section>
                     <module provides="content">ProductAdd</module>
+                    <option name="selectedSection">addProduct</option>
                 </rule>
                 <rule pattern="/[0-9]+/" store="product_id">
                     <template>generic.tpl</template>
