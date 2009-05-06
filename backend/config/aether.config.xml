@@ -20,6 +20,7 @@
                     <template>products.tpl</template>
                     <section>Generic</section>
                     <module provides="add">ProductAdd</module>
+                    <module provides="latest">ProductLatest</module>
                     <option name="selectedSection">products</option>
                 </rule>
             </rule>

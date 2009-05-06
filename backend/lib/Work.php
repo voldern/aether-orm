@@ -9,7 +9,7 @@ class Work extends ActiveRecord {
     protected $id;
     protected $title;
     protected $createdAt;
-    protected $replacesEntityId;
+    protected $replacedByEntityId;
     protected $modifiedAt;
     protected $deletedAt;
     protected $publishedAt;
@@ -23,7 +23,7 @@ class Work extends ActiveRecord {
             'id' => 'id',
             'title' => 'title',
             'created_at' => 'createdAt',
-            'replaces_entity_id' => 'replacesEntityId',
+            'replaced_by_entity_id' => 'replacedEntityId',
             'modified_at' => 'modifiedAt',
             'deleted_at' => 'deletedAt',
             'published_at' => 'publishedAt'
