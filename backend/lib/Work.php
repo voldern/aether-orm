@@ -13,6 +13,9 @@ class Work extends ActiveRecord {
     protected $modifiedAt;
     protected $deletedAt;
     protected $publishedAt;
+    protected $manifestations;
+
+    protected $neverEverCache = true;
 
     public $tableInfo = array(
         'database' => 'pg2_backend',
@@ -23,20 +26,27 @@ class Work extends ActiveRecord {
             'id' => 'id',
             'title' => 'title',
             'created_at' => 'createdAt',
-            'replaced_by_entity_id' => 'replacedEntityId',
+            'replaced_by_entity_id' => 'replacedByEntityId',
             'modified_at' => 'modifiedAt',
             'deleted_at' => 'deletedAt',
             'published_at' => 'publishedAt'
-            ),
+        ),
         'relations' => array(
             'entity' => array(
-                'class' => 'PriceguideEntity',
+                'class' => 'Entity',
                 'type' => 'one',
                 'foreignKey' => 'id',
                 'localKey' => 'id'
-                )
-            )
-        );
+            ),
+            'manifestations' => array(
+                'class' => 'Manifestation',
+                'type' => 'many',
+                'linker' => 'pg2_backend.manifestation_view',
+                'foreignKey' => 'work_id',
+                'linkerKey' => 'id'
+            ),
+        )
+    );
     
     /**
      * Creates a new work and returns it

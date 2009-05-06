@@ -23,6 +23,7 @@ class Manifestation extends ActiveRecord {
     protected $publishedAt;
     protected $deletedAt;
     protected $replacedBy;
+    protected $neverEverCache = true;
 
     public $tableInfo = array(
         'database' => 'pg2_backend',
