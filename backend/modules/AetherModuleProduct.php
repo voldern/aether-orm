@@ -22,11 +22,11 @@ class AetherModuleProduct extends AetherModule {
         $pid = $config->getUrlVar('product_id');
         if (isset($pid) AND is_numeric($pid)) {
             $work = new Work($pid);
-            $title = $work->get('title');
             // Get manifestations
             $manifestations = $work->get('manifestations')->getAll();
             $tpl->set('manifestations', $manifestations);
-            $tpl->set('title', $title);
+            $tpl->set('id', $work->get('id'));
+            $tpl->set('title', $work->get('title'));
         }
         return $tpl->fetch('product/product.tpl');
     }

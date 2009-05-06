@@ -3,6 +3,9 @@
 <head>
     <title>{$title}</title>
     <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <script type="text/javascript" 
+        src="http://ajax.googleapis.com/ajax/libs/dojo/1.3.0/dojo/dojo.xd.js"></script>
+    <script type="text/javascript" src="/js/products.js"></script>
 </head>
 <body>
 <div id="header">
