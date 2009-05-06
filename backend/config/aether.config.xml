@@ -10,30 +10,20 @@
                 <module>PriceguideBackendProductSearch</module>
             </rule>
             <option name="selectedSection">home</option>
-            <rule match="product">
-                <rule match="add">
-                    <template>generic.tpl</template>
-                    <section>Generic</section>
-                    <module provides="content">ProductAdd</module>
-                    <option name="selectedSection">addProduct</option>
-                </rule>
+            <rule match="products">
                 <rule pattern="/[0-9]+/" store="product_id">
                     <template>generic.tpl</template>
                     <section>Generic</section>
                     <module provides="content">Product</module>
                 </rule>
                 <rule match="">
-                    <template>splash_controller.tpl</template>
+                    <template>products.tpl</template>
                     <section>Generic</section>
-                    <module>AetherSplashScreen</module>
+                    <module provides="add">ProductAdd</module>
+                    <option name="selectedSection">products</option>
                 </rule>
             </rule>
-            <rule match="splash">
-                <option name="additive" mode="add">ugh;agh</option>
-                <option name="additive" mode="del">agh</option>
-                <template>splash_controller.tpl</template>
-                <section>Generic</section>
-                <module>AetherSplashScreen</module>
+            <rule match="">
             </rule>
         </urlRules>
     </site>
