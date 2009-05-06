@@ -24,8 +24,17 @@ class AetherModuleProductAdd extends AetherModule {
             $title = $_GET['product_name'];
             $work = Work::create($title);
             $manifestation = Manifestation::create($work, $title);
-            $tpl->set('ok', true);
-            $tpl->set('title', $title);
+            // If it was ok, redirect to product page
+            if (is_numeric($manifestation->get('id'))) {
+                // Redirect
+                $id = $manifestation->get('id');
+                header("Location: /products/$id");
+            }
+            else {
+                $tpl->set('error', true);
+                $tpl->set('title', $title);
+            }
+
         }
         return $tpl->fetch('product/add.tpl');
     }
