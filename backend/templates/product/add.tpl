@@ -6,8 +6,7 @@
         <label class="notify">"{$title}" was not created due to some error</label>
         {/if}
         <label for="product_name">Name</label>
-        <input id="product_name" type="text" name="product_name" 
-            tabindex="1" />
+        <input id="product_name" type="text" name="product_name" />
         <br />
         <button type="submit">Save</button>
     </fieldset>
