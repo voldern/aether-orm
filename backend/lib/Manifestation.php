@@ -65,35 +65,32 @@ class Manifestation extends ActiveRecord {
         $db = new Database('pg2_backend');
         if (!$title)
             $title = $work->get('title');
-        if (!$published_at)
-            $published_at = date('Y-m-d');
         // Creation time is now obviously
-        $created_at = date('Y-m-d');
-        $id = $work->get('id');
-        if ($id) {
-            $id = $db->queryValuef("SELECT create_manifestation(?,?,?,?)",
-                $id, $title, $created_at, $published_at);
-
-            // We have all the information we need at this point.
-            // The object now represents a row in the database
-            $object = new Manifestation;
-            $object->set('id', $id);
-            $object->untaint();
-
-            return $object;
+        $created_at = date('Y-m-d H:i:s');
+        $workId = $work->get('id');
+        if ($workId) {
+            $mani = new Manifestation;
+            $mani->set('title', $title);
+            $mani->set('workId', $workId);
+            $mani->set('createdAt', $created_at);
+            $mani->set('modifiedAt', $created_at);
+            $mani->set('publishedAt', $published_at);
+            $mani->save();
+            return $mani;
         }
         else {
             throw new Exception("Work has no ID, halting");
         }
     }
-    
+
     /**
-     * Disable save for now
+     * Persist record to database
      *
-     * @return void
+     * @access public
+     * @return bool
      */
     public function save() {
-        throw new Exception("Saving is disabled");
+        parent::save('entity');
     }
     
     /**
