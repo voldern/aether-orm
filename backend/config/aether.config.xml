@@ -8,9 +8,13 @@
             <rule match="">
                 <template>generic.tpl</template>
                 <module>PriceguideBackendProductSearch</module>
+                <option name="selectedSection">home</option>
             </rule>
-            <option name="selectedSection">home</option>
             <rule match="products">
+                <option name="javascripts">
+                    /js/products.js;
+                </option>
+                <option name="selectedSection">products</option>
                 <rule pattern="/[0-9]+/" store="product_id">
                     <template>generic.tpl</template>
                     <section>Generic</section>
@@ -21,7 +25,6 @@
                     <section>Generic</section>
                     <module provides="add">ProductAdd</module>
                     <module provides="latest">ProductLatest</module>
-                    <option name="selectedSection">products</option>
                 </rule>
             </rule>
             <rule match="">

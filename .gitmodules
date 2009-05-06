@@ -1,0 +1,3 @@
+[submodule "backend/www/js/dojo"]
+	path = backend/www/js/dojo
+	url = ssh://git.hardware.no/git/dojo.git
