@@ -22,12 +22,15 @@ class AetherModuleProductAdd extends AetherModule {
         $tpl = $this->sl->getTemplate();
         if (array_key_exists('product_name',$_GET) && !empty($_GET['product_name'])) {
             $title = $_GET['product_name'];
-            $work = Work::create($title);
-            $manifestation = Manifestation::create($work, $title);
+            if (is_numeric($_GET['variants']) AND $_GET['variants'] > 0) {
+                $work = Work::create($title);
+                for ($i = $_GET['variants']; $i > 0; $i--)
+                    Manifestation::create($work, $title);
+            }
             // If it was ok, redirect to product page
-            if (is_numeric($manifestation->get('id'))) {
+            if (is_numeric($work->get('id'))) {
                 // Redirect
-                $id = $manifestation->get('id');
+                $id = $work->get('id');
                 header("Location: /products/$id");
             }
             else {

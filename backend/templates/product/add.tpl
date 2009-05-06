@@ -8,6 +8,9 @@
         <label for="product_name">Name</label>
         <input id="product_name" type="text" name="product_name" />
         <br />
+        <label for="variants">Antall varianter</label>
+        <input id="variants" type="text" name="variants" size="4" />
+        <br />
         <button type="submit">Save</button>
     </fieldset>
 </form>
