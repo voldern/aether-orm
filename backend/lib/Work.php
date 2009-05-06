@@ -74,7 +74,7 @@ class Work extends ActiveRecord {
      * @access public
      * @return bool
      */
-    public function save() {
+    public function save($idFromTable = 'entity') {
         parent::save('entity');
     }
 }

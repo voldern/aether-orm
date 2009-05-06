@@ -90,8 +90,8 @@ class Manifestation extends ActiveRecord {
      * @access public
      * @return bool
      */
-    public function save() {
-        parent::save('entity');
+    public function save($idFromTable = 'entity') {
+        parent::save($idFromTable);
     }
     
     /**
