@@ -29,4 +29,25 @@ class WorkTest extends PHPUnit_Framework_TestCase {
         $db->query("DELETE FROM work WHERE entity_id = $id");
         $db->query("DELETE FROM entity WHERE id = $id");
     }
+
+    public function testSaveWork() {
+        $db = new Database('pg2_backend');
+
+        $created_at = date('Y-m-d H:i:s');
+        $title = 'GeForce 6600';
+        
+        $work = Work::create($title);
+        $id = $work->get('id');
+
+        $t2 = 'Hei';
+        $work->set('title', $t2);
+        $work->save();
+
+        $entity = $db->queryRowf('SELECT * FROM work_view WHERE id = ?', $id);
+        $this->assertEquals($t2, $entity['title']);
+        
+        // Delete entry
+        $db->query("DELETE FROM work WHERE entity_id = $id");
+        $db->query("DELETE FROM entity WHERE id = $id");
+    }
 }
