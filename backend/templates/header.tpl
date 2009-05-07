@@ -3,6 +3,7 @@
 <head>
     <title>{$title}</title>
     <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="/js/dojo/dijit/themes/tundra/tundra.css" type="text/css" />
     <script type="text/javascript">
         var djConfig = {
             parseOnLoad: true,
@@ -16,7 +17,7 @@
     <script type="text/javascript" src="{$js}"></script>
     {/foreach}
 </head>
-<body>
+<body class="tundra">
 <div id="header">
     <ul id="menu">
         <li><a href="/"{if $aether.options.selectedSection == 'home'} class="selected"{/if}>Home</a></li>
