@@ -1,6 +1,5 @@
 <div class="grid one">
 <form action="/products" method="get">
-    <input type="hidden" id="duplicate_url" value="/products/?module=ProductAdd&service=duplicateCheck" />
     <fieldset>
         <legend>Add product</legend>
         {if $error eq true}
