@@ -13,7 +13,7 @@
     <script type="text/javascript" src="/js/dojo/plugd/plugd.js"></script>
     <script type="text/javascript" src="/js/backend.js"></script>
     {foreach from=$pageJavascripts item=js}
-    <script type="text/javascript" src="$js"></script>
+    <script type="text/javascript" src="{$js}"></script>
     {/foreach}
 </head>
 <body>

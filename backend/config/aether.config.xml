@@ -16,18 +16,14 @@
                     <template>generic.tpl</template>
                     <section>Generic</section>
                     <module provides="content">Product</module>
-                    <option name="javascripts">
-                        /js/product.js;
-                    </option>
+                    <option name="javascripts">/js/product.js</option>
                 </rule>
                 <rule match="">
                     <template>products.tpl</template>
                     <section>Generic</section>
                     <module provides="add">ProductAdd</module>
                     <module provides="latest">ProductLatest</module>
-                    <option name="javascripts">
-                        /js/products.js;
-                    </option>
+                    <option name="javascripts">/js/products.js</option>
                 </rule>
             </rule>
             <rule match="">
