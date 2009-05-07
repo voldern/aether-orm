@@ -24,7 +24,8 @@ dojo.declare("modules.Duplicate", null, {
         console.log(this.url);
 
         // Remove old notice
-        dojo.query('form .notice').orphan();
+        if (dojo.byId('duplicateCount') != null)
+            dojo.query('#duplicateCount').orphan();
 
         dojo.xhrGet({
             url: this.url + "&check=" + value,
@@ -36,7 +37,9 @@ dojo.declare("modules.Duplicate", null, {
 
                 if (response.duplicateCount > 0) {
                     text = 'Found ' + response.duplicateCount + ' duplicates';
-                    dojo.place(dojo.create("div", { class: 'tooltip error', innerHTML: text }),
+                    dojo.place(dojo.create("div", { id: 'duplicateCount', 
+                                                    class: 'tooltip error',
+                                                    innerHTML: text }),
                                evt.target, 'after');
                 }
                 return response;
