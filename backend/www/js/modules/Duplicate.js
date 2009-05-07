@@ -1,27 +1,20 @@
+dojo.require('dijit.Tooltip');
+dojo.require('dojo.parser');
 dojo.provide("modules.Duplicate");
 dojo.declare("modules.Duplicate", null, {
     url: "",
     
-    constructor: function() {
+    constructor: function(url) {
         // Look for the duplicateURL
-        this.url = dojo.byId('duplicate_url').value;
-
-        if (this.url == null) {
-            console.error("Could not find duplicate_url");
-        }
+        this.url = url;
     },
     
     attachCheck: function() {
-        if (this.url == null) {
-            return;
-        }
-        
         dojo.query('.duplicateCheck').connect('onblur', dojo.hitch(this, 'checkDuplicates'));
     },
 
     checkDuplicates: function(evt) {
         value = evt.target.value; //dojo.attr(evt.target, 'value');
-        console.log(this.url);
 
         // Remove old notice
         if (dojo.byId('duplicateCount') != null)
