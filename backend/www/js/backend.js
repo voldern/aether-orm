@@ -1,0 +1,1 @@
+dojo.registerModulePath("modules", "../../modules");
