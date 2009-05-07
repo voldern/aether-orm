@@ -36,7 +36,7 @@ dojo.declare("modules.Duplicate", null, {
 
                 if (response.duplicateCount > 0) {
                     text = 'Found ' + response.duplicateCount + ' duplicates';
-                    dojo.place(dojo.create("div", { class: 'notice', innerHTML: text }),
+                    dojo.place(dojo.create("div", { class: 'tooltip error', innerHTML: text }),
                                evt.target, 'after');
                 }
                 return response;
