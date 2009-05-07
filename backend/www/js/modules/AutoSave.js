@@ -7,6 +7,15 @@
  *  auto.findNodes();
  *  auto.attachEvents();
  * });
+ * Example markup:
+ * <form class="autosaveForm">
+ *   <input type="text" class="string autosave" name="foo" />
+ * </form>
+ * The three classes in use here is needed.
+ * There are three types of type classes supporter by autosavefields:
+ * * string
+ * * int
+ * * bool
  *
  */
 
