@@ -52,7 +52,7 @@ class AetherModuleProductAdd extends AetherModule {
     public function service($name) {
         switch ($name) {
         case 'duplicateCheck':
-            $response = $this->duplicateCheck($_GET['title']);
+            $response = $this->duplicateCheck($_GET['check']);
             break;
         default:
             $response = array('error' => 'Unknown action');
@@ -69,37 +69,34 @@ class AetherModuleProductAdd extends AetherModule {
      */
     private function duplicateCheck($title) {
         $count = 0;
+        $duplicates = array();
         if (empty($title))
-            return array('duplicateCount' => 0, 'works' => array(),
-                         'manifestations' => array());
+            return array('duplicateCount' => 0, 'duplicates' => array());
 
         // Do a search for the product title in the database
-        $works = array();
         try {
             $collection = RecordFinder::find('Work', array('title' => $title));
             $count += $collection->count();
 
             foreach ($collection->getAll() as $row) {
-                $works[] = $row->get('title');
+                $duplicates[] = $row->get('title');
             }
         }
         catch (NoRecordsFoundException $e) {
         }
         
-        $manifestations = array();
         try {
             $collection = RecordFinder::find('Manifestation', array('title' => $title));
             $count += $collection->count();
 
             foreach ($collection->getAll() as $row) {
-                $manifestations[] = $row->get('title');
+                $duplicates[] = $row->get('title');
             }
         }
         catch (NoRecordsFoundException $e) {
         }
         
-        return array('duplicateCount' => $count, 'works' => $works,
-                     'manifestations' => $manifestations);
+        return array('duplicateCount' => $count, 'duplicates' => $duplicates);
     }
 }
 ?>

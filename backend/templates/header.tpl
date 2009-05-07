@@ -12,6 +12,7 @@
     <script type="text/javascript" src="/js/dojo/dojo/dojo.js"></script>
     <script type="text/javascript" src="/js/dojo/plugd/plugd.js"></script>
     <script type="text/javascript" src="/js/backend.js"></script>
+    <script type="text/javascript" src="/js/products.js"></script>
 </head>
 <body>
 <div id="header">
