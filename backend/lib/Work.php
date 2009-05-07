@@ -21,7 +21,10 @@ class Work extends ActiveRecord {
         'database' => 'pg2_backend',
         'table' => 'work_view',
         'keys' => array('id' => 'id'),
-        'indexes' => array('id' => 'id'),
+        'indexes' => array(
+            'id' => 'id',
+            'title' => 'title'
+            ),
         'fields' => array(
             'id' => 'id',
             'title' => 'title',

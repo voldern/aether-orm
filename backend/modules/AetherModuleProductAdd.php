@@ -1,7 +1,7 @@
 <?php // vim:set ts=4 sw=4 et:
 
 require_once(PG_PATH . 'backend/lib/Manifestation.php');
-require_once(PG_PATH . 'backend/lib/Entity.php');
+require_once(PG_PATH . 'backend/lib/Work.php');
 require_once(LIB_PATH . 'ActiveRecord.php');
 
 /**
@@ -68,24 +68,38 @@ class AetherModuleProductAdd extends AetherModule {
      * @return array
      */
     private function duplicateCheck($title) {
+        $count = 0;
         if (empty($title))
-            return array('duplicateCount' => 0, 'duplicates' => array());
+            return array('duplicateCount' => 0, 'works' => array(),
+                         'manifestations' => array());
 
         // Do a search for the product title in the database
+        $works = array();
         try {
-            $collection = RecordFinder::find('Entity', array('title' => $title));
-            $count = $collection->count();
+            $collection = RecordFinder::find('Work', array('title' => $title));
+            $count += $collection->count();
 
             foreach ($collection->getAll() as $row) {
-                $dupes[] = $row->get('title');
+                $works[] = $row->get('title');
             }
         }
         catch (NoRecordsFoundException $e) {
-            $count = 0;
-            $dupes = array();
         }
         
-        return array('duplicateCount' => $count, 'duplicates' => $dupes);
+        $manifestations = array();
+        try {
+            $collection = RecordFinder::find('Manifestation', array('title' => $title));
+            $count += $collection->count();
+
+            foreach ($collection->getAll() as $row) {
+                $manifestations[] = $row->get('title');
+            }
+        }
+        catch (NoRecordsFoundException $e) {
+        }
+        
+        return array('duplicateCount' => $count, 'works' => $works,
+                     'manifestations' => $manifestations);
     }
 }
 ?>

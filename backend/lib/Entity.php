@@ -13,10 +13,7 @@ class Entity extends ActiveRecord {
         'database' => 'pg2_backend',
         'table' => 'entity',
         'keys' => array('id' => 'id'),
-        'indexes' => array(
-            'id' => 'id',
-            'title' => 'title'
-            ),
+        'indexes' => array('id' => 'id'),
         'fields' => array(
             'id' => 'id',
             'created_at' => 'createdAt',
