@@ -8,7 +8,7 @@
  * @package prisguide.backend.modules
  */
 
-class AetherModuleFooter extends AetherModule {
+class AetherModulePGFooter extends AetherModule {
     /**
      * Render module
      *
