@@ -22,7 +22,7 @@ body {
 }
 
 a {
-    font-size: 14pt;
+    color: #0b5aab;
     text-decoration: none;
 }
 a:hover {
@@ -51,6 +51,44 @@ input {
 }
 
 input[type=submit] {
+}
+
+h2 {
+    font-size: 1.7em;
+    margin: 0.3em 0 0.5em;
+}
+
+h3 {
+    font-size: 1.5em;
+    margin: 0.3em 0 0.4em;
+}
+
+h4 {
+    font-size: 1.2em;
+    margin: 0.3 0 0.4em;
+}
+
+ul {
+    list-style: none;
+}
+
+ul > li {
+    padding-top: 5px;
+}
+
+ul li ul {
+    margin-left: 2em;
+}
+
+ul span {
+    padding-top: 5px;
+    color: #999;
+    left: 180px;
+    position:absolute;
+}
+
+p {
+    margin: 0.3em 0;
 }
 
 
@@ -158,6 +196,7 @@ html[xmlns] .clearfix {
 }
 
 #header #menu a {
+    font-size: 14pt;
     display: block;
     color: #fff;
 }
@@ -171,20 +210,4 @@ html[xmlns] .clearfix {
 /* CONTENT */
 #content {
     padding: 15px;
-}
-
-ul {
-    list-style: none;
-}
-ul>li {
-    padding-top: 5px;
-}
-ul li ul {
-    margin-left: 2em;
-}
-ul span {
-    padding-top: 5px;
-    color: #999;
-    left: 180px;
-    position:absolute;
 }
