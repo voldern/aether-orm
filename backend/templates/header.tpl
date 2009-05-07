@@ -3,6 +3,15 @@
 <head>
     <title>{$title}</title>
     <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <script type="text/javascript">
+        var djConfig = {
+            parseOnLoad: true,
+            usePlainJson: true
+        };
+    </script>
+    <script type="text/javascript" src="/js/dojo/dojo/dojo.js"></script>
+    <script type="text/javascript" src="/js/dojo/plugd/plugd.js"></script>
+    <script type="text/javascript" src="/js/backend.js"></script>
 </head>
 <body>
 <div id="header">
