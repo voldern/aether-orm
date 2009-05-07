@@ -34,6 +34,12 @@ dojo.declare("modules.Duplicate", null, {
                                                     class: 'tooltip error',
                                                     innerHTML: text }),
                                evt.target, 'after');
+
+                    var tooltip = new dijit.Tooltip({
+                        connectId: [evt.target],
+                        label: "Hello !"
+                    });
+                    console.log("Created", tooltip, tooltip.id);
                 }
                 return response;
             },
