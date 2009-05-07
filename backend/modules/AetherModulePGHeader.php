@@ -8,7 +8,7 @@
  * @package prisguide.backend.modules
  */
 
-class AetherModuleHeader extends AetherModule {
+class AetherModulePGHeader extends AetherModuleHeader {
     /**
      * Render module
      *
@@ -18,6 +18,7 @@ class AetherModuleHeader extends AetherModule {
     public function run() {
         $tpl = $this->sl->getTemplate();
         $tpl->set('title', 'Test');
+        $this->applyCommonVariables($tpl);
         return $tpl->fetch('header.tpl');
     }
 }

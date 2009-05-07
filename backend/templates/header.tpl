@@ -12,7 +12,9 @@
     <script type="text/javascript" src="/js/dojo/dojo/dojo.js"></script>
     <script type="text/javascript" src="/js/dojo/plugd/plugd.js"></script>
     <script type="text/javascript" src="/js/backend.js"></script>
-    <script type="text/javascript" src="/js/products.js"></script>
+    {foreach from=$pageJavascripts item=js}
+    <script type="text/javascript" src="$js"></script>
+    {/foreach}
 </head>
 <body>
 <div id="header">

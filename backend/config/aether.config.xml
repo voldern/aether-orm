@@ -3,28 +3,31 @@
         <import>searchpath.xml</import>
         <urlRules>
             <section>Generic</section>
-            <module provides="header">Header</module>
-            <module provides="footer">Footer</module>
+            <module provides="header">PGHeader</module>
+            <module provides="footer">PGFooter</module>
             <rule match="">
                 <template>generic.tpl</template>
                 <module>PriceguideBackendProductSearch</module>
                 <option name="selectedSection">home</option>
             </rule>
             <rule match="products">
-                <option name="javascripts">
-                    /js/products.js;
-                </option>
                 <option name="selectedSection">products</option>
                 <rule pattern="/[0-9]+/" store="product_id">
                     <template>generic.tpl</template>
                     <section>Generic</section>
                     <module provides="content">Product</module>
+                    <option name="javascripts">
+                        /js/product.js;
+                    </option>
                 </rule>
                 <rule match="">
                     <template>products.tpl</template>
                     <section>Generic</section>
                     <module provides="add">ProductAdd</module>
                     <module provides="latest">ProductLatest</module>
+                    <option name="javascripts">
+                        /js/products.js;
+                    </option>
                 </rule>
             </rule>
             <rule match="">
