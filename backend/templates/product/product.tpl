@@ -1,9 +1,10 @@
 <h1>Product</h1>
-<form action="/products/{$id}/edit" method="post" class="autosaveForm">
+<form action="/products/{$id}/?module=Product&amp;service=Save" method="post" class="autosaveForm">
     <fieldset>
         <legend>Product blueprint</legend>
+        <input id="id" type="hidden" value="{$id}" name="id" />
         <label for="blueprint">Name</label>
-        <input id="blueprint" type="text" value="{$title}" name="blueprint" />
+        <input id="blueprint" class="autosave string" type="text" value="{$title}" name="blueprint" />
     </fieldset>
     <fieldset>
         <legend>Product variations</legend>

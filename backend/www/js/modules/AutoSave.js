@@ -69,7 +69,7 @@ dojo.declare("modules.AutoSave", null, {
     save: function(evt) {
         var tNode = evt.target,
         form = tNode.parentNode,
-        load = dojo.place(dojo.create("img", { src: "http://mads.zerg.no/projects/pg2/backend/static/js/modules/spin.gif" }), tNode, "after");
+        load = dojo.place(dojo.create("img", { src: "/images/spin.gif" }), tNode, "after");
 
         // Traverse to find the correct parentNode
         while (form.tagName != "FORM")
