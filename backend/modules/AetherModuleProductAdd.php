@@ -63,6 +63,7 @@ class AetherModuleProductAdd extends AetherModule {
     
     /**
      * Check if a title exists
+     * Returns json array usable by the dojo Duplicate module
      *
      * @param $title string
      * @return array

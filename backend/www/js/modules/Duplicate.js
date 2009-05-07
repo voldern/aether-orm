@@ -23,15 +23,22 @@ dojo.declare("modules.Duplicate", null, {
         value = evt.target.value; //dojo.attr(evt.target, 'value');
         console.log(this.url);
 
+        // Remove old notice
+        dojo.query('form .notice').orphan();
+
         dojo.xhrGet({
             url: this.url + "&check=" + value,
             handleAs: "json",
-            timeout: 1000,
+            timeout: 5000,
             
             load: function(response, ioArgs) {
-                console.log(ioArgs);
                 console.log(response);
-                
+
+                if (response.duplicateCount > 0) {
+                    text = 'Found ' + response.duplicateCount + ' duplicates';
+                    dojo.place(dojo.create("div", { class: 'notice', innerHTML: text }),
+                               evt.target, 'after');
+                }
                 return response;
             },
 
