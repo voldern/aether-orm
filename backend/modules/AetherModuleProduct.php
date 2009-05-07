@@ -39,7 +39,7 @@ class AetherModuleProduct extends AetherModule {
      */
     public function service($name) {
         switch ($name) {
-            case 'save':
+            case 'Save':
                 $response = $this->saveTitles($_POST);
                 break;
         }
@@ -55,7 +55,7 @@ class AetherModuleProduct extends AetherModule {
             if ($data['blueprint'] != $work->get('title')) {
                 $work->set('title', $data['blueprint']);
                 $work->save();
-                $response['blueprint'] = $data['blueprint'];
+                $response['blueprint_'.$pid] = $data['blueprint'];
             }
 
             // Get manifestations
