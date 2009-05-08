@@ -1,5 +1,6 @@
 dojo.require('dijit.Tooltip');
 dojo.require('dojo.parser');
+
 dojo.provide("modules.Duplicate");
 dojo.declare("modules.Duplicate", null, {
     url: "",
@@ -36,8 +37,10 @@ dojo.declare("modules.Duplicate", null, {
                                evt.target, 'after');
 
                     var tooltip = new dijit.Tooltip({
-                        connectId: [evt.target],
-                        label: "Hello !"
+                        connectId: ['duplicateCount'],
+                        position: ['below'],
+                        showDelay: 0,
+                        label: text
                     });
                     console.log("Created", tooltip, tooltip.id);
                 }
