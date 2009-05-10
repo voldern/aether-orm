@@ -28,6 +28,9 @@ class AetherModuleManifestation extends AetherModule {
             case 'Add':
                 $response = $this->createManifestation($_GET);
                 break;
+            case 'Delete':
+                $response = $this->deleteManifestation($_GET);
+                break;
         }
 
         return new AetherJSONResponse($response);
@@ -38,6 +41,14 @@ class AetherModuleManifestation extends AetherModule {
             $work = new Work($wid);
             $manifestation = Manifestation::create($work);
             return array('id'=>$manifestation->get('id'),'title'=>$manifestation->get('title'));
+        }
+    }
+    private function deleteManifestation($data) {
+        if (is_numeric($data['id'])) {
+            $id = $data['id'];
+            $manifestation = new Manifestation($id);
+            $manifestation->delete();
+            return array('id'=>$id);
         }
     }
 }

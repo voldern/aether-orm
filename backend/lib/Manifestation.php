@@ -94,14 +94,5 @@ class Manifestation extends ActiveRecord {
     public function save($idFromTable = 'entity') {
         parent::save($idFromTable);
     }
-    
-    /**
-     * Disable delete
-     *
-     * @return void
-     */
-    public function delete() {
-        throw new Exception("Deleting is disabled");
-    }
 }
 ?>
