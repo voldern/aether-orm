@@ -14,5 +14,7 @@
                 name="mani[{$m->get('id')}]" />
             <br />
         {/foreach}
+        <a href="/products/?module=Manifestation&amp;service=Add&amp;work_id={$id}" 
+            id="add_manifestation">Add variant</a>
     </fieldset>
 </form>
