@@ -127,6 +127,14 @@ html[xmlns] .clearfix {
     clear: left;
 }
 
+.fLeft {
+    float: left;
+}
+
+.fRight {
+    float: right;
+}
+
 
 /**
  * Standard grids
