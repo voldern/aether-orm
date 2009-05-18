@@ -1,0 +1,8 @@
+<LIMIT POST GET>
+    AuthType Basic
+    AuthName "Top Secret PG Admin"
+    AuthUserFile /home/sites/hw.no/orangina/www/secure/.htpasswd
+    AuthGroupFile /home/sites/hw.no/orangina/www/secure/.htgroup
+    Require group drift public
+</LIMIT>
+
