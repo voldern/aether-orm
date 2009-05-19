@@ -25,5 +25,11 @@
         <li><a href="/manufacturers"{if $aether.options.selectedSection == 'manufacturers'} class="selected"{/if}>Manufacturers</a></li>
         <li><a href="/organizations"{if $aether.options.selectedSection == 'organizations'} class="selected"{/if}>Organizations</a></li>
     </ul>
+    <div class="fRight">
+        <form method="get" action="">
+            <input type="text" name="q" id="q" />
+            <input type="submit" value="Search" />
+        </form>
+    </div>
 </div>
 <div id="content" class="clearfix">

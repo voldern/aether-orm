@@ -12,6 +12,7 @@
             </rule>
             <rule match="products">
                 <option name="selectedSection">products</option>
+                <module provides="manifestation">Manifestation</module>
                 <rule pattern="/[0-9]+/" store="product_id">
                     <template>generic.tpl</template>
                     <section>Generic</section>
