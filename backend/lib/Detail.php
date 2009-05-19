@@ -7,7 +7,7 @@ require_once(LIB_PATH . 'ActiveRecord.php');
  * 
  * Created: 2009-05-19
  * @author Raymond Julin
- * @package aether.backend.lib
+ * @package prisguide.backend.lib
  */
 
 class Detail extends ActiveRecord {
@@ -55,6 +55,7 @@ class Detail extends ActiveRecord {
         // Creation time is now obviously
         $created_at = date('Y-m-d H:i:s');
         $detail = new Detail;
+        $detail->set('type', $type);
         $detail->set('title', $title);
         $detail->set('createdAt', $created_at);
         $detail->set('modifiedAt', $created_at);

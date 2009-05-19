@@ -28,6 +28,7 @@ class DetailTest extends PHPUnit_Framework_TestCase {
 
         $row = $db->queryRow("SELECT * FROM detail WHERE id = $id");
         $this->assertEquals($title, $row['title']);
+        $this->assertEquals('int', $row['type']);
 
         $db->query("DELETE FROM detail WHERE id = $id");
     }
