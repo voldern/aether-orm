@@ -27,6 +27,11 @@
                     <option name="javascripts">/js/products.js</option>
                 </rule>
             </rule>
+            <rule match="login">
+                <template>generic.tpl</template>
+                <option name="selectedSection">login</option>
+                <module provides="content">PGLogin</module>
+            </rule>
             <rule match="">
             </rule>
         </urlRules>
