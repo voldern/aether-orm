@@ -24,6 +24,11 @@
         <li><a href="/products"{if $aether.options.selectedSection == 'products'} class="selected"{/if}>Products</a></li>
         <li><a href="/manufacturers"{if $aether.options.selectedSection == 'manufacturers'} class="selected"{/if}>Manufacturers</a></li>
         <li><a href="/organizations"{if $aether.options.selectedSection == 'organizations'} class="selected"{/if}>Organizations</a></li>
+        {if $loggedIn !== true}
+	        <li><a href="/login"{if $aether.options.selectedSection == 'login'} class="selected"{/if}>Login</a></li>
+        {else}
+    	    <li><a href="/logout">Logout</a></li>
+        {/if}
     </ul>
     <div class="fRight">
         <form method="get" action="">

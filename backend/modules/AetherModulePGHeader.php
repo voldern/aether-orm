@@ -19,6 +19,16 @@ class AetherModulePGHeader extends AetherModuleHeader {
         $tpl = $this->sl->getTemplate();
         $tpl->set('title', 'Test');
         $this->applyCommonVariables($tpl);
+
+        // Check if the user is logged in
+        if (isset($_SESSION['authInfo']) &&
+            isset($_SESSION['authInfo']['verified']) &&
+            $_SESSION['authInfo']['verified'] === true) {
+            $tpl->set('loggedIn', true);
+        }
+        else
+            $tpl->set('loggedIn', false);
+        
         return $tpl->fetch('header.tpl');
     }
 }
