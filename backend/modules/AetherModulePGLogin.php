@@ -26,7 +26,6 @@ class AetherModulePGLogin extends AetherModule {
             // Redirect to the page the user came from or the homepage
             if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER']))
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
-
             else
                 header('Location: /');
             exit();
@@ -39,8 +38,12 @@ class AetherModulePGLogin extends AetherModule {
             // Verify the authid
             $auth = new PriceguideUser;
             if ($auth->verify($_GET['authId']) === true) {
-                // Redirect to front page
-                header('Location: /');
+                // Redirect to referer or frontpage
+                if (isset($_GET['referer']) && !empty($_GET['referer']))
+                    header('Location: ' . $_GET['referer']);
+                else
+                    header('Location: /');
+                
                 exit(0);
             }
             else {
@@ -54,9 +57,14 @@ class AetherModulePGLogin extends AetherModule {
         else
             $tpl->set('error', isset($_GET['error']) ? $_GET['error'] : '');
 
+        // Check if we just came from a logout
         if (isset($_GET['ssoAction']) && $_GET['ssoAction'] == 'logout')
             $tpl->set('logout', true);
 
+        // Set the referer
+        if (isset($_GET['referer']) && !empty($_GET['referer']))
+            $tpl->set('referer', $_GET['referer']);
+        
         $tpl->set('loginURL', $this->options['loginURL']);
         return $tpl->fetch('login.tpl');
     }
