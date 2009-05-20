@@ -17,7 +17,7 @@ class AetherModulePGHeader extends AetherModuleHeader {
      */
     public function run() {
         $tpl = $this->sl->getTemplate();
-        $tpl->set('title', 'Test');
+        $tpl->set('title', 'PG2 Backend');
         $this->applyCommonVariables($tpl);
         
         return $tpl->fetch('header.tpl');
