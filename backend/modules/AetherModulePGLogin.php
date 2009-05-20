@@ -61,11 +61,10 @@ class AetherModulePGLogin extends AetherModule {
         if (isset($_GET['ssoAction']) && $_GET['ssoAction'] == 'logout')
             $tpl->set('logout', true);
 
-        // Set the referer
+        // Set the referer if the auth module has included it during the redirect
         if (isset($_GET['referer']) && !empty($_GET['referer']))
             $tpl->set('referer', $_GET['referer']);
         
-        $tpl->set('loginURL', $this->options['loginURL']);
         return $tpl->fetch('login.tpl');
     }
 

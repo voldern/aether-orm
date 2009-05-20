@@ -19,7 +19,7 @@
 </div>
 {/if}
 
-<form action="{$loginURL}" method="post">
+<form action="{$aether.options.loginURL}" method="post">
 	{if $error == 'login_required' && isset($referer)}
     	<input type="hidden" name="referer" value="http://{$aether.domain}{$aether.base}login?referer={$referer}" />
     {else}
