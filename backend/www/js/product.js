@@ -25,15 +25,25 @@ dojo.addOnLoad(function() {
     dojo.query(".delete_manifestation").connect(
         'onclick', dojo.hitch(this, function(evt) {
             dojo.stopEvent(evt);
-            var node = evt.target;
-            var url = dojo.attr(node, 'href');
+            var node = evt.target,
+            url = dojo.attr(node, 'href');
+
             dojo.xhrGet({
                 handleAs: 'json',
                 url: url,
                 handle: function(r, ioArgs) {
                     // Get by id and delete
                     var id = r['id'];
-                    dojo.query("div#container_mani_"+id).destroy();
+/*                    var dojo.fx.wipeOut({
+                        node: dojo.byId("container_mani_"+id),
+                        node
+                    });*/
+                    var elem = dojo.query("div#container_mani_"+id)
+                        .style("overflow", "hidden")
+                        .animate({
+                                height: 0,
+                                backgroundColor: "red"
+                                }, 1000, null, function() { elem.destroy(); });
                 }
             });
     }));
