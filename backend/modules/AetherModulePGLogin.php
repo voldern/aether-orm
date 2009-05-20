@@ -67,15 +67,5 @@ class AetherModulePGLogin extends AetherModule {
         
         return $tpl->fetch('login.tpl');
     }
-
-    /**
-     * Services provided for login/logout
-     *
-     * @param $name string
-     * @return AetherJSONResponse
-     */
-    public function service($name) {
-        //return new AetherJSONResponse(array());
-    }
 }
 ?>

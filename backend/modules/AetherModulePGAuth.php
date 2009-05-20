@@ -41,14 +41,5 @@ class AetherModulePGAuth extends AetherModule {
             $tpl->set('loggedIn', $loggedIn);
     }
 
-    /**
-     * Services provided for login/logout
-     *
-     * @param $name string
-     * @return AetherJSONResponse
-     */
-    public function service($name) {
-        //return new AetherJSONResponse(array());
-    }
 }
 ?>
