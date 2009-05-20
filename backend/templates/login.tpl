@@ -6,7 +6,9 @@
 
 {if not empty($error)}
 <div class="error">
-	{if $error == 'wrong_password'}
+	{if $error == 'login_required'}
+    	Du må være logget inn for å se denne siden.
+	{elseif $error == 'wrong_password'}
 		Feil passord.
 	{elseif $error == 'no_such_user'}
     	Feil brukernavn.
@@ -18,7 +20,11 @@
 {/if}
 
 <form action="{$loginURL}" method="post">
-    <input type="hidden" name="referer" value="http://{$aether.domain}{$aether.base}login" />
+	{if $error == 'login_required' && isset($referer)}
+    	<input type="hidden" name="referer" value="http://{$aether.domain}{$aether.base}login?referer={$referer}" />
+    {else}
+	    <input type="hidden" name="referer" value="http://{$aether.domain}{$aether.base}login" />
+    {/if}
     <label>Username: <input type="text" name="email" /></label>
     <label>Password: <input type="password" name="password" /></label>
     <button type="submit">Log in</button>

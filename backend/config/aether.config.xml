@@ -3,13 +3,16 @@
         <import>searchpath.xml</import>
         <option name="session">on</option>
         <option name="locale">nb_NO.UTF-8</option>
+        <option name="loginRequired">true</option>
         <urlRules>
             <section>Generic</section>
+            <module provides="auth">PGAuth</module>
             <module provides="header">PGHeader</module>
             <module provides="footer">PGFooter</module>
             <rule match="">
                 <template>generic.tpl</template>
                 <module>PriceguideBackendProductSearch</module>
+                <option name="loginRequired">false</option>
                 <option name="selectedSection">home</option>
             </rule>
             <rule match="products">
@@ -34,9 +37,9 @@
                 <option name="selectedSection">login</option>
                 <option name="loginURL">https://auth.tek.no/</option>
                 <module provides="content">PGLogin</module>
+                <option name="loginRequired">false</option>
             </rule>
             <rule match="logout">
-                <option name="loginURL">https://auth.tek.no/</option>
                 <module>PGLogout</module>
             </rule>
             <rule match="">
