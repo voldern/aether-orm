@@ -185,6 +185,25 @@ html[xmlns] .clearfix {
     margin-right: 20px;
 }
 
+/* Notice classes */
+
+.notice {
+    width: 300px;
+    padding: 6px;
+    position: absolute;
+    border: 1px solid #000;
+}
+
+.notice.info {
+    background-color: #96b8db;
+    border-color: #a8cff6 #7497bb #7497bb #a8cff6;
+}
+
+.notice.error {
+    background-color: #cc0000;
+    border-color: #660000;
+}
+
 
 #header {
     width: 100%;
