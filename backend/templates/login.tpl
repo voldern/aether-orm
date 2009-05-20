@@ -1,11 +1,11 @@
 {if $logout === true}
-<div class="notice">
+<div class="notice info">
 	Du er nå logget ut.
 </div>
 {/if}
 
 {if not empty($error)}
-<div class="error">
+<div class="notice error">
 	{if $error == 'login_required'}
     	Du må være logget inn for å se denne siden.
 	{elseif $error == 'wrong_password'}
