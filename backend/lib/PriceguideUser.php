@@ -36,7 +36,7 @@ class PriceguideUser extends ActiveRecord {
     public function verify($authId, $referer = "/") {
         // Trust in the Session[tm] to bring some load off the auth-system.
         if (isset($_SESSION['authInfo']['verified']) && 
-                    isset($_SESSION['authInfo']['verified']) == true) {
+            $_SESSION['authInfo']['verified'] === true) {
             $this->verified = true;
         }
 
@@ -47,7 +47,7 @@ class PriceguideUser extends ActiveRecord {
                 // Add more authInfo from auth system if needed
                 $this->verified = true;
                 $this->authInfo['verified'] = true;
-                $this->authInfo['userId'] = $authVerification->userId;
+                $this->authInfo['userId'] = (int)$authVerification->userId;
                 $this->authInfo['authId'] = $authId;
                 $_SESSION['authInfo'] = $this->authInfo;
             }
@@ -67,16 +67,15 @@ class PriceguideUser extends ActiveRecord {
      * @param string $referer
      */
     public function logout($referer = "/") {
-        if (isset($this->authInfo['authId']))
-            $authId = $this->authInfo['authId'];
+        if (isset($_SESSION['authId']))
+            $authId = $_SESSION['authId'];
+        else
+            $authId = NULL;
 
         if (isset($_SESSION['authInfo']))
             unset($_SESSION['authInfo']);
 
-        $this->authInfo = array();
-        
-        if (isset($authId))
-            $auth->logout($authId, $referer);
+        $this->auth->logout($authId, $referer);
     }
 }
 
