@@ -185,26 +185,40 @@ html[xmlns] .clearfix {
     margin-right: 20px;
 }
 
+
 /* Notice classes */
 
 .notice {
-    color: #fff;
-    font-weight: bold;
-    margin-top: 30px;
-    width: 300px;
-    padding: 6px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 6px 0;
     position: absolute;
-    border: 1px solid #000;
+    border-bottom: 1px solid #aaa;
+    background-color: #ffffe1;
 }
 
 .notice.info {
-    background-color: #96b8db;
-    border-color: #a8cff6 #7497bb #7497bb #a8cff6;
 }
 
 .notice.error {
-    background-color: #cc0000;
-    border-color: #660000;
+}
+
+
+/* Icons */
+
+.icon {
+    width: 22px;
+    height: 22px;
+    text-indent: -9999px;
+    outline: none;
+}
+
+.icon.close {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    background: url(../images/close.png) no-repeat;
 }
 
 
