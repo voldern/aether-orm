@@ -32,6 +32,9 @@ class AetherModuleDetails extends AetherModule {
                     $pid = $_GET['pid'];
                 $response = $this->getDetail($_GET['id'],$pid);
                 break;
+            case 'getAllForEntity':
+                $response = $this->getAllDetails($_GET['pid']);
+                break;
         }
 
         return new AetherJSONResponse($response);
@@ -64,6 +67,39 @@ class AetherModuleDetails extends AetherModule {
                     $resp['value'] = $col->first->get('date');
                     break;
             }
+        }
+        return $resp;
+    }
+    private function getAllDetails($pid) {
+        if (!is_numeric($pid))
+            return array('error'=>'Supplied ID is not numerical');
+        $resp = array();
+        $col = RecordFinder::find('DetailValue',
+            array('entityId'=>$pid));
+        foreach ($col->getAll() as $r) {
+            $arr = array();
+            $detail = new Detail($r->get('detailId'));
+            $arr['detail'] = array(
+                'id' => $detail->get('id'),
+                'type' => $detail->get('type'),
+                'title' => $detail->get('title'),
+                'title_i18n' => $detail->get('titleI18N')
+            );
+            switch ($detail->get('type')) {
+                case 'int':
+                    $arr['value'] = $r->get('num');
+                    break;
+                case 'text':
+                    $arr['value'] = $r->get('text');
+                    break;
+                case 'bool':
+                    $arr['value'] = $r->get('bool');
+                    break;
+                case 'date':
+                    $arr['value'] = $r->get('date');
+                    break;
+            }
+            $resp[$r->get('id')] = $arr;
         }
         return $resp;
     }
