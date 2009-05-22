@@ -38,8 +38,13 @@ class AetherModulePGLogin extends AetherModule {
             // Verify the authid
             $auth = new PriceguideUser;
             if ($auth->verify($_GET['authId']) === true) {
-                // Redirect to referer or frontpage
-                if (isset($_GET['referer']) && !empty($_GET['referer']))
+
+                // If the user is using a onetime password redirect
+                // to the password reset page. If not try to redirect
+                // to where the user came from or the frontpage as a last resort
+                if (isset($_GET['authType']) && $_GET['authType'] == 'onetime_password')
+                    header('Location: /password');
+                elseif (isset($_GET['referer']) && !empty($_GET['referer']))
                     header('Location: ' . $_GET['referer']);
                 else
                     header('Location: /');
