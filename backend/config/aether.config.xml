@@ -42,6 +42,13 @@
             <rule match="logout">
                 <module>PGLogout</module>
             </rule>
+            <rule match="password">
+                <template>generic.tpl</template>
+                <option name="selectedSection">password</option>
+                <option name="loginURL">https://auth.tek.no/</option>
+                <module provides="content">PGPassword</module>
+                <option name="javascripts">/js/password.js</option>
+            </rule>
             <rule match="">
             </rule>
         </urlRules>
