@@ -33,6 +33,7 @@ dojo.declare("modules.Duplicate", null, {
 
                 if (response.duplicateCount > 0) {
                     // Give the field the class 'error'
+                    dojo.addClass(evt.target('notice');
                     dojo.addClass(evt.target, 'error');
 
                     // Create textual information with dupe count
@@ -42,6 +43,8 @@ dojo.declare("modules.Duplicate", null, {
                                                     innerHTML: text }),
                                evt.target, 'after');
 
+                    // Add close button
+                    dojo.behavior.apply();
                     // Generate list of duplicates
                     var dupeList = "<ul>\n";
                     dojo.forEach(response.duplicates,
