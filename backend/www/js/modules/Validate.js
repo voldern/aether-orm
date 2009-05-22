@@ -8,11 +8,14 @@ dojo.provide("modules.Validate");
  * dojo.addOnLoad(function() {
  *     dojo.query("#intFieldToCheck").validate('int') ? console.log("YAY!"); : console.log("fail!");
  *
- * }
+ * });
  *
  */
 dojo.extend(dojo.NodeList, {
     validate: function(type) {
+        if (type == undefined)
+            throw "You need to provide a field type";
+
         switch (type) {
             case 'int':
                 this._validateInt();
@@ -25,6 +28,9 @@ dojo.extend(dojo.NodeList, {
                 break;
             case 'calc':
                 this._validateCalc();
+                break;
+            default:
+                throw "Not a valid field type";
                 break;
         }
     },
@@ -44,10 +50,7 @@ dojo.extend(dojo.NodeList, {
     },
     _regexCheck: function(regex) {
         this.forEach(function(node) {
-            if (regex.test(node.value))
-                return true;
-            else
-                return false
+            return (regex.test(node.value));
         });
     },
 });
