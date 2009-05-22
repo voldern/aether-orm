@@ -25,7 +25,7 @@
     {else}
 	    <input type="hidden" name="referer" value="http://{$aether.domain}{$aether.base}login" />
     {/if}
-    <label>Username: <input type="text" name="email" /></label>
+    <label>Email: <input type="text" name="email" /></label>
     <label>Password: <input type="password" name="password" /></label>
     <button type="submit">Log in</button>
 </form>
