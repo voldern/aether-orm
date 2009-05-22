@@ -18,6 +18,7 @@
             <rule match="products">
                 <option name="selectedSection">products</option>
                 <module provides="manifestation">Manifestation</module>
+                <module provides="details">Details</module>
                 <rule pattern="/[0-9]+/" store="product_id">
                     <template>generic.tpl</template>
                     <section>Generic</section>
@@ -41,6 +42,13 @@
             </rule>
             <rule match="logout">
                 <module>PGLogout</module>
+            </rule>
+            <rule match="password">
+                <template>generic.tpl</template>
+                <option name="selectedSection">password</option>
+                <option name="loginURL">https://auth.tek.no/</option>
+                <module provides="content">PGPassword</module>
+                <option name="javascripts">/js/password.js</option>
             </rule>
             <rule match="">
             </rule>

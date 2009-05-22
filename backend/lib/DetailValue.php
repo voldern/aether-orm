@@ -20,7 +20,6 @@ class DetailValue extends ActiveRecord {
     protected $deletedAt;
 
     protected $entityId;
-    protected $unitId;
     protected $detailId;
     protected $status;
 
@@ -30,7 +29,6 @@ class DetailValue extends ActiveRecord {
     protected $bool;
 
     protected $entity;
-    protected $unit;
     protected $detail;
 
     public $tableInfo = array(
@@ -41,6 +39,7 @@ class DetailValue extends ActiveRecord {
         ),
         'indexes' => array(
             'id' => 'id',
+            'entity_id' => 'entityId'
         ),
         'fields' => array(
             'id' => 'id',
@@ -50,7 +49,6 @@ class DetailValue extends ActiveRecord {
             'deleted_at' => 'deletedAt',
             'status' => 'status',
             'entity_id' => 'entityId',
-            'unit_id' => 'unitId',
             'detail_id' => 'detailId',
             'num_val' => 'num',
             'text_val' => 'text',
