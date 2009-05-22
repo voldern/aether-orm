@@ -33,7 +33,7 @@ dojo.declare("modules.Duplicate", null, {
 
                 if (response.duplicateCount > 0) {
                     // Give the field the class 'error'
-                    dojo.addClass(evt.target('notice');
+                    dojo.addClass(evt.target, 'notice');
                     dojo.addClass(evt.target, 'error');
 
                     // Create textual information with dupe count
