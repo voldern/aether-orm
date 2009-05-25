@@ -20,10 +20,17 @@ class AetherModulePGPassword extends AetherModule {
         $config = $this->sl->get('aetherConfig');
         $options = $config->getOptions();
 
-        
-
+        // Make any errors accessable from the view
+        if (isset($_GET['error']) && !empty($_GET['error']))
+            $tpl->set('error', $_GET['error']);
+        elseif (isset($_GET['ssoAction']) && $_GET['ssoAction'] == 'setPassword') {
+            // Logout and redirect back to the login page
+            header('Location: /logout?redirect=http://' . $_SERVER['HTTP_HOST'] .
+                   '/login?message=password_changed');
+            exit();
+        }
+            
         $tpl->set('authId', $_SESSION['authInfo']['authId']);
-        $tpl->set('error', isset($error) ? $error : '');
         return $tpl->fetch('password.tpl');
     }
 }
