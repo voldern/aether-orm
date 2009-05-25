@@ -33,7 +33,7 @@
 	    <input type="hidden" name="referer" value="http://{$aether.domain}{$aether.base}login" />
     {/if}
     <p class="clearfix"><label for="email">Email:</label> <input type="text" id="email" name="email" /></p>
-    <p class="clearfix"><label for="password">Password:<label> <input type="password" id="password" name="password" /></p>
+    <p class="clearfix"><label for="password">Password:</label> <input type="password" id="password" name="password" /></p>
     <p class="clearfix"><button class="login" type="submit">Log in</button></p>
 </form>
 </div>
