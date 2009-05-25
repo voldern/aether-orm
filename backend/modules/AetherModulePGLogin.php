@@ -43,7 +43,7 @@ class AetherModulePGLogin extends AetherModule {
                 // to the password reset page. If not try to redirect
                 // to where the user came from or the frontpage as a last resort
                 if (isset($_GET['authType']) && $_GET['authType'] == 'onetime_password')
-                    header('Location: /password');
+                    header('Location: /password?message=onetime');
                 elseif (isset($_GET['referer']) && !empty($_GET['referer']))
                     header('Location: ' . $_GET['referer']);
                 else

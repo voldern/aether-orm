@@ -12,6 +12,13 @@
 </div>
 {/if}
 
+{if isset($message) and $message == 'onetime'}
+<div class="message">
+    Vi anbefaler at du endrer passordet ditt her slik at du slipper
+    å bruke engangspassord neste gang du logger inn.
+</div>
+{/if}
+
 <form action="{$aether.options.loginURL}?action=setPassword&authId={$authId}&referer=http://{$aether.domain}{$aether.base}password" method="post">
     <label>New password: <input type="password" name="password" /></label>
     <label>Repeate password: <input type="password" name="password2" /></label>

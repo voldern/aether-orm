@@ -29,6 +29,9 @@ class AetherModulePGPassword extends AetherModule {
                    '/login?message=password_changed');
             exit();
         }
+
+        if (isset($_GET['message']) && !empty($_GET['message']))
+            $tpl->set('message', $_GET['message']);
             
         $tpl->set('authId', $_SESSION['authInfo']['authId']);
         return $tpl->fetch('password.tpl');
