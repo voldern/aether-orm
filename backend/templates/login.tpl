@@ -25,13 +25,15 @@
 </div>
 {/if}
 
-<form action="{$aether.options.loginURL}" method="post">
+<div class="grid four">
+<form action="{$aether.options.loginURL}" method="post" class="login">
 	{if $error == 'login_required' && isset($referer)}
     	<input type="hidden" name="referer" value="http://{$aether.domain}{$aether.base}login?referer={$referer}" />
     {else}
 	    <input type="hidden" name="referer" value="http://{$aether.domain}{$aether.base}login" />
     {/if}
-    <label>Email: <input type="text" name="email" /></label>
-    <label>Password: <input type="password" name="password" /></label>
-    <button type="submit">Log in</button>
+    <p class="clearfix"><label for="email">Email:</label> <input type="text" id="email" name="email" /></p>
+    <p class="clearfix"><label for="password">Password:<label> <input type="password" id="password" name="password" /></p>
+    <p class="clearfix"><button class="login" type="submit">Log in</button></p>
 </form>
+</div>
