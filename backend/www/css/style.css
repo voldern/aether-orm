@@ -277,3 +277,10 @@ form.login label {
 #password {
     background: url(../images/secure.png) no-repeat 0 50%;
 }
+
+form.login button.login {
+    padding: 6px 6px 6px 28px;
+    background-image: url(../images/check.png);
+    background-repeat: no-repeat;
+    background-position: 6px 50%;
+}
