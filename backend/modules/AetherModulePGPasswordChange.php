@@ -34,7 +34,7 @@ class AetherModulePGPasswordChange extends AetherModule {
             $tpl->set('message', $_GET['message']);
             
         $tpl->set('authId', $_SESSION['authInfo']['authId']);
-        return $tpl->fetch('password.tpl');
+        return $tpl->fetch('password/change.tpl');
     }
 }
 ?>
