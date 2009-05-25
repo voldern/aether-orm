@@ -69,6 +69,9 @@ class AetherModulePGLogin extends AetherModule {
         // Set the referer if the auth module has included it during the redirect
         if (isset($_GET['referer']) && !empty($_GET['referer']))
             $tpl->set('referer', $_GET['referer']);
+
+        if (isset($_GET['message']) && !empty($_GET['message']))
+            $tpl->set('message', $_GET['message']);
         
         return $tpl->fetch('login.tpl');
     }

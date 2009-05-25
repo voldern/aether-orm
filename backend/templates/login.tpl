@@ -4,6 +4,12 @@
 </div>
 {/if}
 
+{if isset($message) and $message == 'password_changed'}
+<div class="notice info">
+	Passordet ditt er nå endret.
+</div>
+{/if}
+
 {if not empty($error)}
 <div class="notice error">
 	{if $error == 'login_required'}
