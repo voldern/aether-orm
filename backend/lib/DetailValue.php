@@ -39,6 +39,7 @@ class DetailValue extends ActiveRecord {
         ),
         'indexes' => array(
             'id' => 'id',
+            'entity_id' => 'entityId'
         ),
         'fields' => array(
             'id' => 'id',
