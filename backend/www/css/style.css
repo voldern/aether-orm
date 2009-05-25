@@ -256,3 +256,24 @@ html[xmlns] .clearfix {
 #content {
     padding: 15px;
 }
+
+
+/* Login form */
+
+form.login input {
+    padding: 6px 6px 6px 26px;
+}
+
+form.login label {
+    text-align: right;
+    float: left;
+    width: 70px;
+}
+
+#email {
+    background: url(../images/user.png) no-repeat 0 50%;
+}
+
+#password {
+    background: url(../images/secure.png) no-repeat 0 50%;
+}
