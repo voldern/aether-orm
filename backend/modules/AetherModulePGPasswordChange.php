@@ -8,7 +8,7 @@
  * @package prisguide.backend.modules
  */
 
-class AetherModulePGPassword extends AetherModule {
+class AetherModulePGPasswordChange extends AetherModule {
     /**
      * Render module
      *

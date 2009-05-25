@@ -45,10 +45,14 @@
             </rule>
             <rule match="password">
                 <template>generic.tpl</template>
-                <option name="selectedSection">password</option>
                 <option name="loginURL">https://auth.tek.no/</option>
-                <module provides="content">PGPassword</module>
                 <option name="javascripts">/js/password.js</option>
+                <rule match="change">
+                    <module provides="content">PGPasswordChange</module>
+                </rule>
+                <rule match="onetime">
+                    <module provides="content">PGPasswordOnetime</module>
+                </rule>
             </rule>
             <rule match="">
             </rule>
