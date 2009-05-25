@@ -23,4 +23,8 @@ dojo.addOnLoad(function() {
         }
     });
     dojo.behavior.apply();
+
+    // Add focus to e-mail if login is required
+    if (dojo.byId("email"))
+        dojo.byId("email").focus();
 });
