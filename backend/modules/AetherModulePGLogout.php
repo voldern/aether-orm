@@ -21,7 +21,11 @@ class AetherModulePGLogout extends AetherModule {
                         
         // Logout the user and send him back to the login page
         $auth = new PriceguideUser;
-        $auth->logout('http://' . $_SERVER['HTTP_HOST'] . '/login');
+
+        if (isset($_GET['redirect']) && !empty($_GET['redirect']))
+            $auth->logout($_GET['redirect']);
+        else
+            $auth->logout('http://' . $_SERVER['HTTP_HOST'] . '/login');
     }
 }
 
