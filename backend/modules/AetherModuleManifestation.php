@@ -31,6 +31,12 @@ class AetherModuleManifestation extends AetherModule {
             case 'Delete':
                 $response = $this->deleteManifestation($_GET);
                 break;
+            case 'Get':
+                $response = $this->getManifestation($_GET);
+                break;
+            case 'GetByWork':
+                $response = $this->getManifestationsByWork($_GET);
+                break;
         }
 
         return new AetherJSONResponse($response);
@@ -49,6 +55,20 @@ class AetherModuleManifestation extends AetherModule {
             $manifestation = new Manifestation($id);
             $manifestation->delete();
             return array('id'=>$id);
+        }
+    }
+    private function getManifestation($data) {
+        if (is_numeric($data['id'])) {
+            $id = $data['id'];
+            $manifestation = new Manifestation($id);
+            return $manifestation->toArray();
+        }
+    }
+    private function getManifestationsByWork($data) {
+        if (is_numeric($data['id'])) {
+            $id = $data['id'];
+            $ms = RecordFinder::find('Manifestation', array('workId'=>$data['id']));
+            return $ms->toArray();
         }
     }
 }
