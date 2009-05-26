@@ -4,10 +4,14 @@
 </div>
 {/if}
 
-{if isset($message) and $message == 'password_changed'}
-<div class="notice info">
-	Passordet ditt er nå endret.
-</div>
+{if isset($message)}
+    <div class="notice info">
+    {if $message == 'password_changed'}
+       Passordet ditt er nå endret.
+    {elseif $message == 'onetime'}
+       Du skal motta et engangspassord på SMS innen fem minutter.
+    {/if}
+    </div>
 {/if}
 
 {if not empty($error)}
@@ -37,3 +41,6 @@
     <p class="clearfix"><button class="login" type="submit">Log in</button></p>
 </form>
 </div>
+
+<p>Har du glemt passordet ditt? Du kan få tilsendt et engangspassord
+på sms <a href="/password/onetime">her</a>.</p>
