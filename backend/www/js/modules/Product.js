@@ -11,7 +11,7 @@ dojo.declare("modules.Product",
     templatePath: dojo.moduleUrl("modules.templates", "product.html"),
     postMixInProperties: function() {
         dojo.xhrGet({
-            url: 'http://pg.raymond.raw.no/products/',
+            url: '/products/',
             content: {
                 module: 'Manifestation',
                 service: 'GetByWork',
