@@ -39,7 +39,7 @@ dojo.declare("modules.Duplicate", null, {
                     // Create textual information with dupe count
                     var text = 'Found ' + response.duplicateCount + ' duplicates';
                     dojo.place(dojo.create("div", { id: 'duplicateCount', 
-                                                    class: 'tooltip error',
+                                                    className: 'tooltip error',
                                                     innerHTML: text }),
                                evt.target, 'after');
 
@@ -71,5 +71,4 @@ dojo.declare("modules.Duplicate", null, {
             }
         });
     }
-    
 });
