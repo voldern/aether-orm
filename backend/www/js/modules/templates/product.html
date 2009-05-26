@@ -1,0 +1,11 @@
+<div>
+{% for item in data.records %}
+<div id="container_mani_{{item.id}}">
+    <label for="mani_{{item.id}}">[#{{item.id}}] Name</label>
+    <input class="string autosave" id="mani_{{item.id}}" type="text" 
+        value="{{item.title}}" name="mani[{{item.id}}]" />
+    <a href="/products/?module=Manifestation&amp;service=Delete&amp;id={{item.id}}" 
+    class="delete_manifestation">X</a>
+</div>
+{% endfor %}
+</div>
