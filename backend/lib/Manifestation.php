@@ -47,7 +47,7 @@ class Manifestation extends ActiveRecord {
         ),
         'relations' => array(
             'entity' => array(
-                'class' => 'PriceguideEntity',
+                'class' => 'Entity',
                 'type' => 'one',
                 'foreignKey' => 'id',
                 'localKey' => 'id'

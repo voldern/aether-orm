@@ -23,8 +23,9 @@ class Work extends ActiveRecord {
         'keys' => array('id' => 'id'),
         'indexes' => array(
             'id' => 'id',
-            'title' => 'title'
-            ),
+            'title' => 'title',
+            'deleted_at' => 'deletedAt',
+        ),
         'fields' => array(
             'id' => 'id',
             'title' => 'title',
