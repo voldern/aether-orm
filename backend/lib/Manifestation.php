@@ -33,7 +33,8 @@ class Manifestation extends ActiveRecord {
         'indexes' => array(
             'id' => 'id',
             'work_id' => 'workId',
-            'title' => 'title'
+            'title' => 'title',
+            'deleted_at' => 'deletedAt'
         ),
         'fields' => array(
             'id' => 'id',

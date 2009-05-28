@@ -13,7 +13,8 @@ dojo.declare("modules.Product",
         dojo.xhrGet({
             url: '/products/',
             content: {
-                module: 'Manifestation',
+                module: 'Entity',
+                type: 'manifestation',
                 service: 'GetByWork',
                 id: this.id,
             },
