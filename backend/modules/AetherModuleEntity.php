@@ -42,7 +42,7 @@ class AetherModuleEntity extends AetherModule {
         return new AetherJSONResponse($response);
     }
     private function createEntity($data) {
-        switch ($data['type']) {
+        switch (strtolower($data['type'])) {
             case 'manifestation':
                 if (is_numeric($data['work_id'])) {
                     $wid = $data['work_id'];
@@ -56,7 +56,7 @@ class AetherModuleEntity extends AetherModule {
     private function deleteEntity($data) {
         if (is_numeric($data['id'])) {
             $id = $data['id'];
-            switch ($data['type']) {
+            switch (strtolower($data['type'])) {
                 case 'manifestation':
                     $object = new Manifestation($id);
                     break;
@@ -84,7 +84,12 @@ class AetherModuleEntity extends AetherModule {
                     $class = 'Manifestation';
                     break;
             }
-            $ms = RecordFinder::locate($class, array("workId = $id", 'deletedAt IS NULL'));
+            $ms = RecordFinder::locate($class, 
+                array(
+                    "workId = $id", 'deletedAt IS NULL',
+                    'order' => array('title' => 'asc')
+                )
+            );
             return $ms->toArray();
         }
     }

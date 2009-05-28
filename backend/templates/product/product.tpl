@@ -9,7 +9,7 @@
     <fieldset>
         <legend>Product variations</legend>
         <div dojoType="modules.Product" id="{$id}"></div>
-        <a href="/products/?module=Manifestation&amp;service=Add&amp;work_id={$id}" 
+        <a href="/products/?module=Entity&amp;type=Manifestation&amp;service=Add&amp;work_id={$id}" 
             id="add_manifestation" class="ajax_link">Add variant</a>
     </fieldset>
 </form>
