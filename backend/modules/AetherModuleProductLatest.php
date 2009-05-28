@@ -20,7 +20,8 @@ class AetherModuleProductLatest extends AetherModule {
         $tpl = $this->sl->getTemplate();
         $config = $this->sl->get('aetherConfig');
         // Find works
-        $works = RecordFinder::find('Work', array(
+        $works = RecordFinder::locate('Work', array(
+            'deletedAt IS NULL',
             'limit' => 25, 'order' => array(
                 'created_at' => 'desc')
             )
