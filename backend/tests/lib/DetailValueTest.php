@@ -20,6 +20,8 @@ class DetailValueTest extends PHPUnit_Framework_TestCase {
         $detail = new DetailValue($id);
         $this->assertEquals($created, $detail->get('createdAt'));
         $this->assertEquals(1, $detail->get('num'));
+        // Test get(value)
+        $this->assertEquals(1, $detail->get('value'));
         $db->query("DELETE FROM detail_value WHERE id = $id");
     }
 

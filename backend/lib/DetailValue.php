@@ -56,6 +56,12 @@ class DetailValue extends ActiveRecord {
             'bool_val' => 'bool',
         ),
         'relations' => array(
+            'detail' => array(
+                'class' => 'Detail',
+                'type' => 'one',
+                'foreignKey' => 'id',
+                'localKey' => 'detailId'
+            ),
         )
     );
 
@@ -67,6 +73,29 @@ class DetailValue extends ActiveRecord {
      */
     public function save($idFromTable = 'detail_value') {
         parent::save($idFromTable);
+    }
+    
+    /**
+     * Override get to have some magic way to fetch "value"
+     *
+     * @return mixed
+     * @param string $key
+     */
+    public function get($key) {
+        if ($key == 'value') {
+            switch ($this->get('detail')->get('type')) {
+                case 'int':
+                    return $this->get('num');
+                case 'text':
+                    return $this->get('text');
+                case 'date':
+                    return $this->get('date');
+                case 'bool':
+                    return $this->get('bool');
+            }
+        }
+        else
+            return parent::get($key);
     }
 
     /**
