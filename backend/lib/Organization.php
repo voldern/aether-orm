@@ -1,6 +1,6 @@
 <?php // 
 require_once('/home/lib/libDefines.lib.php');
-require_once(LIB_PATH . 'ActiveRecord.php');
+require_once(PG_PATH . 'backend/lib/Entity.php');
 /**
  * 
  * Organization
@@ -10,16 +10,7 @@ require_once(LIB_PATH . 'ActiveRecord.php');
  * @package prisguide.backend.lib
  */
 
-class Organization extends ActiveRecord {
-    protected $id;
-    protected $title;
-    protected $createdAt;
-    protected $modifiedAt;
-    protected $publishedAt;
-    protected $deletedAt;
-    protected $replacedBy;
-    protected $neverEverCache = true;
-
+class Organization extends Entity {
     public $tableInfo = array(
         'database' => 'pg2_backend',
         'table' => 'organization_view',
@@ -37,7 +28,7 @@ class Organization extends ActiveRecord {
             'modified_at' => 'modifiedAt',
             'published_at' => 'publishedAt',
             'deleted_at' => 'deletedAt',
-            'replaced_by_entity_id' => 'replacedBy'
+            'replaced_by_entity_id' => 'replacedByEntityId'
         ),
         'relations' => array(
             'entity' => array(
@@ -73,16 +64,6 @@ class Organization extends ActiveRecord {
         $work->save();
         
         return $work;
-    }
-
-    /**
-     * Persist record to database
-     *
-     * @access public
-     * @return bool
-     */
-    public function save($idFromTable = 'entity') {
-        parent::save('entity');
     }
 }
 ?>

@@ -1,22 +1,10 @@
 <?php
 
 require_once('/home/lib/libDefines.lib.php');
-require_once(LIB_PATH . 'Database.php');
-require_once(LIB_PATH . 'ActiveRecord.php');
 require_once(PG_PATH . 'backend/lib/Entity.php');
-require_once(PG_PATH . 'backend/lib/DetailValue.php');
 
-class Work extends ActiveRecord {
-    protected $id;
-    protected $title;
-    protected $createdAt;
-    protected $replacedByEntityId;
-    protected $modifiedAt;
-    protected $deletedAt;
-    protected $publishedAt;
+class Work extends Entity {
     protected $manifestations;
-
-    protected $neverEverCache = true;
 
     public $tableInfo = array(
         'database' => 'pg2_backend',
@@ -77,15 +65,5 @@ class Work extends ActiveRecord {
         $work->save();
         
         return $work;
-    }
-
-    /**
-     * Persist record to database
-     *
-     * @access public
-     * @return bool
-     */
-    public function save($idFromTable = 'entity') {
-        parent::save('entity');
     }
 }

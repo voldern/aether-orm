@@ -1,27 +1,44 @@
 <?php
+require_once('/home/lib/libDefines.lib.php');
+require_once(LIB_PATH . 'ActiveRecord.php');
+require_once(PG_PATH . 'backend/lib/DetailValue.php');
 
-class Entity extends ActiveRecord {
+abstract class Entity extends ActiveRecord {
     protected $id;
-    protected $created_at;
-    protected $replaced_by_entity_id;
-    protected $published_at;
-    protected $modified_at;
-    protected $deleted_at;
+    protected $createdAt;
+    protected $replacedByEntityId;
+    protected $publishedAt;
+    protected $modifiedAt;
+    protected $deletedAt;
     protected $title;
 
-    public $tableInfo = array(
-        'database' => 'pg2_backend',
-        'table' => 'entity',
-        'keys' => array('id' => 'id'),
-        'indexes' => array('id' => 'id'),
-        'fields' => array(
-            'id' => 'id',
-            'created_at' => 'createdAt',
-            'replaced_by_entity_id' => 'replacedByEntityId',
-            'published_at' => 'publishedAt',
-            'modified_at' => 'modifiedAt',
-            'deleted_at' => 'deletedAt',
-            'title' => 'title'
-            )
-        );
+    // Tmp turned of caching completely
+    protected $neverEverCache = true;
+
+    /**
+     * Persist record to database
+     *
+     * @access public
+     * @return bool
+     */
+    public function save($idFromTable = 'entity') {
+        parent::save($idFromTable);
+    }
+    
+    /**
+     * Override default toArray() to include Details
+     *
+     * @access public
+     * @return string
+     * @param string $srcCharset
+     */
+    public function toArray($srcCharset = 'ISO-8859-1') {
+        $data = parent::toArray();
+        // mix in details
+        $data['details'] = array();
+        foreach ($this->get('details')->getAll() as $d) {
+            $data['details'][$d->get('id')] = $d->toArray();
+        }
+        return $data;
+    }
 }

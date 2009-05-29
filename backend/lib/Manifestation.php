@@ -1,7 +1,7 @@
 <?php // 
 
 require_once('/home/lib/libDefines.lib.php');
-require_once(LIB_PATH . 'ActiveRecord.php');
+require_once(PG_PATH . 'backend/lib/Entity.php');
 require_once(PG_PATH . 'backend/lib/Work.php');
 
 /**
@@ -13,16 +13,8 @@ require_once(PG_PATH . 'backend/lib/Work.php');
  * @package aether.backend.lib
  */
 
-class Manifestation extends ActiveRecord {
-    protected $id;
+class Manifestation extends Entity {
     protected $workId;
-    protected $title;
-    protected $createdAt;
-    protected $modifiedAt;
-    protected $publishedAt;
-    protected $deletedAt;
-    protected $replacedBy;
-    protected $neverEverCache = true;
 
     public $tableInfo = array(
         'database' => 'pg2_backend',
@@ -44,7 +36,7 @@ class Manifestation extends ActiveRecord {
             'modified_at' => 'modifiedAt',
             'published_at' => 'publishedAt',
             'deleted_at' => 'deletedAt',
-            'replaced_by_entity_id' => 'replacedBy'
+            'replaced_by_entity_id' => 'replacedByEntityId'
         ),
         'relations' => array(
             'entity' => array(
@@ -94,16 +86,6 @@ class Manifestation extends ActiveRecord {
         else {
             throw new Exception("Work has no ID, halting");
         }
-    }
-
-    /**
-     * Persist record to database
-     *
-     * @access public
-     * @return bool
-     */
-    public function save($idFromTable = 'entity') {
-        parent::save($idFromTable);
     }
 }
 ?>

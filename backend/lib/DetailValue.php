@@ -1,7 +1,6 @@
 <?php // 
 require_once('/home/lib/libDefines.lib.php');
 require_once(LIB_PATH . 'ActiveRecord.php');
-require_once(PG_PATH . 'backend/lib/Manifestation.php');
 require_once(PG_PATH . 'backend/lib/Detail.php');
 /**
  * 
@@ -133,6 +132,24 @@ class DetailValue extends ActiveRecord {
         }
         $dv->save();
         return $dv;
+    }
+
+    /**
+     * Override default toArray() to include Details
+     *
+     * @access public
+     * @return string
+     * @param string $srcCharset
+     */
+    public function toArray($srcCharset = 'ISO-8859-1') {
+        $detail = $this->get('detail');
+        $data = array(
+            'id' => $this->get('id'),
+            'status' => $this->get('status'),
+            'value' => $this->get('value'),
+            'type' => $detail->get('type')
+        );
+        return $data;
     }
 }
 ?>

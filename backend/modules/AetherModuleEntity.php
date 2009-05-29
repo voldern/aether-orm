@@ -37,6 +37,8 @@ class AetherModuleEntity extends AetherModule {
             case 'GetByWork':
                 $response = $this->getEntitiesByWork($_GET);
                 break;
+            default:
+                $response = array('error'=>'No service requested');
         }
 
         return new AetherJSONResponse($response);
@@ -73,7 +75,8 @@ class AetherModuleEntity extends AetherModule {
                     $object = new Manifestation($id);
                     break;
             }
-            return $object->toArray();
+            $return = $object->toArray();
+            return $return;
         }
     }
     private function getEntitiesByWork($data) {
