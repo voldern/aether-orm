@@ -4,6 +4,7 @@ require_once('/home/lib/libDefines.lib.php');
 require_once(LIB_PATH . 'Database.php');
 require_once(LIB_PATH . 'ActiveRecord.php');
 require_once(PG_PATH . 'backend/lib/Entity.php');
+require_once(PG_PATH . 'backend/lib/DetailValue.php');
 
 class Work extends ActiveRecord {
     protected $id;
@@ -40,13 +41,19 @@ class Work extends ActiveRecord {
                 'class' => 'Entity',
                 'type' => 'one',
                 'foreignKey' => 'id',
-                'localKey' => 'id'
             ),
             'manifestations' => array(
                 'class' => 'Manifestation',
                 'type' => 'many',
                 'linker' => 'pg2_backend.manifestation_view',
                 'foreignKey' => 'work_id',
+                'linkerKey' => 'id'
+            ),
+            'details' => array(
+                'class' => 'DetailValue',
+                'type' => 'many',
+                'linker' => 'pg2_backend.detail_value',
+                'foreignKey' => 'entity_id',
                 'linkerKey' => 'id'
             ),
         )

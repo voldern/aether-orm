@@ -17,6 +17,8 @@ class ManifestationTest extends PHPUnit_Framework_TestCase {
         $manifestation = Manifestation::create($work, $title);
         $id = $manifestation->get('id');
         $workId = $work->get('id');
+        // Get work
+        $this->assertEquals($workId, $manifestation->get('work')->get('id'));
 
         $entity = $db->queryRowf(
             'SELECT * FROM manifestation_view WHERE id = ?',$id);

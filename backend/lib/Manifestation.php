@@ -51,8 +51,19 @@ class Manifestation extends ActiveRecord {
                 'class' => 'Entity',
                 'type' => 'one',
                 'foreignKey' => 'id',
-                'localKey' => 'id'
-            )
+            ),
+            'details' => array(
+                'class' => 'DetailValue',
+                'type' => 'many',
+                'linker' => 'pg2_backend.detail_value',
+                'foreignKey' => 'entity_id',
+                'linkerKey' => 'id'
+            ),
+            'work' => array(
+                'class' => 'Work',
+                'type' => 'one',
+                'foreignKey' => 'workId'
+            ),
         )
     );
     
