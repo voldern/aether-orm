@@ -28,16 +28,21 @@ class AetherModuleProductLatest extends AetherModule {
         );
         $wrks = array();
         foreach ($works->getAll() as $w) {
-            $manifestations = $w->get('manifestations')->getAll();
             $manis = array();
-            if (count($manifestations) > 1) {
-                foreach ($manifestations as $m) {
-                    $manis[] = array(
-                        'id' => $m->get('id'),
-                        'title' => $m->get('title'),
-                        'created' => $m->get('createdAt'),
-                    );
+            try {
+                $manifestations = $w->get('manifestations')
+                    ->getBy('deletedAt',null)->getAll();
+                if (count($manifestations) > 1) {
+                    foreach ($manifestations as $m) {
+                        $manis[] = array(
+                            'id' => $m->get('id'),
+                            'title' => $m->get('title'),
+                            'created' => $m->get('createdAt'),
+                        );
+                    }
                 }
+            }
+            catch (Exception $e) {
             }
             $wrks[] = array(
                 'id' => $w->get('id'),
