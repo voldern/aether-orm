@@ -62,6 +62,9 @@ class AetherModuleEntity extends AetherModule {
                 case 'manifestation':
                     $object = new Manifestation($id);
                     break;
+                case 'work':
+                    $object = new Work($id);
+                    break;
             }
             $object->delete();
             return array('id'=>$id);
@@ -74,8 +77,11 @@ class AetherModuleEntity extends AetherModule {
                 case 'manifestation':
                     $object = new Manifestation($id);
                     break;
+                case 'work':
+                    $object = new Work($id);
+                    break;
             }
-            $return = $object->toArray();
+            $return = Entity::removeDeletedArrayMembers($object->toArray());
             return $return;
         }
     }

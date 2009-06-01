@@ -33,12 +33,30 @@ abstract class Entity extends ActiveRecord {
      * @param string $srcCharset
      */
     public function toArray($srcCharset = 'ISO-8859-1') {
-        $data = parent::toArray();
-        // mix in details
-        $data['details'] = array();
-        foreach ($this->get('details')->getAll() as $d) {
-            $data['details'][$d->get('id')] = $d->toArray();
+        $this->setExportFields(array('details'),false);
+        return parent::toArray();
+    }
+    
+    /**
+     * Filter out all non-deleted entitys from an array
+     *
+     * @return array
+     * @param array $data
+     */
+    static public function removeDeletedArrayMembers($array) {
+        $newArray = array();
+        foreach ($array as $key => $val) {
+            if (is_array($val)) {
+                $newArray[$key] = array('records'=>array());
+                foreach ($val['records'] as $k => $r) {
+                    if ($r['deletedAt'] == '')
+                        $newArray[$key]['records'][$k] = $r;
+                }
+            }
+            else {
+                $newArray[$key] = $val;
+            }
         }
-        return $data;
+        return $newArray;
     }
 }

@@ -1,5 +1,15 @@
 <div>
-{% for item in data.records %}
+<h1>Product</h1>
+<form action="/products/{{data.id}}/?module=Product&amp;service=Save" method="post" class="autosaveForm">
+    <fieldset>
+        <legend>Product blueprint</legend>
+        <input id="id" type="hidden" value="{{data.id}}" name="id" />
+        <label for="blueprint">Name</label>
+        <input id="blueprint" class="autosave string" type="text" value="{{data.title}}" name="blueprint" />
+    </fieldset>
+    <fieldset>
+        <legend>Product variations</legend>
+{% for item in data.manifestations.records %}
 <div id="container_mani_{{item.id}}">
     <label for="mani_{{item.id}}">[#{{item.id}}] Name</label>
     <input class="string autosave" id="mani_{{item.id}}" type="text" 
@@ -8,4 +18,8 @@
     class="delete_manifestation">X</a>
 </div>
 {% endfor %}
+    <a href="/products/?module=Entity&amp;type=Manifestation&amp;service=Add&amp;work_id={{data.id}}" 
+            id="add_manifestation" class="ajax_link">Add variant</a>
+    </fieldset>
+</form>
 </div>

@@ -66,4 +66,23 @@ class Work extends Entity {
         
         return $work;
     }
+    
+    /**
+     * Override default toArray() to include Manifestations
+     *
+     * @access public
+     * @return string
+     * @param string $srcCharset
+     */
+    public function toArray($srcCharset = 'ISO-8859-1') {
+        $this->setExportFields(array('manifestations'),false);
+        return parent::toArray();
+        // mix in manifestations
+        $ms = $this->get('manifestations')->getAll();
+        $data['manifestations'] = array();
+        foreach ($ms as $m) {
+            $data['manifestations'][$m->get('id')] = $m->toArray();
+        }
+        return $data;
+    }
 }

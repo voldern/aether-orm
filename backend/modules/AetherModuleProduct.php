@@ -23,10 +23,8 @@ class AetherModuleProduct extends AetherModule {
         if (isset($pid) AND is_numeric($pid)) {
             $work = new Work($pid);
             // Get manifestations
-            $manifestations = $work->get('manifestations')->getAll();
-            $tpl->set('manifestations', $manifestations);
-            $tpl->set('id', $work->get('id'));
             $tpl->set('title', $work->get('title'));
+            $tpl->set('id', $pid);
         }
         return $tpl->fetch('product/product.tpl');
     }
