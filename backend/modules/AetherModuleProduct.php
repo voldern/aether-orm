@@ -20,12 +20,7 @@ class AetherModuleProduct extends AetherModule {
         $tpl = $this->sl->getTemplate();
         $config = $this->sl->get('aetherConfig');
         $pid = $config->getUrlVar('product_id');
-        if (isset($pid) AND is_numeric($pid)) {
-            $work = new Work($pid);
-            // Get manifestations
-            $tpl->set('title', $work->get('title'));
-            $tpl->set('id', $pid);
-        }
+        $tpl->set('id', $pid);
         return $tpl->fetch('product/product.tpl');
     }
 
