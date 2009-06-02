@@ -39,8 +39,8 @@ class URLDownloader {
     public function fetch($url) {
         curl_setopt($this->ch, CURLOPT_URL, $url);
 
-        $data = curl_exec($c);
-        if (curl_errno($c)) {
+        $data = curl_exec($this->ch);
+        if (curl_errno($this->ch)) {
             return array(
                 'error' => array(
                     'id' => curl_errno($this->ch), 
@@ -50,9 +50,9 @@ class URLDownloader {
         }
 
         $http = array(
-            'httpCode' => curl_getinfo($c, CURLINFO_HTTP_CODE),
-            'sizeDownload' => curl_getinfo($c, CURLINFO_SIZE_DOWNLOAD),
-            'speedDownload' => curl_getinfo($c, CURLINFO_SPEED_DOWNLOAD),
+            'httpCode' => curl_getinfo($this->ch, CURLINFO_HTTP_CODE),
+            'sizeDownload' => curl_getinfo($this->ch, CURLINFO_SIZE_DOWNLOAD),
+            'speedDownload' => curl_getinfo($this->ch, CURLINFO_SPEED_DOWNLOAD),
             'response' => $data
         );
 
