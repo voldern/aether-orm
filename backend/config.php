@@ -8,16 +8,16 @@
  * @package pg2.backend
  */
 
-define("AETHER_PATH", "/home/simeng/aether/");
-define("LIB_PATH", "/home/simeng/lib/");
+define("AETHER_PATH", "/home/sites/shared/aether/");
+define("LIB_PATH", "/home/lib/");
 
-define("PG_PATH", "/home/simeng/public_html/pg2/backend");
+define("PG_PATH", "/home/sites/shared/prisguide/backend/");
 
 $_AUTOLOAD_CONFIG = array(
     "path" => array(
-        "Priceguide" => array("/home/simeng/lib/priceguide"),
-        "AetherModule" => array("/home/simeng/public_html/pg2/backend/modules"),
-        "" => array("/home/simeng/lib", "/home/simeng/lib/article/new2"),
+        "Priceguide" => array(LIB_PATH . "priceguide"),
+        "AetherModule" => array(PG_PATH . "modules"),
+        "" => array("/home/lib", PG_PATH . "lib"),
     )
 );
 
