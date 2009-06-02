@@ -1,5 +1,6 @@
 <?php // 
 require_once(PG_PATH . 'backend/lib/Detail.php');
+require_once(PG_PATH . 'backend/lib/DetailSet.php');
 require_once(PG_PATH . 'backend/lib/DetailValue.php');
 /**
  * 
@@ -26,7 +27,7 @@ class AetherModuleDetails extends AetherModule {
      */
     public function service($name) {
         switch ($name) {
-            case 'getDetail':
+            case 'Get':
                 $pid = false;
                 if (isset($_GET['pid']))
                     $pid = $_GET['pid'];
@@ -35,6 +36,9 @@ class AetherModuleDetails extends AetherModule {
             case 'getAllForEntity':
                 $response = $this->getAllDetails($_GET['pid']);
                 break;
+            case 'GetSets':
+                $response = $this->getDetailSets($_GET);
+                break;
         }
 
         return new AetherJSONResponse($response);
@@ -42,33 +46,20 @@ class AetherModuleDetails extends AetherModule {
 
     private function getDetail($id,$pid) {
         if (!is_numeric($id))
-            return array('error'=>'Supplied ID is not numerical');
-        $detail = new Detail($id);
-        $resp = array('detail' => array(
-            'id' => $detail->get('id'),
-            'type' => $detail->get('type'),
-            'title' => $detail->get('title'),
-            'title_i18n' => $detail->get('titleI18N')
-        ));
+            return array('errors'=>
+                array('message'=>'Supplied ID is not numerical')
+            );
         if (is_numeric($pid)) {
+            $detail = new Detail($id);
             $col = RecordFinder::find('DetailValue',
                 array('detailId'=>$id,'entityId'=>$pid));
-            switch ($detail->get('type')) {
-                case 'int':
-                    $resp['value'] = $col->first->get('num');
-                    break;
-                case 'text':
-                    $resp['value'] = $col->first->get('text');
-                    break;
-                case 'bool':
-                    $resp['value'] = $col->first->get('bool');
-                    break;
-                case 'date':
-                    $resp['value'] = $col->first->get('date');
-                    break;
-            }
+            return $col->first->toArray();
         }
-        return $resp;
+        else {
+            return array('errors'=>array(
+                'message' => 'Failed to load DetailValue',)
+            );
+        }
     }
     private function getAllDetails($pid) {
         if (!is_numeric($pid))
@@ -102,5 +93,28 @@ class AetherModuleDetails extends AetherModule {
             $resp[$r->get('id')] = $arr;
         }
         return $resp;
+    }
+    
+    /**
+     * List all detail sets as array
+     *
+     * @return array
+     * @param array $data
+     */
+    private function getDetailSets($data) {
+        $legalCriteria = array('active','title','limit');
+        $criteria = array();
+        if (isset($data['active'])) {
+            if ($data['active'] == 1)
+                $criteria[] = 'deletedAt IS NULL';
+            else
+                $criteria[] = 'deletedAt IS NOT NULL';
+        }
+        if (isset($data['limit']) AND is_numeric($data['limit'])) {
+            $criteria['limit'] = $data['limit'];
+        }
+        $col = RecordFinder::find('DetailSet',$criteria);
+        $col->setExportFields(array('details'));
+        return $col->toArray();
     }
 }
