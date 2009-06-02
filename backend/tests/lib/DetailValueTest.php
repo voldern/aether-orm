@@ -41,4 +41,23 @@ class DetailValueTest extends PHPUnit_Framework_TestCase {
         $db->queryf("DELETE FROM entity WHERE id = ?", $entity->get('id'));
         $db->queryf("DELETE FROM work WHERE entity_id = ?", $entity->get('id'));
     }
+
+    public function testToArray() {
+
+        $db = new Database('pg2_backend');
+        $val = 1;
+        $detail = Detail::create('test','int');
+        $entity = Work::create('test');
+        $dv = DetailValue::create($detail,$entity,$val);
+        $id = $dv->get('id');
+
+        $arr = $dv->toArray();
+
+        $this->assertTrue(is_array($arr['detail']));
+
+        $db->query("DELETE FROM detail_value WHERE id = $id");
+        $db->queryf("DELETE FROM detail WHERE id = ?", $detail->get('id'));
+        $db->queryf("DELETE FROM entity WHERE id = ?", $entity->get('id'));
+        $db->queryf("DELETE FROM work WHERE entity_id = ?", $entity->get('id'));
+    }
 }

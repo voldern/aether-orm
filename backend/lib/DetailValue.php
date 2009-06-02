@@ -2,6 +2,7 @@
 require_once('/home/lib/libDefines.lib.php');
 require_once(LIB_PATH . 'ActiveRecord.php');
 require_once(PG_PATH . 'backend/lib/Detail.php');
+require_once(PG_PATH . 'backend/lib/Work.php');
 /**
  * 
  * Raymond Julin was too lazy to write a description and owes you a beer.
@@ -142,14 +143,8 @@ class DetailValue extends ActiveRecord {
      * @param string $srcCharset
      */
     public function toArray($srcCharset = 'ISO-8859-1') {
-        $detail = $this->get('detail');
-        $data = array(
-            'id' => $this->get('id'),
-            'status' => $this->get('status'),
-            'value' => $this->get('value'),
-            'type' => $detail->get('type')
-        );
-        return $data;
+        $this->setExportFields(array('id','detail','status','value'),true);
+        return parent::toArray();
     }
 }
 ?>

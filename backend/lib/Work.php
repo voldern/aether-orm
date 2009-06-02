@@ -77,12 +77,5 @@ class Work extends Entity {
     public function toArray($srcCharset = 'ISO-8859-1') {
         $this->setExportFields(array('manifestations'),false);
         return parent::toArray();
-        // mix in manifestations
-        $ms = $this->get('manifestations')->getAll();
-        $data['manifestations'] = array();
-        foreach ($ms as $m) {
-            $data['manifestations'][$m->get('id')] = $m->toArray();
-        }
-        return $data;
     }
 }
