@@ -112,10 +112,10 @@ foreach ($shopIds as $s) {
     } else {
         $data = $url->fetch($shop->shopPricefeedUrl);
         if (isset($data['httpCode'])) {
-            logFetch($shop, $pricelist_path_orig, $data);
+            logFetch($shop, $pricelist_original, $data);
         }
         if (isset($data['error'])) {
-            logFetchError($shop, $pricelist_path_orig, $data['error']);
+            logFetchError($shop, $pricelist_original, $data['error']);
         }
 
         $outfp = fopen($pricelist_original, "w+");
