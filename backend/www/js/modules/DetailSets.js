@@ -23,5 +23,41 @@ dojo.declare("modules.DetailSets",
             }),
         });
     },
+    renderSetEdit: function(evt) {
+        // Create edit set widget
+        var link = dijit.byId(evt.currentTarget);
+        // Check if widget exists
+        widget = dijit.byId('set_edit');
+        if (widget)
+            widget.destroy();
+        // Whether or not to load existing
+        if (link.parentNode.nodeName == 'DIV') {
+            var id = 'new';
+        }
+        else {
+            var id = link.parentNode.getAttribute('id').substr(4);
+        }
+        var refNode = dojo.query('div.grid.one')[0];
+        // Set up replacement node
+        var replaceNode = document.createElement('div');
+        dojo.place(replaceNode, refNode);
+
+        // Create widget
+        widget = new modules.DetailSetEdit(
+            {set_id:id, id:'set_edit'},replaceNode);
+    },
+    postCreate: function() {
+        console.log("Created");
+        dojo.query("li.detail_set a").connect('onclick', 
+            dojo.hitch(this, function(evt) {
+                this.renderSetEdit(evt);
+            })
+        );
+        dojo.query("a#set_add").connect('onclick', 
+            dojo.hitch(this, function(evt) {
+                this.renderSetEdit(evt);
+            })
+        );
+    },
 });
 

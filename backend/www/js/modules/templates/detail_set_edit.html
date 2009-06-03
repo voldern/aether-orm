@@ -1,0 +1,28 @@
+<div>
+    <form action="" method="get">
+        <fieldset>
+            <legend>Detail name</legend>
+            <input type="text" name="set_name" value="{{data.title}}" />
+            <input type="submit" value="Save" />
+        </fieldset>
+        <fieldset>
+            <legend>Details</legend>
+            {% for item in data.details.records %}
+            <div id="detail_container_{{item.id}}" class="detail">
+                [#{{item.id}}] - 
+                <select name="type_{{item.id}}">
+                {% for type in data.types %}
+                    {% ifequal item.type type %}
+                    <option value="{{type}}" selected="selected">{{type}}</option>
+                    {% endifequal %}
+                    {% ifnotequal item.type type %}
+                    <option value="{{type}}">{{type}}</option>
+                    {% endifnotequal %}
+                {% endfor %}
+                </select>
+                <input type="text" value="{{item.title}}" id="detail_{{item.id}}" />
+            </div>
+            {% endfor %}
+        </fieldset>
+    </form>
+</div>

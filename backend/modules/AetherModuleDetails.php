@@ -33,11 +33,16 @@ class AetherModuleDetails extends AetherModule {
                     $pid = $_GET['pid'];
                 $response = $this->getDetail($_GET['id'],$pid);
                 break;
-            case 'getAllForEntity':
-                $response = $this->getAllDetails($_GET['pid']);
-                break;
             case 'GetSets':
                 $response = $this->getDetailSets($_GET);
+                break;
+            case 'GetSet':
+                $response = $this->getSet($_GET);
+                break;
+            case 'GetSetDetails':
+                break;
+            case 'CreateSet':
+                $response = $this->createSet($_GET);
                 break;
         }
 
@@ -61,40 +66,6 @@ class AetherModuleDetails extends AetherModule {
             );
         }
     }
-    private function getAllDetails($pid) {
-        if (!is_numeric($pid))
-            return array('error'=>'Supplied ID is not numerical');
-        $resp = array();
-        $col = RecordFinder::find('DetailValue',
-            array('entityId'=>$pid));
-        foreach ($col->getAll() as $r) {
-            $arr = array();
-            $detail = new Detail($r->get('detailId'));
-            $arr['detail'] = array(
-                'id' => $detail->get('id'),
-                'type' => $detail->get('type'),
-                'title' => $detail->get('title'),
-                'title_i18n' => $detail->get('titleI18N')
-            );
-            switch ($detail->get('type')) {
-                case 'int':
-                    $arr['value'] = $r->get('num');
-                    break;
-                case 'text':
-                    $arr['value'] = $r->get('text');
-                    break;
-                case 'bool':
-                    $arr['value'] = $r->get('bool');
-                    break;
-                case 'date':
-                    $arr['value'] = $r->get('date');
-                    break;
-            }
-            $resp[$r->get('id')] = $arr;
-        }
-        return $resp;
-    }
-    
     /**
      * List all detail sets as array
      *
@@ -116,5 +87,29 @@ class AetherModuleDetails extends AetherModule {
         $col = RecordFinder::find('DetailSet',$criteria);
         $col->setExportFields(array('details'));
         return $col->toArray();
+    }
+
+    /**
+     * Get a set
+     *
+     * @return array
+     * @param array $data
+     */
+    private function getSet($data) {
+        if (isset($data['id']) AND is_numeric($data['id'])) {
+            $set = new DetailSet($data['id']);
+            $set->setExportFields(array('details'));
+            if (isset($data['active']) AND $data['active'] == 1) {
+                $array['records'] = Entity::removeDeletedArrayMembers(
+                    $array['records']);
+            }
+            $array = $set->toArray();
+            return $array;
+        }
+        else {
+            return array('errors'=>
+                array('message'=>'Wong ID supplied')
+            );
+        }
     }
 }
