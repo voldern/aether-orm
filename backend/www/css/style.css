@@ -17,7 +17,7 @@
 
 body {
     font-family: Arial, Verdana, sans-serif;
-    color: black;
+    color: #000;
     font-size: 10pt;
 }
 
@@ -30,16 +30,18 @@ a:hover {
 }
 
 fieldset {
-    border: 1px solid #000;
+    border: 1px solid #ccc;
+    background-color: #eee;
     padding: 15px;
-    margin: 0.3em 0;
+    margin: 0.3em 0 2em;
 }
 
 fieldset legend {
-    border: 1px solid #ccc;
-    background-color: #eee;
+    background-color: #333366;
     padding: 4px 6px;
+    font-family: Georgia, Times, serif;
     font-weight: bold;
+    color: #fff;
 }
 
 label {
