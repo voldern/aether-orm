@@ -2,7 +2,6 @@
 require_once('/home/lib/libDefines.lib.php');
 require_once(LIB_PATH . 'ActiveRecord.php');
 require_once(PG_PATH . 'backend/lib/Detail.php');
-require_once(PG_PATH . 'backend/lib/Work.php');
 /**
  * 
  * Raymond Julin was too lazy to write a description and owes you a beer.
