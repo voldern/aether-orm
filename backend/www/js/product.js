@@ -2,7 +2,6 @@ dojo.require("dojo.parser");
 dojo.require("modules.AutoSave");
 dojo.require("modules.Product");
 
-
 dojo.addOnLoad(function() {
     // Add manifestation
     var node = dojo.byId("add_manifestation");

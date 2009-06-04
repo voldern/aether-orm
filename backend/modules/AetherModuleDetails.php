@@ -44,16 +44,28 @@ class AetherModuleDetails extends AetherModule {
             case 'CreateSet':
                 $response = $this->createSet($_GET);
                 break;
+            default:
+                $response = $this->error('Invalid service');
+                break;
         }
 
         return new AetherJSONResponse($response);
     }
+    
+    /**
+     * Wrap in an error message
+     *
+     * @return array
+     * @param string $message
+     */
+    private function error($message) {
+        return array('error' => array(
+            'message' => $message));
+    }
 
     private function getDetail($id,$pid) {
         if (!is_numeric($id))
-            return array('errors'=>
-                array('message'=>'Supplied ID is not numerical')
-            );
+            return $this->error('Supplied ID is not numerical');
         if (is_numeric($pid)) {
             $detail = new Detail($id);
             $col = RecordFinder::find('DetailValue',
@@ -61,9 +73,7 @@ class AetherModuleDetails extends AetherModule {
             return $col->first->toArray();
         }
         else {
-            return array('errors'=>array(
-                'message' => 'Failed to load DetailValue',)
-            );
+            return $this->error('Failed to load DetailValue');
         }
     }
     /**
@@ -107,9 +117,7 @@ class AetherModuleDetails extends AetherModule {
             return $array;
         }
         else {
-            return array('errors'=>
-                array('message'=>'Wong ID supplied')
-            );
+            return $this->error('Wrong ID supplied');
         }
     }
 }
