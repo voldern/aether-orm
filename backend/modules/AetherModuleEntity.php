@@ -1,5 +1,4 @@
 <?php // 
-require_once(PG_PATH . 'backend/lib/Manifestation.php');
 /**
  * 
  * Interact with all sorts of entities
