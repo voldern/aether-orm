@@ -24,12 +24,12 @@ echo "Started at: " . date('Y-m-d H:i:s') . "\n\n";
 
 // define directories
 $minute = date('Hi');
-$pricelist_path_orig = PG_PATH . "/pricelists/original/" . date('Y') . "/" . 
+$pricelist_path_orig = PG_PATH . "/backend/pricelists/original/" . date('Y') . "/" . 
         date('m') . "/" . date('d') . "/" . $minute . "/";
 
 # Link up latest download to /current
-unlink(PG_PATH . "/pricelists/current");
-symlink($pricelist_path_orig, PG_PATH . "/pricelists/current");
+unlink(PG_PATH . "/backend/pricelists/current");
+symlink($pricelist_path_orig, PG_PATH . "/backend/pricelists/current");
 
 // verify that all directories are created
 if (!is_dir($pricelist_path_orig) && !mkdir($pricelist_path_orig, 0775, true)) {
