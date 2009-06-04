@@ -24,8 +24,9 @@ dojo.declare("modules.DetailSets",
         });
     },
     renderSetEdit: function(evt) {
+        dojo.stopEvent(evt);
         // Create edit set widget
-        var link = dijit.byId(evt.currentTarget);
+        var link = dijit.byId(evt.target);
         // Check if widget exists
         widget = dijit.byId('set_edit');
         if (widget)
