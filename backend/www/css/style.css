@@ -111,6 +111,7 @@ table th,
 
 table thead th,
 .table .thead .th {
+    font-weight: bold;
     background-color: #333366;
     border-width: 1px;
     border-style: solid;
