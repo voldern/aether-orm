@@ -95,19 +95,22 @@ p {
 }
 
 /* Table style */
-table {
+table,
+.table {
     border: 0;
     border-collapse: collapse;
     border-bottom: 3px double #ccc;
     margin: 0.3em 0; 
 }
 
-table th {
+table th,
+.table .th {
     text-align: left;
     border-bottom: 1px solid #ccc;
 }
 
-table thead th {
+table thead th,
+.table .thead .th {
     background-color: #333366;
     border-width: 1px;
     border-style: solid;
@@ -116,29 +119,35 @@ table thead th {
     padding: 4px 6px;
 }
 
-table tbody td {
+table tbody td,
+.table .tbody .td {
     padding: 4px 6px;
 }
 
-table tbody .odd td {
+table tbody .odd td,
+.table .tbody .odd .td {
     background-color: #eee;
 }
 
-table tbody tr:hover td {
+table tbody tr:hover td,
+.table .tbody .tr:hover .td {
     background-color: #dfe6ef;
 }
 
-table .editable {
+table .editable,
+.table .editable {
     background: url(../images/edit-16x16.png) no-repeat right center;
     cursor: pointer;
 }
 
-table .editable:hover {
+table .editable:hover,
+.table .editable:hover {
     color: #0b5aab;
     text-decoration: underline;
 }
 
-table .work {
+table .work,
+.table .work {
     opacity: 0.5;
 }
 
@@ -192,6 +201,33 @@ html[xmlns] .clearfix {
 
 .half {
     width: 50%;
+}
+
+/* Table classes */
+
+.table {
+    display: table;
+}
+
+.table .tr {
+    display: table-row;
+}
+
+.table .td,
+.table .th {
+    display: table-cell;
+}
+
+.table .thead {
+    display: table-header-group;
+}
+
+.table .tbody {
+    display: table-row-group;
+}
+
+.table .tfoot {
+    display: table-footer-group;
 }
 
 
