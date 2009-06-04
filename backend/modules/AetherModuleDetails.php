@@ -1,7 +1,4 @@
 <?php // 
-require_once(PG_PATH . 'backend/lib/Detail.php');
-require_once(PG_PATH . 'backend/lib/DetailSet.php');
-require_once(PG_PATH . 'backend/lib/DetailValue.php');
 /**
  * 
  * Interface with details

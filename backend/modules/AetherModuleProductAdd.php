@@ -1,8 +1,5 @@
 <?php // vim:set ts=4 sw=4 et:
 
-require_once(PG_PATH . 'backend/lib/Manifestation.php');
-require_once(PG_PATH . 'backend/lib/Work.php');
-require_once(LIB_PATH . 'ActiveRecord.php');
 
 /**
  * 
