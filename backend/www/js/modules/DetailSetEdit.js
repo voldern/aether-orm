@@ -8,7 +8,14 @@ dojo.require("dojox.dtl._DomTemplated");
 
 dojo.declare("modules.DetailSetEdit", 
     [dijit._Widget, dojox.dtl._DomTemplated], {
+    /**
+     * Use a file based html template
+     */
     templatePath: dojo.moduleUrl("modules.templates", "detail_set_edit.html"),
+    /**
+     * This gets called once the widget is loaded with its configuration
+     * but before rendering so the data set in here will be available
+     */
     postMixInProperties: function() {
         if (this.set_id == 'new') {
             this.data = {
@@ -35,6 +42,9 @@ dojo.declare("modules.DetailSetEdit",
         }
         this.data.types = ['text','bool','date','numeric'];
         console.log(this.data);
+        var auto = new modules.AutoSave;
+        auto.findNodes();
+        auto.attachEvents();
     }
 });
 
