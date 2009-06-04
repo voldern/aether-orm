@@ -5,8 +5,8 @@ dojo.require("modules.DetailSetEdit");
 
 dojo.addOnLoad(function() {
     // Add manifestation
-    var node = dojo.byId("add_manifestation");
-    dojo.connect(node, 'onclick', dojo.hitch(this, function(evt) {
+    dojo.query("#add_manifestation")
+        .connect('onclick', dojo.hitch(this, function(evt) {
             dojo.stopEvent(evt);
             var node = evt.target;
             var url = dojo.attr(node, 'href');
@@ -20,7 +20,7 @@ dojo.addOnLoad(function() {
                         '<label for="mani_'+id+'">[#'+id+'] Name</label>'+
                         '<input type="text" class="string autosave" '+
                         'id="mani_'+id+'" name="mani['+id+']" '+
-                        'value="'+title+'" /><br />')
+                        'value="'+title+'" /><br />');
                     dojo.place(html, node, 'before');
                 }
             });
