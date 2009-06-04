@@ -41,7 +41,8 @@ dojo.declare("modules.DetailSetEdit",
             });
         }
         this.data.types = ['text','bool','date','numeric'];
-        console.log(this.data);
+    },
+    postCreate: function() {
         var auto = new modules.AutoSave;
         auto.findNodes();
         auto.attachEvents();

@@ -41,6 +41,10 @@ class AetherModuleDetails extends AetherModule {
             case 'CreateSet':
                 $response = $this->createSet($_GET);
                 break;
+            case 'SaveSet':
+                $id = $_GET['id'];
+                $response = $this->saveSet($id,$_POST);
+                break;
             default:
                 $response = $this->error('Invalid service');
                 break;
@@ -58,6 +62,20 @@ class AetherModuleDetails extends AetherModule {
     private function error($message) {
         return array('error' => array(
             'message' => $message));
+    }
+    
+    /**
+     * Send a succesfull statement
+     *
+     * @return array
+     * @param string $message
+     */
+    private function success($message='') {
+        $ret = array('success' => array());
+        if ($message != '')
+            $ret['success']['message'] = $message;
+        return $ret;
+            
     }
 
     private function getDetail($id,$pid) {
@@ -116,5 +134,28 @@ class AetherModuleDetails extends AetherModule {
         else {
             return $this->error('Wrong ID supplied');
         }
+    }
+    
+    /**
+     * Save a template set
+     *
+     * @return array
+     * @param int $id
+     * @param array $data
+     */
+    private function saveSet($id, $data) {
+        if (!is_numeric($id))
+            return $this->error('Supplied ID is not numerical');
+        $set = new DetailSet($id);
+        if (isset($data['set_name'])) {
+            $name = trim($data['set_name']);
+            $set->set('title', $name);
+        }
+        if (isset($data['set_name_i18n'])) {
+            $name = trim($data['set_name_i18n']);
+            $set->set('titleI18N', $name);
+        }
+        $set->save();
+        return $this->success();
     }
 }
