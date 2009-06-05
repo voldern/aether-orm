@@ -17,11 +17,11 @@ dojo.declare("modules.DetailSetDetails",
      * but before rendering so the data set in here will be available
      */
     postMixInProperties: function() {
+        // The other properties comes from DetailSetEdit
         this.data.types = ['text','bool','date','numeric'];
     },
     postCreate: function() {
-        var auto = new modules.AutoSave;
-        auto.findNodes();
+        auto.findNodes(this.domNode);
         auto.attachEvents();
     }
 });

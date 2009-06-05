@@ -46,8 +46,7 @@ dojo.declare("modules.DetailSetEdit",
     postCreate: function() {
         //var details = new modules.DetailSetDetails(data:{foo:'hei'});
         this.updateDetails({});
-        var auto = new modules.AutoSave;
-        auto.findNodes();
+        auto.findNodes(dojo.byId('edit_detail_set').parentNode);
         auto.attachEvents();
     },
     updateDetails: function() {

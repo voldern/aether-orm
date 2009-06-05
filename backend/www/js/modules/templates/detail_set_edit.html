@@ -1,7 +1,8 @@
 <div>
     <fieldset>
         <legend>Edit detail set</legend>
-        <form action="/detail?module=Details&service=SaveSet&id={{data.id}}" method="post" class="autosaveForm">
+        <form action="/detail?module=Details&service=SaveSet&id={{data.id}}" 
+            method="post" class="autosaveForm" id="edit_detail_set">
             <input type="text" name="set_name" value="{{data.title}}"
                 class="autosave string" />
             <input type="text" name="set_name_i18n" value="{{data.titleI18N}}"
