@@ -44,10 +44,23 @@ dojo.declare("modules.DetailSetEdit",
         this.data.types = ['text','bool','date','numeric'];
     },
     postCreate: function() {
-        //var details = new modules.DetailSetDetails(data:{foo:'hei'});
-        this.updateDetails({});
+        this.updateDetails();
         auto.findNodes(dojo.byId('edit_detail_set').parentNode);
         auto.attachEvents();
+
+        // Add details
+        dojo.query('#add_detail').connect('onclick', dojo.hitch(this, function(e) {
+            // add detail
+            dojo.stopEvent(e);
+            dojo.xhrGet({
+                url: e.currentTarget.getAttribute('href'),
+                load: dojo.hitch(this, function(response, ioArgs) {
+                    this.postMixInProperties();
+                    this.updateDetails();
+                })
+            });
+            // render details
+        }));
     },
     updateDetails: function() {
         // Show spinner for a little time

@@ -49,6 +49,10 @@ class AetherModuleDetails extends AetherModule {
                 $id = $_GET['id'];
                 $response = $this->saveDetail($id,$_POST);
                 break;
+            case 'AddDetail':
+                $setId = $_GET['id'];
+                $response = $this->addDetail($setId);
+                break;
             default:
                 $response = $this->error('Invalid service');
                 break;
@@ -192,5 +196,22 @@ class AetherModuleDetails extends AetherModule {
         }
         $detail->save();
         return $this->success();
+    }
+    
+    /**
+     * Create a new detail
+     *
+     * @return array
+     */
+    private function addDetail($setId) {
+        if (is_numeric($setId)) {
+            $detail = Detail::create();
+            $detail->save();
+            $detail->connectSet($setId);
+            $id = $detail->get('id');
+            if (is_numeric($id))
+                return $this->success("Detail [$id] created");
+        }
+        return $this->error('Failed to create Detail');
     }
 }

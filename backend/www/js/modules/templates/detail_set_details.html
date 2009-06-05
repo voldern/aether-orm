@@ -6,31 +6,29 @@
         <span class="th">Norwegian name</span>
         <span class="th">Data type</span>
         <span class="th">Display as</span>
-        <span class="td">
-            <a id="add_detail" 
-                href="/detail?module=Details&service=AddDetail">Add</a>
-        </span>
     </div>
     </div>
     <div class="tbody">
 {% for item in data.records %}
     <form id="detail_row_{{item.id}}"
-        action="/detail?module=Details&service=SaveDetail&id={{item.id}}"
+        action="/detail?module=Details&service=SaveDetail&id={{ item.id }}"
         class="tr autosaveForm" method="post">
         <div class="td">[#{{item.id}}]</div>
         <div class="td">
             <input type="text" 
                 name="title"
-                value="{{item.title}}" 
+                id="title_{{ item.title}}"
+                value="{{ item.title }}" 
                 class="autosave string" />
         </div>
         <div class="td">
             <input type="text" 
                 name="titleI18N"
-                value="{{item.titleI18N}}" 
+                id="titleI18N_{{ item.title}}"
+                value="{{ item.titleI18N }}" 
                 class="autosave string" />
         </div>
-        <div class="td"><select name="type" class="autosave string">
+        <div class="td"><select name="type" class="autosave string" id="type_{{ item.type}}">
             {% for type in data.types %}
                 {% ifequal item.type type %}
                 <option value="{{ type }}" selected="selected">
