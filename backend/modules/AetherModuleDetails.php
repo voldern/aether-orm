@@ -45,10 +45,18 @@ class AetherModuleDetails extends AetherModule {
                 $id = $_GET['id'];
                 $response = $this->saveSet($id,$_POST);
                 break;
+            case 'SaveDetail':
+                $id = $_GET['id'];
+                $response = $this->saveDetail($id,$_POST);
+                break;
             default:
                 $response = $this->error('Invalid service');
                 break;
         }
+        // Mix in request data sent
+        $response['request'] = array(
+            'get' => $_GET,
+            'post' => $_POST);
 
         return new AetherJSONResponse($response);
     }
@@ -137,7 +145,7 @@ class AetherModuleDetails extends AetherModule {
     }
     
     /**
-     * Save a template set
+     * Save a detail set
      *
      * @return array
      * @param int $id
@@ -156,6 +164,33 @@ class AetherModuleDetails extends AetherModule {
             $set->set('titleI18N', $name);
         }
         $set->save();
+        return $this->success();
+    }
+    
+    /**
+     * Save a singular detail
+     *
+     * @return array
+     * @param int $id
+     * @param array $data
+     */
+    private function saveDetail($id, $data) {
+        if (!is_numeric($id))
+            return $this->error('Supplied ID is not numerical');
+        $detail = new Detail($id);
+        if (isset($data['title'])) {
+            $title = trim($data['title']);
+            $detail->set('title', $title);
+        }
+        if (isset($data['titleI18N'])) {
+            $titleI18N = trim($data['titleI18N']);
+            $detail->set('titleI18N', $titleI18N);
+        }
+        if (isset($data['type'])) {
+            $type = trim($data['type']);
+            $detail->set('type', $type);
+        }
+        $detail->save();
         return $this->success();
     }
 }

@@ -25,25 +25,25 @@
                 <div class="td">[#{{item.id}}]</div>
                 <div class="td">
                     <input type="text" 
+                        name="title"
                         value="{{item.title}}" 
-                        id="title_{{item.id}}"
                         class="autosave string" />
                 </div>
                 <div class="td">
                     <input type="text" 
+                        name="titleI18N"
                         value="{{item.titleI18N}}" 
-                        id="title_i18n_{{item.id}}"
                         class="autosave string" />
                 </div>
-                <div class="td"><select name="type_{{item.id}}" class="autosave string">
+                <div class="td"><select name="type" class="autosave string">
                     {% for type in data.types %}
                         {% ifequal item.type type %}
-                        <option value="{{type}}" selected="selected">
+                        <option value="{{ type }}" selected="selected">
                             {{type}}
                         </option>
                         {% endifequal %}
                         {% ifnotequal item.type type %}
-                        <option value="{{type}}">{{type}}</option>
+                        <option value="{{ type }}">{{type}}</option>
                         {% endifnotequal %}
                     {% endfor %}
                 </select></div>
