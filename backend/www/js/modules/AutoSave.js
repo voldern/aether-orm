@@ -36,7 +36,6 @@ dojo.declare("modules.AutoSave", null, {
      * Check if array has element allready
      */
     arrayHasNode: function(array, node) {
-        console.log([node,array]);
         if (array.indexOf(node) == -1)
             return false;
         else
@@ -47,7 +46,6 @@ dojo.declare("modules.AutoSave", null, {
     findNodes: function(node) {
         if (!node)
             node = document;
-        console.log(node);
         dojo.query("form.autosaveForm", node)
             .forEach(dojo.hitch(this, function(form) {
                 dojo.query(".autosave", form)

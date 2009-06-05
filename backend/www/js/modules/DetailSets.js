@@ -28,7 +28,6 @@ dojo.declare("modules.DetailSets",
         dojo.stopEvent(evt);
         // Create edit set widget
         var link = dijit.byId(evt.target);
-        console.log(link);
         // Show spinner for a little time
         var refNode = dojo.query('div.grid.one')[0];
         // Set up replacement node
