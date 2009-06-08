@@ -12,7 +12,7 @@ dojo.declare("modules.DetailSets",
 
     postMixInProperties: function() {
         dojo.xhrGet({
-            url: '/detail/',
+            url: '/details/',
             content: {
                 module: 'Details',
                 service: 'GetSets',

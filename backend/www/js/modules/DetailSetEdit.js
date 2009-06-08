@@ -28,7 +28,7 @@ dojo.declare("modules.DetailSetEdit",
         }
         else {
             dojo.xhrGet({
-                url: '/detail/',
+                url: '/details/',
                 content: {
                     module: 'Details',
                     service: 'GetSet',

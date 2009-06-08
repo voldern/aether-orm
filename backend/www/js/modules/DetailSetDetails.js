@@ -23,6 +23,33 @@ dojo.declare("modules.DetailSetDetails",
     postCreate: function() {
         auto.findNodes(this.domNode);
         auto.attachEvents();
+        // Handle deletion
+        dojo.query(".delete_detail").connect('onclick', function(evt) {
+            dojo.stopEvent(evt);
+            dojo.xhrGet({
+                url: evt.currentTarget.getAttribute('href'),
+                handleAs: 'json',
+                load: function(r,ioArgs) {
+                    if (r.response.ok == true) {
+                        // Visually destroy
+                        var id = r.request.get.id;
+                        var elem = dojo.query("form#detail_row_" + id)
+                            .style("overflow",'hidden')
+                            .animate({
+                                    height:0,
+                                    backgroundColor: "red"
+                                }, 
+                                1000, null, function() {
+                                    elem.destroy(); 
+                                }
+                            );
+                    }
+                    else {
+                        console.log(r.response.message);
+                    }
+                },
+            });
+        });
     }
 });
 

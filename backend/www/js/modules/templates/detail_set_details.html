@@ -11,29 +11,45 @@
     <div class="tbody">
 {% for item in data.records %}
     <form id="detail_row_{{item.id}}"
-        action="/detail?module=Details&service=SaveDetail&id={{ item.id }}"
+        action="/details?module=Details&service=SaveDetail&id={{ item.id }}"
         class="tr autosaveForm" method="post">
         <div class="td">[#{{item.id}}]</div>
         <div class="td">
+            {%if item.title%}
             <input type="text" 
                 name="title"
-                id="title_{{ item.title}}"
-                value="{{ item.title }}" 
+                id="title_{{item.id}}"
+                value="{{item.title}}" 
                 class="autosave string" />
+            {%else%}
+            <input type="text" 
+                name="title"
+                id="title_{{item.id}}"
+                class="autosave string" />
+            {%endif%}
         </div>
         <div class="td">
+            {% if item.titleI18N %}
             <input type="text" 
                 name="titleI18N"
-                id="titleI18N_{{ item.title}}"
-                value="{{ item.titleI18N }}" 
+                id="titleI18N_{{item.id}}"
+                value="{{item.titleI18N}}"
                 class="autosave string" />
+            {% else %}
+            <input type="text" 
+                name="titleI18N"
+                id="titleI18N_{{item.id}}"
+                class="autosave string" />
+            {% endif %}
         </div>
-        <div class="td"><select name="type" class="autosave string" id="type_{{ item.type}}">
+        <div class="td">
+            <select name="type" class="autosave string" id="type_{{item.id}}">
             {% for type in data.types %}
                 {% ifequal item.type type %}
                 <option value="{{ type }}" selected="selected">
                     {{type}}
                 </option>
+                {% else %}
                 {% endifequal %}
                 {% ifnotequal item.type type %}
                 <option value="{{ type }}">{{type}}</option>
@@ -42,7 +58,8 @@
         </select></div>
         <div class="td">Display as ...</div>
         <div class="td">
-            <a href="/detail?module=Details&service=DeleteDetail&id={{item.id}}">[X]</a>
+            <a href="/details?module=Details&service=DeleteDetail&id={{item.id}}"
+                class="delete_detail">[X]</a>
         </div>
     </form>
 {% endfor %}
