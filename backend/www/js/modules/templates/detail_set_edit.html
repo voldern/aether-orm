@@ -1,7 +1,7 @@
 <div>
     <fieldset>
         <legend>Edit detail set</legend>
-        <form action="/detail?module=Details&service=SaveSet&id={{data.id}}" 
+        <form action="/details?module=Details&service=SaveSet&id={{data.id}}" 
             method="post" class="autosaveForm" id="edit_detail_set">
             <input type="text" name="set_name" value="{{data.title}}"
                 class="autosave string" />
@@ -9,7 +9,7 @@
                 class="autosave string" />
         </form>
         <a id="add_detail" 
-            href="/detail?module=Details&service=AddDetail&id={{data.id}}">Add</a>
+            href="/details?module=Details&service=AddDetail&id={{data.id}}">Add</a>
         <div id="details_placeholder"></div>
     </fieldset>
 </div>

@@ -11,7 +11,7 @@
     <div class="tbody">
 {% for item in data.records %}
     <form id="detail_row_{{item.id}}"
-        action="/detail?module=Details&service=SaveDetail&id={{ item.id }}"
+        action="/details?module=Details&service=SaveDetail&id={{ item.id }}"
         class="tr autosaveForm" method="post">
         <div class="td">[#{{item.id}}]</div>
         <div class="td">
@@ -42,7 +42,7 @@
         </select></div>
         <div class="td">Display as ...</div>
         <div class="td">
-            <a href="/detail?module=Details&service=DeleteDetail&id={{item.id}}">[X]</a>
+            <a href="/details?module=Details&service=DeleteDetail&id={{item.id}}">[X]</a>
         </div>
     </form>
 {% endfor %}

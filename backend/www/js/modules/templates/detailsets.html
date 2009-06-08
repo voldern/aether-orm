@@ -1,10 +1,10 @@
 <div>
     <h1>Detail sets</h1>
-    <a id="set_add" href="/detail?module=Details&service=EditSet">Add set</a>
+    <a id="set_add" href="/details?module=Details&service=EditSet">Add set</a>
     <ul>
     {% for item in data.records %}
         <li class="detail_set" id="set_{{item.id}}">
-            <a href="/detail?module=Details&service=EditSet&sid={{item.id}}" 
+            <a href="/details?module=Details&service=EditSet&sid={{item.id}}" 
                title="Edit set">{{item.title}}</a>
             <span>({{item.details.length}})</span>
         </li>
