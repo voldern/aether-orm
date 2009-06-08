@@ -130,6 +130,13 @@ class AetherModuleImageImport extends AetherModule {
 		}
 
 		// Insert
+		$link = new EntityImage;
+		$link->set('imageId', $image->get('id'));
+		$link->set('entityId', $target->get('id'));
+		if ($link->save() !== false)
+			return array('status' => 'success');
+		else
+			return array('error' => 'Unknown error, could not import image');
     }
 
     /**
