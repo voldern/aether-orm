@@ -58,9 +58,9 @@ if (isset($options['s'])) {
             $updateShopIds[] = $shop;
         }
         else {
-            $shopId = $db->queryValue(sprintf("
-                SELECT shop_id FROM shops WHERE shop_name LIKE '%.2s%%'
-            ", $db->escapeString($shop)));
+            $shopId = $pgdb->queryValue(sprintf("
+                SELECT shop_id FROM shops WHERE shop_name LIKE '%s%%'
+            ", $pgdb->escapeString($shop)));
             if ($shopId) {
                 $updateShopIds[] = $shopId;
             }
@@ -75,7 +75,7 @@ if (isset($options['s'])) {
 $sql = "SELECT shop_id FROM shops WHERE shop_pricefeed_active = 1";
 // use specific shop_id if specified
 if (isset($updateShopIds)) {
-    $sql .= " AND shop_id IN " . join(", ", $updateShopIds);
+    $sql .= " AND shop_id IN (" . join(", ", $updateShopIds) . ")";
 }
 $shopIds = $pgdb->query($sql);
 
