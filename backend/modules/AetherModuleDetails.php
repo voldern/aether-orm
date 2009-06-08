@@ -53,14 +53,14 @@ class AetherModuleDetails extends AetherModule {
                 $setId = $_GET['id'];
                 $response = $this->addDetail($setId);
                 break;
+            case 'DeleteDetail':
+                $id = $_GET['id'];
+                $response = $this->deleteDetail($id);
+                break;
             default:
                 $response = $this->error('Invalid service');
                 break;
         }
-        // Mix in request data sent
-        $response['request'] = array(
-            'get' => $_GET,
-            'post' => $_POST);
 
         return new AetherJSONResponse($response);
     }
@@ -72,8 +72,15 @@ class AetherModuleDetails extends AetherModule {
      * @param string $message
      */
     private function error($message) {
-        return array('error' => array(
-            'message' => $message));
+        return array('response' => array(
+                'ok' => false,
+                'message' => $message
+            ),
+            'request' => array(
+                'get' => $_GET,
+                'post' => $_POST
+            ),
+        );
     }
     
     /**
@@ -83,9 +90,13 @@ class AetherModuleDetails extends AetherModule {
      * @param string $message
      */
     private function success($message='') {
-        $ret = array('success' => array());
+        $ret = array('response' => array('ok'=>true));
         if ($message != '')
-            $ret['success']['message'] = $message;
+            $ret['message'] = $message;
+        $ret['request'] = array(
+            'get' => $_GET,
+            'post' => $_POST
+        );
         return $ret;
             
     }
@@ -213,5 +224,22 @@ class AetherModuleDetails extends AetherModule {
                 return $this->success("Detail [$id] created");
         }
         return $this->error('Failed to create Detail');
+    }
+    
+    /**
+     * Delete detail
+     *
+     * @return array
+     * @param int $id
+     */
+    private function deleteDetail($id) {
+        if (is_numeric($id)) {
+            $detail = new Detail($id);
+            if ($detail->delete())
+                return $this->success("Detail [$id] deleted");
+            else
+                return $this->error("Detail [$id] failed to delete.");
+        }
+        return $this->error('Cant delete Detail without id');
     }
 }
