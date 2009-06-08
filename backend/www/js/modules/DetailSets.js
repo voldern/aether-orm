@@ -9,6 +9,7 @@ dojo.require("dojox.dtl._DomTemplated");
 dojo.declare("modules.DetailSets", 
     [dijit._Widget, dojox.dtl._DomTemplated], {
     templatePath: dojo.moduleUrl("modules.templates", "detailsets.html"),
+
     postMixInProperties: function() {
         dojo.xhrGet({
             url: '/detail/',
@@ -27,6 +28,15 @@ dojo.declare("modules.DetailSets",
         dojo.stopEvent(evt);
         // Create edit set widget
         var link = dijit.byId(evt.target);
+        // Show spinner for a little time
+        var refNode = dojo.query('div.grid.one')[0];
+        // Set up replacement node
+        var replaceNode = document.createElement('div');
+        var spinner = dojo.create("img", 
+            {src: "/images/spin-large.gif"});
+        dojo.place(spinner, replaceNode);
+        replaceNode = spinner;
+
         // Check if widget exists
         widget = dijit.byId('set_edit');
         if (widget)
@@ -38,9 +48,6 @@ dojo.declare("modules.DetailSets",
         else {
             var id = link.parentNode.getAttribute('id').substr(4);
         }
-        var refNode = dojo.query('div.grid.one')[0];
-        // Set up replacement node
-        var replaceNode = document.createElement('div');
         dojo.place(replaceNode, refNode);
 
         // Create widget
@@ -48,7 +55,6 @@ dojo.declare("modules.DetailSets",
             {set_id:id, id:'set_edit'},replaceNode);
     },
     postCreate: function() {
-        console.log("Created");
         dojo.query("li.detail_set a").connect('onclick', 
             dojo.hitch(this, function(evt) {
                 this.renderSetEdit(evt);

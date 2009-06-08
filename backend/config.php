@@ -17,7 +17,7 @@ $_AUTOLOAD_CONFIG = array(
     "path" => array(
         "Priceguide" => array(LIB_PATH . "priceguide"),
         "AetherModule" => array(PG_PATH . "modules"),
-        "" => array("/home/lib", PG_PATH . "lib"),
+        "" => array(LIB_PATH, LIB_PATH . 'activerecord', PG_PATH . 'lib'),
     )
 );
 

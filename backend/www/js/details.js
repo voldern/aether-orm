@@ -3,6 +3,8 @@ dojo.require("modules.AutoSave");
 dojo.require("modules.DetailSets");
 dojo.require("modules.DetailSetEdit");
 
+var auto = new modules.AutoSave;
+
 dojo.addOnLoad(function() {
     // Add manifestation
     dojo.query("#add_manifestation")

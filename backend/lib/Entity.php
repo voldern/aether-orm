@@ -1,7 +1,7 @@
 <?php
 require_once('/home/lib/libDefines.lib.php');
 require_once(LIB_PATH . 'ActiveRecord.php');
-require_once(PG_PATH . 'backend/lib/DetailValue.php');
+require_once(PG_PATH . 'lib/DetailValue.php');
 
 abstract class Entity extends ActiveRecord {
     protected $id;

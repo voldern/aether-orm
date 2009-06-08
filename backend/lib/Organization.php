@@ -1,6 +1,6 @@
 <?php // 
 require_once('/home/lib/libDefines.lib.php');
-require_once(PG_PATH . 'backend/lib/Entity.php');
+require_once(PG_PATH . 'lib/Entity.php');
 /**
  * 
  * Organization

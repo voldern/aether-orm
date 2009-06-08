@@ -1,5 +1,4 @@
 <?php // 
-require_once(PG_PATH . 'backend/lib/Manifestation.php');
 /**
  * 
  * List the latest added products

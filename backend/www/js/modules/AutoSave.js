@@ -32,15 +32,28 @@ dojo.declare("modules.AutoSave", null, {
     },
     ev: null,
 
+    /**
+     * Check if array has element allready
+     */
+    arrayHasNode: function(array, node) {
+        if (array.indexOf(node) == -1)
+            return false;
+        else
+            return true;
+    },
+
     // Find all nodes with autosave class inside a form with autosaveForm class
-    findNodes: function() {
-        dojo.query("form.autosaveForm")
+    findNodes: function(node) {
+        if (!node)
+            node = document;
+        dojo.query("form.autosaveForm", node)
             .forEach(dojo.hitch(this, function(form) {
                 dojo.query(".autosave", form)
                     .forEach(dojo.hitch(this, function(elem) {
                         for (var field in this.fields) {
                             if (dojo.hasClass(elem, field)) {
-                                this.fields[field].push(elem);
+                                if (!this.arrayHasNode(this.fields[field],elem))
+                                    this.fields[field].push(elem);
                             }
                         }
                     }));

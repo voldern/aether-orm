@@ -1,56 +1,15 @@
 <div>
     <fieldset>
         <legend>Edit detail set</legend>
-        <form action="/detail?module=Details&service=SaveSet&id={{data.id}}" method="post">
-            <input type="text" name="set_name" value="{{data.title}}" />
+        <form action="/detail?module=Details&service=SaveSet&id={{data.id}}" 
+            method="post" class="autosaveForm" id="edit_detail_set">
+            <input type="text" name="set_name" value="{{data.title}}"
+                class="autosave string" />
+            <input type="text" name="set_name_i18n" value="{{data.titleI18N}}"
+                class="autosave string" />
         </form>
-        <div id="details" class="table">
-            <div class="thead">
-            <div class="tr">
-                <span class="th">Id</span>
-                <span class="th">Name</span>
-                <span class="th">Norwegian name</span>
-                <span class="th">Data type</span>
-                <span class="th">Display as</span>
-            </div>
-            </div>
-            <div class="tbody">
-        {% for item in data.details.records %}
-            <form id="detail_row_{{item.id}}"
-                action="/detail?module=Details&service=SaveDetail&id={{item.id}}"
-                class="tr autosaveForm" method="post">
-                <div class="td">[#{{item.id}}]</div>
-                <div class="td">
-                    <input type="text" 
-                        value="{{item.title}}" 
-                        id="title_{{item.id}}"
-                        class="autosave string" />
-                </div>
-                <div class="td">
-                    <input type="text" 
-                        value="{{item.titleI18N}}" 
-                        id="title_i18n_{{item.id}}"
-                        class="autosave string" />
-                </div>
-                <div class="td"><select name="type_{{item.id}}" class="autosave string">
-                    {% for type in data.types %}
-                        {% ifequal item.type type %}
-                        <option value="{{type}}" selected="selected">
-                            {{type}}
-                        </option>
-                        {% endifequal %}
-                        {% ifnotequal item.type type %}
-                        <option value="{{type}}">{{type}}</option>
-                        {% endifnotequal %}
-                    {% endfor %}
-                </select></div>
-                <div class="td">Display as ...</div>
-                <div class="td">
-                    <a href="/detail?module=Details&service=DeleteDetail&id={{item.id}}">[X]</a>
-                </div>
-            </form>
-        {% endfor %}
-            </div>
-        </div>
+        <a id="add_detail" 
+            href="/detail?module=Details&service=AddDetail&id={{data.id}}">Add</a>
+        <div id="details_placeholder"></div>
     </fieldset>
 </div>
