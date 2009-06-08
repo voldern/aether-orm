@@ -7,6 +7,7 @@
  * @author Espen Volden
  * @package prisguide.backend.modules
  */
+require_once(LIB_PATH . 'image/NewImage.php');
 
 class AetherModuleImageImport extends AetherModule {
     /**
@@ -97,7 +98,38 @@ class AetherModuleImageImport extends AetherModule {
     }
 
     private function serviceConnect($GET) {
-        
+        $acceptedTypes = array('product' => 'Manifestation');
+
+        // Validate imageId, targetId and type
+        if (!isset($GET['imageId']) || empty($GET['imageId']) ||
+            !is_numeric($GET['imageId']))
+            return array('error' => 'No/Unknown imageIdd');
+        if (!isset($GET['targetId']) || empty($GET['targetId']) ||
+            !is_numeric($GET['targetId']))
+            return array('error' => 'No/Unknown targetId');
+        if (!isset($GET['type']) || empty($GET['type']) ||
+            !isset($acceptedTypes[$GET['type']]))
+            return array('error' => 'No/Unknown type');
+
+        // Check if the imageId exists
+		try {
+			$image = RecordFinder::locate('NewImage', array(
+											   "id = {$GET['imageId']}"));
+			$image = $image->getByPosition(0);
+		} catch (NoRecordsFoundException $e) {
+			return array('error' => 'Image not found');
+		}
+
+        // Check if the target exists
+		try {
+			$target = RecordFinder::locate($acceptedTypes[$GET['type']], array(
+											   "id = {$GET['targetId']}"));
+			$target = $target->getByPosition(0);
+		} catch (NoRecordsFoundException $e) {
+			return array('error' => 'Target not found');
+		}
+
+		// Insert
     }
 
     /**
