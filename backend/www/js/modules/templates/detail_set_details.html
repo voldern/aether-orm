@@ -29,7 +29,6 @@
             {%endif%}
         </div>
         <div class="td">
-            {{item.titleI18N|length}}
             {% if item.titleI18N %}
             <input type="text" 
                 name="titleI18N"
@@ -59,7 +58,8 @@
         </select></div>
         <div class="td">Display as ...</div>
         <div class="td">
-            <a href="/details?module=Details&service=DeleteDetail&id={{item.id}}">[X]</a>
+            <a href="/details?module=Details&service=DeleteDetail&id={{item.id}}"
+                class="delete_detail">[X]</a>
         </div>
     </form>
 {% endfor %}
