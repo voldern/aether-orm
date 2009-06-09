@@ -5,6 +5,7 @@
 dojo.provide("modules.DetailSets");
 dojo.require('dijit._Widget');
 dojo.require("dojox.dtl._DomTemplated");
+dojo.require("modules.DetailSetEdit");
 
 dojo.declare("modules.DetailSets", 
     [dijit._Widget, dojox.dtl._DomTemplated], {
@@ -55,6 +56,7 @@ dojo.declare("modules.DetailSets",
             {set_id:id, id:'set_edit'},replaceNode);
     },
     postCreate: function() {
+        console.log("CREATED DetailSets");
         dojo.query("li.detail_set a").connect('onclick', 
             dojo.hitch(this, function(evt) {
                 this.renderSetEdit(evt);

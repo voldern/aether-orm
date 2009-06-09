@@ -3,10 +3,18 @@
         <legend>Edit detail set</legend>
         <form action="/details?module=Details&service=SaveSet&id={{data.id}}" 
             method="post" class="autosaveForm" id="edit_detail_set">
+            {% if data.title %}
             <input type="text" name="set_name" value="{{data.title}}"
                 class="autosave string" />
+            {% else %}
+            <input type="text" name="set_name" class="autosave string" />
+            {% endif %}
+            {% if data.titleI18N %}
             <input type="text" name="set_name_i18n" value="{{data.titleI18N}}"
                 class="autosave string" />
+            {% else %}
+            <input type="text" name="set_name_i18n" class="autosave string" />
+            {% endif %}
         </form>
         <a id="add_detail" 
             href="/details?module=Details&service=AddDetail&id={{data.id}}">Add</a>
