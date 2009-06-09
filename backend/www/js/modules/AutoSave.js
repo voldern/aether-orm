@@ -110,7 +110,6 @@ dojo.declare("modules.AutoSave", null, {
                 form = form.parentNode;
 
             dojo.xhr(dojo.attr(form, "method"), {
-                url: form.action,
                 handleAs: "json",
                 form: form,
                 handle: function(response) {

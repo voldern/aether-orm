@@ -18,9 +18,11 @@ dojo.declare("modules.DetailSetEdit",
      * but before rendering so the data set in here will be available
      */
     postMixInProperties: function() {
-        if (this.set_id == 'new') {
+        if (this.set_id < 0) {
             this.data = {
-                title: " ",
+                id: this.set_id,
+                title: false,
+                titleI18N: false,
                 details: {
                     records: []
                 },

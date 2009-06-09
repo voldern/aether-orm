@@ -1,5 +1,5 @@
 // Register custom module path
-dojo.registerModulePath("modules", "../../modules");
+dojo.registerModulePath("modules", "../../../modules");
 
 // Requires
 dojo.require("dojo.behavior");
