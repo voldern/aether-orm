@@ -1,6 +1,7 @@
 dojo.require("dojo.parser");
 dojo.require("modules.AutoSave");
 dojo.require("modules.Product");
+dojo.require('modules.ImageImport');
 
 dojo.addOnLoad(function() {
     // Add manifestation
