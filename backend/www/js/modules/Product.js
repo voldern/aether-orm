@@ -16,7 +16,7 @@ dojo.declare("modules.Product",
                 module: 'Entity',
                 type: 'work',
                 service: 'Get',
-                id: this.id,
+                id: this.id.substring(18)
             },
             handleAs: 'json',
             sync: true,

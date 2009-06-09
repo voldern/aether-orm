@@ -10,7 +10,7 @@
             usePlainJson: true
         };
     </script>
-    <script type="text/javascript" src="/js/dojo/dojo/dojo.js"></script>
+    <script type="text/javascript" src="/js/dojo/1.3.1/dojo/dojo.js"></script>
     <script type="text/javascript" src="/js/dojo/plugd/plugd.js"></script>
     <script type="text/javascript" src="/js/backend.js"></script>
     {foreach from=$pageJavascripts item=js}
