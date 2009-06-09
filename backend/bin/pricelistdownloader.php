@@ -20,6 +20,8 @@ ini_set("max_execution_time", 1800);
 ini_set("memory_limit", "512M");
 error_reporting(E_ERROR | E_PARSE | E_WARNING);
 
+$scriptTimeout = 1500;
+
 echo "Started at: " . date('Y-m-d H:i:s') . "\n\n";
 
 // define directories
