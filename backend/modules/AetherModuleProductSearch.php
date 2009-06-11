@@ -13,7 +13,7 @@ require_once(LIB_PATH . 'image/NewImage.php');
  * @package pg2.backend
  */
 
-class AetherModulePriceguideBackendProductSearch extends AetherModule {
+class AetherModuleProductSearch extends AetherModule {
     /**
      * Search service:
      *   GET: service=qs
