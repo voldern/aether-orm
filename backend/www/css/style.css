@@ -381,3 +381,10 @@ form.login button.login {
     background-repeat: no-repeat;
     background-position: 6px 50%;
 }
+
+fieldset button.close {
+    position: relative;
+    float: right;
+    right: 5px;
+    top: -40px;
+}

@@ -1,6 +1,7 @@
 <div>
     <fieldset>
         <legend>Edit detail set</legend>
+        <button type="button" class="close">Close</button>
         <form action="/details?module=Details&service=SaveSet&id={{data.id}}" 
             method="post" class="autosaveForm" id="edit_detail_set">
             {% if data.title %}

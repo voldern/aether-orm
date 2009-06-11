@@ -6,6 +6,12 @@ dojo.require("dojo.behavior");
 dojo.require("modules.ProductSearch");
 
 dojo.addOnLoad(function() {
+    // Traverse document and require widgets
+    dojo.query("[dojoType]")
+        .forEach(function(node) {
+            dojo.require(dojo.attr(node, "dojoType"));
+        });
+
     dojo.behavior.add({
         ".notice": function(n) {
             var notices = dojo.query("<a class=\"icon close\" href=\"#\">Close</a>")
