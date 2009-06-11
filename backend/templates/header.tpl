@@ -32,9 +32,10 @@
     </ul>
     <div class="fRight">
         <form method="get" action="">
-            <input type="text" name="q" id="q" />
+            <input type="text" name="q" id="q" autocomplete="off" />
             <input type="submit" value="Search" />
         </form>
+        <div dojoType="modules.ProductSearch" id="product_search"></div>
     </div>
 </div>
 <div id="content" class="clearfix">

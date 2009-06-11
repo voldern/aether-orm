@@ -1,6 +1,6 @@
 <?php // 
 
-require_once(LIB_PATH . 'Cache.lib.php');
+require_once("/home/lib/Autoload.php");
 require_once(LIB_PATH . 'soap/client/NSS.php');
 require_once(LIB_PATH . 'image/NewImage.php');
 
