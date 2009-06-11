@@ -1,11 +1,5 @@
 <?php // vim:set ts=4 sw=4 et:
-
-require_once('/home/lib/libDefines.lib.php');
-require_once(PG_PATH . 'backend/tests/lib/DetailTest.php');
-require_once(PG_PATH . 'backend/tests/lib/DetailValueTest.php');
-require_once(PG_PATH . 'backend/tests/lib/EntityTest.php');
-require_once(PG_PATH . 'backend/tests/lib/ManifestationTest.php');
-require_once(PG_PATH . 'backend/tests/lib/WorkTest.php');
+require_once('/home/lib/Autoload.php');
 
 /**
  * 

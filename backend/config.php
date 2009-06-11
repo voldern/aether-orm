@@ -11,7 +11,7 @@
 define("AETHER_PATH", "/home/sites/shared/aether/");
 define("LIB_PATH", "/home/lib/");
 
-define("PG_PATH", "/home/sites/shared/prisguide/backend/");
+define("PG_PATH", "/home/sites/shared/prisguide/");
 
 $_AUTOLOAD_CONFIG = array(
     "path" => array(
