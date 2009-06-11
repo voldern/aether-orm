@@ -50,12 +50,19 @@ dojo.declare("modules.DetailSetEdit",
         auto.findNodes(dojo.byId('edit_detail_set').parentNode);
         auto.attachEvents();
 
+        // Make closable
+        dojo.query("button.close", this.domNode)
+            .connect('onclick', dojo.hitch(this, function(e) {
+                this.destroy();
+            })
+        );
         // Add details
         dojo.query('#add_detail').connect('onclick', dojo.hitch(this, function(e) {
             // add detail
             dojo.stopEvent(e);
             dojo.xhrGet({
                 url: e.currentTarget.getAttribute('href'),
+                handleAs: 'json',
                 load: dojo.hitch(this, function(response, ioArgs) {
                     this.postMixInProperties();
                     this.update();
