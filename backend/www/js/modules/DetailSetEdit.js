@@ -46,7 +46,7 @@ dojo.declare("modules.DetailSetEdit",
         this.data.types = ['text','bool','date','numeric'];
     },
     postCreate: function() {
-        this.updateDetails();
+        this.update();
         auto.findNodes(dojo.byId('edit_detail_set').parentNode);
         auto.attachEvents();
 
@@ -58,32 +58,23 @@ dojo.declare("modules.DetailSetEdit",
                 url: e.currentTarget.getAttribute('href'),
                 load: dojo.hitch(this, function(response, ioArgs) {
                     this.postMixInProperties();
-                    this.updateDetails();
+                    this.update();
                 })
             });
-            // render details
         }));
     },
-    updateDetails: function() {
-        // Show spinner for a little time
-        var refNode = dojo.query('#details_placeholder')[0];
-        // Set up replacement node
-        var replaceNode = document.createElement('div');
-        var spinner = dojo.create("img", 
-            {src: "/images/spin-large.gif"});
-        dojo.place(spinner, replaceNode);
-        replaceNode = spinner;
-
-        // Check if widget exists
+    /*
+     * Update sub widget with details
+     */
+    update: function() {
         widget = dijit.byId('set_details');
         if (widget)
             widget.destroy();
+        var div = dojo.create('div',{id:'set_details'});
+        dojo.place(div, dojo.byId('details_placeholder'));
 
-        dojo.place(replaceNode, refNode);
-
-        // Create widget
-        widget = new modules.DetailSetDetails(
-            {data: this.data.details, id:'set_details'},replaceNode);
+        dojo.query(div).instantiate(
+            modules.DetailSetDetails,{data:this.data.details});
     },
 });
 
