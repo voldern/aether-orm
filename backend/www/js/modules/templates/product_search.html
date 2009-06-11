@@ -1,0 +1,7 @@
+<ol id="container_search_results">
+{% for item in data.return %}
+    <li id="search_result_{{item.id}}">
+        [#{{item.id}}] <a href="/products/{{item.id}}">{{item.name}}</a>
+    </li>
+{% endfor %}
+</ol>
