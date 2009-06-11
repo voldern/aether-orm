@@ -388,3 +388,22 @@ fieldset button.close {
     right: 5px;
     top: -40px;
 }
+
+#mainSearch {
+    margin-right: 20px;
+}
+
+#q {
+    width: 165px;
+}
+
+#product_search {
+    border: 1px solid #ccc;
+    border-top: none;
+    right: 21px;
+    margin-top: -11px;
+    position: absolute;
+    width: 220px;
+    list-style: none;
+    background-color: #fff;
+}

@@ -30,7 +30,7 @@
     	    <li><a href="/logout">Logout</a></li>
         {/if}
     </ul>
-    <div class="fRight">
+    <div id="mainSearch" class="fRight">
         <form method="get" action="">
             <input type="text" name="q" id="q" />
             <input type="submit" value="Search" />
