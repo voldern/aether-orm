@@ -29,31 +29,14 @@ dojo.declare("modules.DetailSets",
         dojo.stopEvent(evt);
         // Create edit set widget
         var link = dijit.byId(evt.target);
-        // Show spinner for a little time
-        var refNode = dojo.query('div.grid.one')[0];
-        // Set up replacement node
-        var replaceNode = document.createElement('div');
-        var spinner = dojo.create("img", 
-            {src: "/images/spin-large.gif"});
-        dojo.place(spinner, replaceNode);
-        replaceNode = spinner;
-
-        // Check if widget exists
+        var id = link.parentNode.getAttribute('id').substr(4);
         widget = dijit.byId('set_edit');
         if (widget)
             widget.destroy();
-        // Whether or not to load existing
-        if (link.parentNode.nodeName == 'DIV') {
-            var id = 'new';
-        }
-        else {
-            var id = link.parentNode.getAttribute('id').substr(4);
-        }
-        dojo.place(replaceNode, refNode);
-
-        // Create widget
-        widget = new modules.DetailSetEdit(
-            {set_id:id, id:'set_edit'},replaceNode);
+        var div = dojo.create('div',{id:'set_edit'});
+        dojo.place(div, dojo.query('div.grid.one')[0]);
+        dojo.query(div).instantiate(
+            modules.DetailSetEdit,{set_id:id});
     },
     postCreate: function() {
         dojo.query("li.detail_set a").connect('onclick', 
