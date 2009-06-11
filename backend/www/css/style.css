@@ -390,20 +390,25 @@ fieldset button.close {
 }
 
 #mainSearch {
+    position: relative;
     margin-right: 20px;
 }
 
 #q {
-    width: 165px;
+    width: 265px;
 }
 
 #product_search {
     border: 1px solid #ccc;
     border-top: none;
-    right: 21px;
-    margin-top: -11px;
+    left: 6px;
+    margin-top: -10px;
     position: absolute;
-    width: 220px;
+    width: 259px;
     list-style: none;
     background-color: #fff;
+}
+
+#product_search li {
+    padding: 4px;
 }
