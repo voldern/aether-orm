@@ -1,6 +1,6 @@
 <?php // 
 
-require_once(LIB_PATH . 'Cache.lib.php');
+require_once("/home/lib/Autoload.php");
 require_once(LIB_PATH . 'soap/client/NSS.php');
 require_once(LIB_PATH . 'image/NewImage.php');
 
@@ -13,7 +13,7 @@ require_once(LIB_PATH . 'image/NewImage.php');
  * @package pg2.backend
  */
 
-class AetherModulePriceguideBackendProductSearch extends AetherModule {
+class AetherModuleProductSearch extends AetherModule {
     /**
      * Search service:
      *   GET: service=qs

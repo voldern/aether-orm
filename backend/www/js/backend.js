@@ -3,6 +3,7 @@ dojo.registerModulePath("modules", "../../../modules");
 
 // Requires
 dojo.require("dojo.behavior");
+dojo.require("modules.ProductSearch");
 
 dojo.addOnLoad(function() {
     // Traverse document and require widgets
