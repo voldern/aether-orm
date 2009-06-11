@@ -56,7 +56,6 @@ dojo.declare("modules.DetailSets",
             {set_id:id, id:'set_edit'},replaceNode);
     },
     postCreate: function() {
-        console.log("CREATED DetailSets");
         dojo.query("li.detail_set a").connect('onclick', 
             dojo.hitch(this, function(evt) {
                 this.renderSetEdit(evt);

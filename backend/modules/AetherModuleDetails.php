@@ -45,6 +45,9 @@ class AetherModuleDetails extends AetherModule {
                 $id = $_GET['id'];
                 $response = $this->saveSet($id,$_POST);
                 break;
+            case 'AddSet':
+                $response = $this->addSet($_GET);
+                break;
             case 'SaveDetail':
                 $id = $_GET['id'];
                 $response = $this->saveDetail($id,$_POST);
@@ -241,5 +244,23 @@ class AetherModuleDetails extends AetherModule {
                 return $this->error("Detail [$id] failed to delete.");
         }
         return $this->error('Cant delete Detail without id');
+    }
+    
+    /**
+     * Add detail set
+     *
+     * @return array
+     * @param array $data
+     */
+    private function addSet($data) {
+        if (isset($data['title'])) {
+            $title = trim($data['title']);
+            $set = DetailSet::create($title);
+            $id = $set->get('id');
+            return $this->success("Created set [$id]");
+        }
+        else {
+            return $this->error('Cant create set, title missing');
+        }
     }
 }
