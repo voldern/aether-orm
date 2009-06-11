@@ -17,7 +17,8 @@ dojo.declare("modules.ProductSearch",
     },
     update: function(ev) {
         if (ev.target.value.length == 0) {
-            this.data.return = []
+            this.data = {};
+            this.data.return = [];
         }
         else {
             dojo.xhrGet({
