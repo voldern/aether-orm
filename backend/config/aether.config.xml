@@ -23,7 +23,7 @@
                 <rule pattern="/[0-9]+/" store="product_id">
                     <template>generic.tpl</template>
                     <section>Generic</section>
-										<module>ImageImport</module>
+                    <module>ImageImport</module>
                     <module provides="content">Product</module>
                     <option name="javascripts">/js/product.js</option>
                 </rule>
