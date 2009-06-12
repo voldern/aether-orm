@@ -24,6 +24,7 @@ class AetherModuleDetails extends AetherModule {
      */
     public function service($name) {
         switch ($name) {
+            case 'GetDetail':
             case 'Get':
                 $pid = false;
                 if (isset($_GET['pid']))
@@ -36,7 +37,8 @@ class AetherModuleDetails extends AetherModule {
             case 'GetSet':
                 $response = $this->getSet($_GET);
                 break;
-            case 'GetSetDetails':
+            case 'GetDetails':
+                $response = $this->getDetails($_GET);
                 break;
             case 'CreateSet':
                 $response = $this->createSet($_GET);
@@ -114,7 +116,8 @@ class AetherModuleDetails extends AetherModule {
             return $col->first->toArray();
         }
         else {
-            return $this->error('Failed to load DetailValue');
+            $detail = new Detail($id);
+            return $detail->toArray();
         }
     }
     /**
@@ -137,6 +140,24 @@ class AetherModuleDetails extends AetherModule {
         }
         $col = RecordFinder::find('DetailSet',$criteria);
         $col->setExportFields(array('details'));
+        return $col->toArray();
+    }
+    /**
+     * Return all details in system
+     *
+     * @return array
+     * @param array $data
+     */
+    private function getDetails($data) {
+        $legalCriteria = array('active','title','limit');
+        $criteria = array();
+        if (isset($data['active'])) {
+            if ($data['active'] == 1)
+                $criteria[] = 'deletedAt IS NULL';
+            else
+                $criteria[] = 'deletedAt IS NOT NULL';
+        }
+        $col = RecordFinder::find('Detail',$criteria);
         return $col->toArray();
     }
 
