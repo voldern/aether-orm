@@ -412,3 +412,8 @@ fieldset button.close {
 #product_search li {
     padding: 4px;
 }
+
+#product_search li.selected,
+#product_search li:hover {
+    background-color: #add8e6;
+}
