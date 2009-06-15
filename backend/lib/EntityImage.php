@@ -23,7 +23,8 @@ class EntityImage extends ActiveRecord {
             'id' => 'id',
             'entity_id' => 'entityId',
             'image_id' => 'imageId',
-            'order' => 'order'
+            'order' => 'order',
+            'created_at' => 'createdAt'
         ),
         'relations' => array(
         )
@@ -33,6 +34,7 @@ class EntityImage extends ActiveRecord {
         if ($idFromTable == false)
             $idFromTable = $this->tableInfo['table'];
 
+        $this->set('created_at', date('c'));
         parent::save($idFromTable);
     }
 }
