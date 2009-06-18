@@ -27,6 +27,9 @@ class AetherModuleImageImport extends AetherModule {
         case 'connect':
             $response = $this->serviceConnect($_GET);
             break;
+        case 'unlink':
+            $response = $this->serviceUnlink($_GET);
+            break;
         default:
             $response = array('error' => 'No/Unknown service requested');
         }
@@ -138,6 +141,34 @@ class AetherModuleImageImport extends AetherModule {
 		else
 			return array('error' => 'Unknown error, could not import image');
     }
+
+    /**
+     * Unlinks image -> product link
+     *
+     * @access private
+     * @return array
+     * @param array $GET
+     */
+    private function serviceUnlink($GET) {
+        if ((!isset($GET['product']) || empty($GET['product'])) ||
+            (!isset($GET['image']) || empty($GET['image'])))
+            return array('error' => 'Need image and product id');
+
+        try {
+            $result = RecordFinder::find('EntityImage', array(
+                                             'imageId' => $GET['image'],
+                                             'entityId' => $GET['product']));
+        } catch (NoRecordsFoundException $e) {
+            return array('error' => 'Image -> product link not found');
+        }
+
+        foreach ($result->getAll() as $row)
+            $row->delete();
+
+        return array('status' => 'success');
+    }
+
+
 
     /**
      * Validates array of id's
