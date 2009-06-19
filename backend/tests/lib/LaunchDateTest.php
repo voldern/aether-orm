@@ -2,7 +2,6 @@
 
 require_once('/home/lib/Autoload.php');
 require_once('PHPUnit/Framework.php');
-require_once(PG_PATH . 'backend/lib/LaunchDate.php');
 
 class LaunchDateTest extends PHPUnit_Framework_TestCase {
     public function testPeriodHalf() {

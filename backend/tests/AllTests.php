@@ -18,7 +18,7 @@ class Framework_AllTests {
         $suite->addTestSuite('EntityTest');
         $suite->addTestSuite('ManifestationTest');
         $suite->addTestSuite('WorkTest');
-        $suite->addTestSuite('LaunchDate');
+        $suite->addTestSuite('LaunchDateTest');
         return $suite;
     }
 }
