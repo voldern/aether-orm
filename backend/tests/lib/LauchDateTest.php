@@ -6,7 +6,6 @@ require_once(PG_PATH . 'backend/lib/LaunchDate.php');
 
 class LaunchDateTest extends PHPUnit_Framework_TestCase {
     public function testPeriodHalf() {
-        $this->assertEquals(0, 1);
         $l = new LaunchDate();
 
         $l->set('startDate', '2009-01-01');
