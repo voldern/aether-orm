@@ -7,4 +7,7 @@
  * @author Espen Volden
  */
 
-exit(0);
+$dir = dirname(__FILE__);
+chdir($dir . "/tests");
+system("phpunit AllTests.php", $exitCode);
+exit($exitCode);
