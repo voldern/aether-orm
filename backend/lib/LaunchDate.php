@@ -45,23 +45,29 @@ class LaunchDate extends ActiveRecord {
      * @param $period string
      */
     public function setInterval($year, $period = false) {
-        if ($period == "Q1")
-            $start = sprintf("%04d-01-01", $year);
-        else if ($period == "Q2")
-            $start = sprintf("%04d-04-01", $year);
-        else if ($period == "Q3")
-            $start = sprintf("%04d-07-01", $year);
-        else if ($period == "Q4")
-            $start = sprintf("%04d-10-01", $year);
-        else
-            $start = sprintf("%04d-%02d-01", $year, $period);
+        if ($period == false) {
+            $start = $year . "-01-01";
+            $end = ($year+1) . "-01-01 -1days";
+        }
+        else {
+            if ($period == "Q1" || $period == "H1")
+                $start = sprintf("%04d-01-01", $year);
+            else if ($period == "Q2")
+                $start = sprintf("%04d-04-01", $year);
+            else if ($period == "Q3" || $period == "H2")
+                $start = sprintf("%04d-07-01", $year);
+            else if ($period == "Q4")
+                $start = sprintf("%04d-10-01", $year);
+            else
+                $start = sprintf("%04d-%02d-01", $year, $period);
 
-        if (substr($period, 0, 1) == "Q")
-            $end = $start . " +3months-1days";
-        else if (substr($period, 0, 1) == "H")
-            $end = $start . " +6months-1days";
-        else
-            $end = $start . " +1months-1days";
+            if (substr($period, 0, 1) == "Q")
+                $end = $start . " +3months-1days";
+            else if (substr($period, 0, 1) == "H")
+                $end = $start . " +6months-1days";
+            else
+                $end = $start . " +1months-1days";
+        }
 
         $this->set('startDate', date("Y-m-d", strtotime($start)));
         $this->set('endDate', date("Y-m-d", strtotime($end)));
