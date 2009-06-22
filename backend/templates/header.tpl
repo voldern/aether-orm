@@ -22,6 +22,7 @@
     <ul id="menu">
         <li><a href="/"{if $aether.options.selectedSection == 'home'} class="selected"{/if}>Home</a></li>
         <li><a href="/products"{if $aether.options.selectedSection == 'products'} class="selected"{/if}>Products</a></li>
+        <li><a href="/details"{if $aether.options.selectedSection == 'details'} class="selected"{/if}>Details</a></li>
         <li><a href="/manufacturers"{if $aether.options.selectedSection == 'manufacturers'} class="selected"{/if}>Manufacturers</a></li>
         <li><a href="/organizations"{if $aether.options.selectedSection == 'organizations'} class="selected"{/if}>Organizations</a></li>
         {if $loggedIn !== true}
