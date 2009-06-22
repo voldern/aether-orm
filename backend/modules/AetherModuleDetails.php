@@ -40,9 +40,6 @@ class AetherModuleDetails extends AetherModule {
             case 'GetDetails':
                 $response = $this->getDetails($_GET);
                 break;
-            case 'CreateSet':
-                $response = $this->createSet($_GET);
-                break;
             case 'SaveSet':
                 $id = $_GET['id'];
                 $response = $this->saveSet($id,$_POST);
@@ -52,20 +49,17 @@ class AetherModuleDetails extends AetherModule {
                 $type = $_GET['type'];
                 $response = $this->createResource($name, $type);
                 break;
+            case 'Delete':
+                $id = $_GET['id'];
+                $type = $_GET['type'];
+                $response = $this->deleteResource($id, $type);
+                break;
             case 'AddSet':
                 $response = $this->addSet($_GET);
                 break;
             case 'SaveDetail':
                 $id = $_GET['id'];
                 $response = $this->saveDetail($id,$_POST);
-                break;
-            case 'AddDetail':
-                $setId = $_GET['id'];
-                $response = $this->addDetail($setId);
-                break;
-            case 'DeleteDetail':
-                $id = $_GET['id'];
-                $response = $this->deleteDetail($id);
                 break;
             case 'GetSetsFor':
                 $id = $_GET['id'];
@@ -252,58 +246,6 @@ class AetherModuleDetails extends AetherModule {
     }
     
     /**
-     * Create a new detail
-     *
-     * @return array
-     */
-    private function addDetail($setId) {
-        if (is_numeric($setId)) {
-            $detail = Detail::create();
-            $detail->save();
-            $detail->connectSet($setId);
-            $id = $detail->get('id');
-            if (is_numeric($id))
-                return $this->success("Detail [$id] created");
-        }
-        return $this->error('Failed to create Detail');
-    }
-    
-    /**
-     * Delete detail
-     *
-     * @return array
-     * @param int $id
-     */
-    private function deleteDetail($id) {
-        if (is_numeric($id)) {
-            $detail = new Detail($id);
-            if ($detail->delete())
-                return $this->success("Detail [$id] deleted");
-            else
-                return $this->error("Detail [$id] failed to delete.");
-        }
-        return $this->error('Cant delete Detail without id');
-    }
-    
-    /**
-     * Add detail set
-     *
-     * @return array
-     * @param array $data
-     */
-    private function addSet($data) {
-        if (isset($data['title'])) {
-            $title = trim($data['title']);
-            $set = DetailSet::create($title);
-            $id = $set->get('id');
-            return $this->success("Created set [$id]");
-        }
-        else {
-            return $this->error('Cant create set, title missing');
-        }
-    }
-    
-    /**
      * Get all details for a certain type with id
      *
      * @return array
@@ -357,5 +299,34 @@ class AetherModuleDetails extends AetherModule {
             return $this->success("Created $type [$id]",array('id'=>$id,'name'=>$name));
         }
         return $this->error("Cant create $type. To short");
+    }
+
+    /**
+     * Delete resource
+     *
+     * @return array
+     * @param int $id
+     * @param string $type
+     */
+    private function deleteResource($id,$type) {
+        if (is_numeric($id)) {
+            switch ($type) {
+                case 'set':
+                    $resource = new DetailSet($id);
+                    break;
+                case 'detail':
+                    $resource = new Detail($id);
+                    break;
+                case 'template':
+                default:
+                    return $this->error("Failed to delete $type::$id");
+                    break;
+            }
+            if ($resource->delete())
+                return $this->success("Deleted $type::$id",array('id'=>$id));
+            else
+                return $this->error("Failed to delete $type::$id for some unknown reason");
+        }
+        return $this->error("Cant delete $type without id");
     }
 }

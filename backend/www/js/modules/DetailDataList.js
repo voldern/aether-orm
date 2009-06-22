@@ -50,11 +50,7 @@ dojo.declare("modules.DetailDataList",
                  * [1] = $id  (42)
                  */
                 parts = arg.split("=");
-                dojo.publish("/details/edit", 
-                    [
-                        parts[0],
-                        parts[1]
-                    ]);
+                dojo.publish("/details/edit", [parts[0], parts[1]]);
             })
         );
         // Add handler to add new
@@ -76,12 +72,10 @@ dojo.declare("modules.DetailDataList",
                             sync: true,
                             load: dojo.hitch(this, function(resp,ioArgs) {
                                 if (resp.response.ok == true) {
+                                    evt.target.value = '';
                                     this.update();
                                     dojo.publish("/details/edit", 
-                                        [
-                                            this.data.prefix,
-                                            resp.info.id
-                                        ]);
+                                        [this.data.prefix, resp.info.id]);
                                 }
                             }),
                         });

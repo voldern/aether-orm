@@ -38,6 +38,7 @@ dojo.declare("modules.DetailBasicEditor",
         });
         this.data.prefix = prefix;
         this.data.types = ['text','bool','date','numeric'];
+        this.data.id = id;
         this.render();
     },
     /**
@@ -50,6 +51,26 @@ dojo.declare("modules.DetailBasicEditor",
         dojo.parser.parse(this.domNode);
     },
     postCreate: function() {
+        /* Make it possible to delete this resource */
+        dojo.query("button.delete", this.domNode).connect('onclick',
+            dojo.hitch(this, function(evt) {
+                dojo.stopEvent(evt);
+                dojo.xhrGet({
+                    url: '/details',
+                    content: {
+                        module: 'Details',
+                        service: 'Delete',
+                        type: this.data.prefix,
+                        id: this.data.id
+                    },
+                    handleAs: 'json',
+                    load: dojo.hitch(this, function(resp,ioArgs) {
+                        this.data = {};
+                        this.render();
+                    }),
+                });
+            })
+        );
         dojo.subscribe('/details/edit', this, "update");
     },
 });
