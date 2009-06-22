@@ -3,6 +3,7 @@ dojo.require("dijit.layout.BorderContainer");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.layout.TabContainer");
 dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
 
 dojo.require("modules.AutoSave");
 dojo.require("modules.DetailConnectionsEditor");

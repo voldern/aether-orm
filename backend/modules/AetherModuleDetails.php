@@ -47,6 +47,11 @@ class AetherModuleDetails extends AetherModule {
                 $id = $_GET['id'];
                 $response = $this->saveSet($id,$_POST);
                 break;
+            case 'Create':
+                $name = $_GET['name'];
+                $type = $_GET['type'];
+                $response = $this->createResource($name, $type);
+                break;
             case 'AddSet':
                 $response = $this->addSet($_GET);
                 break;
@@ -86,10 +91,11 @@ class AetherModuleDetails extends AetherModule {
      * @return array
      * @param string $message
      */
-    private function error($message) {
+    private function error($message,$data=array()) {
         return array('response' => array(
                 'ok' => false,
-                'message' => $message
+                'message' => $message,
+                'info' => $data
             ),
             'request' => array(
                 'get' => $_GET,
@@ -104,10 +110,11 @@ class AetherModuleDetails extends AetherModule {
      * @return array
      * @param string $message
      */
-    private function success($message='') {
+    private function success($message='',$data=array()) {
         $ret = array('response' => array('ok'=>true));
         if ($message != '')
             $ret['message'] = $message;
+        $ret['info'] = $data;
         $ret['request'] = array(
             'get' => $_GET,
             'post' => $_POST
@@ -321,5 +328,34 @@ class AetherModuleDetails extends AetherModule {
         else {
             return $this->error("Not implemented");
         }
+    }
+
+    /**
+     * Add resource
+     *
+     * @return array
+     * @param string $name
+     * @param string $type
+     */
+    private function createResource($name,$type) {
+        if (strlen($name) >= 2) {
+            $name = trim($name);
+            switch ($type) {
+                case 'set':
+                    $resource = DetailSet::create($name);
+                    $id = $resource->get('id');
+                    break;
+                case 'detail':
+                    $resource = Detail::create($name);
+                    $id = $resource->get('id');
+                    break;
+                case 'template':
+                default:
+                    return $this->error("Failed to create $type");
+                    break;
+            }
+            return $this->success("Created $type [$id]",array('id'=>$id,'name'=>$name));
+        }
+        return $this->error("Cant create $type. To short");
     }
 }

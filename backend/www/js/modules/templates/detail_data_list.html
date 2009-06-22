@@ -1,5 +1,13 @@
 <ul>
 {% for item in data.records %}
-    <li><a href="/details#{{data.prefix}}={{item.id}}">{{item.title}}</a></li>
+    <li>
+        <a id="data_{{data.prefix}}_{{item.id}}"
+            href="/details#{{data.prefix}}={{item.id}}">{{item.title}}</a>
+    </li>
 {% endfor %}
+    <li>
+        <form class="add_data_item">
+            <input type="text" name="title" />
+        </form>
+    </li>
 </ul>
