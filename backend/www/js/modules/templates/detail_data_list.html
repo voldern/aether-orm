@@ -1,0 +1,5 @@
+<ul>
+{% for item in data.records %}
+    <li><a href="/details#{{data.prefix}}={{item.id}}">{{item.title}}</a></li>
+{% endfor %}
+</ul>

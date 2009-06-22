@@ -1,5 +1,10 @@
 dojo.require("dojo.parser");
-dojo.require("modules.AutoSave");
-dojo.require("modules.DetailSetMain");
+dojo.require("dijit.layout.BorderContainer");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.form.Button");
 
-var auto = new modules.AutoSave;
+dojo.require("modules.AutoSave");
+dojo.require("modules.DetailConnectionsEditor");
+dojo.require("modules.DetailBasicEditor");
+dojo.require("modules.DetailDataList");

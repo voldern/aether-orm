@@ -62,6 +62,16 @@ class AetherModuleDetails extends AetherModule {
                 $id = $_GET['id'];
                 $response = $this->deleteDetail($id);
                 break;
+            case 'GetSetsFor':
+                $id = $_GET['id'];
+                $type = $_GET['type'];
+                $response = $this->getSetsFor($type, $id);
+                break;
+            case 'GetDetailsFor':
+                $id = $_GET['id'];
+                $type = $_GET['type'];
+                $response = $this->getDetailsFor($type, $id);
+                break;
             default:
                 $response = $this->error('Invalid service');
                 break;
@@ -127,7 +137,7 @@ class AetherModuleDetails extends AetherModule {
      * @param array $data
      */
     private function getDetailSets($data) {
-        $legalCriteria = array('active','title','limit');
+        //$legalCriteria = array('active','title','limit');
         $criteria = array();
         if (isset($data['active'])) {
             if ($data['active'] == 1)
@@ -139,7 +149,8 @@ class AetherModuleDetails extends AetherModule {
             $criteria['limit'] = $data['limit'];
         }
         $col = RecordFinder::find('DetailSet',$criteria);
-        $col->setExportFields(array('details'));
+        if (isset($data['details']))
+            $col->setExportFields(array('details'));
         return $col->toArray();
     }
     /**
@@ -282,6 +293,33 @@ class AetherModuleDetails extends AetherModule {
         }
         else {
             return $this->error('Cant create set, title missing');
+        }
+    }
+    
+    /**
+     * Get all details for a certain type with id
+     *
+     * @return array
+     * @param string $type
+     * @param int $id
+     */
+    private function getDetailsFor($type,$id) {
+        if ($type == 'set') {
+            $field = 'detail_set_id';
+            $sql = "SELECT id, title,detail_set_id FROM detail
+                LEFT OUTER JOIN detail_detail_set
+                ON detail.id = detail_detail_set.detail_id AND
+                detail_detail_set.{$field} = $id";
+            $db = new Database('pg2_backend');
+            $res = $db->query($sql);
+            foreach ($res as $k => $v) {
+                $res[$k]['selected'] = is_numeric($v['detail_set_id'])?true:false;
+                unset($res[$k]['detail_set_id']);
+            }
+            return $res;
+        }
+        else {
+            return $this->error("Not implemented");
         }
     }
 }

@@ -1,0 +1,22 @@
+<fieldset>
+    {% ifnotequal data.headline "" %}
+    <h2>{{data.headline}}</h2>
+    <ul class="table">
+    {% for item in data.records %}
+        <li class="tr">
+            <label for="detail_{{item.id}}" class="th" style="min-width:100px;">
+                {{item.title}}
+            </label>
+        {% ifequal item.selected true %}
+            <input type="checkbox" name="detail[{{item.id}}]" 
+                checked="checked" id="detail_{{item.id}}" class="td" />
+        {% endifequal %}
+        {% ifequal item.selected false %}
+            <input type="checkbox" name="detail[{{item.id}}]" 
+                id="detail_{{item.id}}" class="td" />
+        {% endifequal %}
+        </li>
+    {% endfor %}
+    </ul>
+    {% endifnotequal %}
+</fieldset>

@@ -1,3 +1,20 @@
+/**
+ * Extend arrays to allow something like this:
+ * >>> foo = ['a','b','c','d'];
+ * ["a", "b", "c", "d"]
+ * >>> foo.removeValue('c');
+ * 3
+ * >>> foo
+ * ["a", "b", "d"]
+ */
+Array.prototype.removeValue = function(value) {
+    var ind = this.indexOf(value);
+    if (ind == -1)
+        return this;
+    var rest = this.slice(ind+1);
+    this.length = this.length - (rest.length + 1);
+    return this.push.apply(this,rest);
+};
 // Register custom module path
 dojo.registerModulePath("modules", "../../../modules");
 
@@ -34,4 +51,5 @@ dojo.addOnLoad(function() {
     // Add focus to e-mail if login is required
     if (dojo.byId("email"))
         dojo.byId("email").focus();
+    var auto = new modules.AutoSave;
 });
