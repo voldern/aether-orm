@@ -22,6 +22,9 @@ class Config {
         if (class_exists($class, false))
             return true;
 
+        // Get this directory
+        $dir = dirname(__FILE__) . '/';
+
         // Split up the class name into logical parts
         // MUST BE CAMELCASE!
         $matches = preg_split('/([A-Z][^A-Z]+)/', $class, -1, PREG_SPLIT_NO_EMPTY |
@@ -41,17 +44,17 @@ class Config {
         }
         else {
             // Try to check if there is a file with the name of the class
-            if (file_exists($class . '.php'))
-                require($class . '.php');
+            if (file_exists($dir . $class . '.php'))
+                require($dir . $class . '.php');
             else
                 return false;
         }
 
         // Check that the file exists
-        if (!file_exists($type . $file))
+        if (!file_exists($dir . $type . $file))
             return false;
 
-        require $type . $file;
+        require $dir . $type . $file;
 
         return true;
     }
