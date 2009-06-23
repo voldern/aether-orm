@@ -40,16 +40,6 @@
                 <option name="selectedSection">details</option>
                 <module provides="details">Details</module>
                 <option name="javascripts">/js/details.js</option>
-                <rule match="set">
-                    <rule pattern="/[0-9]+/" store="set_id">
-                        <template>generic.tpl</template>
-                        <section>Generic</section>
-                    </rule>
-                </rule>
-                <rule pattern="/[0-9]+/" store="detail_id">
-                    <template>generic.tpl</template>
-                    <section>Generic</section>
-                </rule>
                 <rule match="">
                     <template>details.tpl</template>
                     <section>Generic</section>

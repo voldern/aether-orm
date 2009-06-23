@@ -417,3 +417,9 @@ fieldset button.close {
 #product_search li:hover {
     background-color: #add8e6;
 }
+
+li.selected,
+li.selected * {
+    background-color: #333366;
+    color: #FFF;
+}

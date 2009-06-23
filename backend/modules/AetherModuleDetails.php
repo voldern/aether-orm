@@ -40,12 +40,19 @@ class AetherModuleDetails extends AetherModule {
             case 'GetDetails':
                 $response = $this->getDetails($_GET);
                 break;
-            case 'CreateSet':
-                $response = $this->createSet($_GET);
-                break;
             case 'SaveSet':
                 $id = $_GET['id'];
                 $response = $this->saveSet($id,$_POST);
+                break;
+            case 'Create':
+                $name = $_GET['name'];
+                $type = $_GET['type'];
+                $response = $this->createResource($name, $type);
+                break;
+            case 'Delete':
+                $id = $_GET['id'];
+                $type = $_GET['type'];
+                $response = $this->deleteResource($id, $type);
                 break;
             case 'AddSet':
                 $response = $this->addSet($_GET);
@@ -54,13 +61,15 @@ class AetherModuleDetails extends AetherModule {
                 $id = $_GET['id'];
                 $response = $this->saveDetail($id,$_POST);
                 break;
-            case 'AddDetail':
-                $setId = $_GET['id'];
-                $response = $this->addDetail($setId);
-                break;
-            case 'DeleteDetail':
+            case 'GetSetsFor':
                 $id = $_GET['id'];
-                $response = $this->deleteDetail($id);
+                $type = $_GET['type'];
+                $response = $this->getSetsFor($type, $id);
+                break;
+            case 'GetDetailsFor':
+                $id = $_GET['id'];
+                $type = $_GET['type'];
+                $response = $this->getDetailsFor($type, $id);
                 break;
             default:
                 $response = $this->error('Invalid service');
@@ -76,10 +85,11 @@ class AetherModuleDetails extends AetherModule {
      * @return array
      * @param string $message
      */
-    private function error($message) {
+    private function error($message,$data=array()) {
         return array('response' => array(
                 'ok' => false,
-                'message' => $message
+                'message' => $message,
+                'info' => $data
             ),
             'request' => array(
                 'get' => $_GET,
@@ -94,10 +104,11 @@ class AetherModuleDetails extends AetherModule {
      * @return array
      * @param string $message
      */
-    private function success($message='') {
+    private function success($message='',$data=array()) {
         $ret = array('response' => array('ok'=>true));
         if ($message != '')
             $ret['message'] = $message;
+        $ret['info'] = $data;
         $ret['request'] = array(
             'get' => $_GET,
             'post' => $_POST
@@ -127,7 +138,7 @@ class AetherModuleDetails extends AetherModule {
      * @param array $data
      */
     private function getDetailSets($data) {
-        $legalCriteria = array('active','title','limit');
+        //$legalCriteria = array('active','title','limit');
         $criteria = array();
         if (isset($data['active'])) {
             if ($data['active'] == 1)
@@ -139,7 +150,8 @@ class AetherModuleDetails extends AetherModule {
             $criteria['limit'] = $data['limit'];
         }
         $col = RecordFinder::find('DetailSet',$criteria);
-        $col->setExportFields(array('details'));
+        if (isset($data['details']))
+            $col->setExportFields(array('details'));
         return $col->toArray();
     }
     /**
@@ -234,54 +246,87 @@ class AetherModuleDetails extends AetherModule {
     }
     
     /**
-     * Create a new detail
+     * Get all details for a certain type with id
      *
      * @return array
+     * @param string $type
+     * @param int $id
      */
-    private function addDetail($setId) {
-        if (is_numeric($setId)) {
-            $detail = Detail::create();
-            $detail->save();
-            $detail->connectSet($setId);
-            $id = $detail->get('id');
-            if (is_numeric($id))
-                return $this->success("Detail [$id] created");
+    private function getDetailsFor($type,$id) {
+        if ($type == 'set') {
+            $field = 'detail_set_id';
+            $sql = "SELECT id, title,detail_set_id FROM detail
+                LEFT OUTER JOIN detail_detail_set
+                ON detail.id = detail_detail_set.detail_id AND
+                detail_detail_set.{$field} = $id";
+            $db = new Database('pg2_backend');
+            $res = $db->query($sql);
+            foreach ($res as $k => $v) {
+                $res[$k]['selected'] = is_numeric($v['detail_set_id'])?true:false;
+                unset($res[$k]['detail_set_id']);
+            }
+            return $res;
         }
-        return $this->error('Failed to create Detail');
+        else {
+            return $this->error("Not implemented");
+        }
     }
-    
+
     /**
-     * Delete detail
+     * Add resource
+     *
+     * @return array
+     * @param string $name
+     * @param string $type
+     */
+    private function createResource($name,$type) {
+        if (strlen($name) >= 2) {
+            $name = trim($name);
+            switch ($type) {
+                case 'set':
+                    $resource = DetailSet::create($name);
+                    $id = $resource->get('id');
+                    break;
+                case 'detail':
+                    $resource = Detail::create($name);
+                    $id = $resource->get('id');
+                    break;
+                case 'template':
+                default:
+                    return $this->error("Failed to create $type");
+                    break;
+            }
+            return $this->success("Created $type [$id]",array('id'=>$id,'name'=>$name));
+        }
+        return $this->error("Cant create $type. To short");
+    }
+
+    /**
+     * Delete resource
      *
      * @return array
      * @param int $id
+     * @param string $type
      */
-    private function deleteDetail($id) {
+    private function deleteResource($id,$type) {
         if (is_numeric($id)) {
-            $detail = new Detail($id);
-            if ($detail->delete())
-                return $this->success("Detail [$id] deleted");
+            switch ($type) {
+                case 'set':
+                    $resource = new DetailSet($id);
+                    break;
+                case 'detail':
+                    $resource = new Detail($id);
+                    break;
+                case 'template':
+                default:
+                    return $this->error("Failed to delete $type::$id");
+                    break;
+            }
+            if ($resource->delete())
+                return $this->success("Deleted $type::$id",array('id'=>$id));
             else
-                return $this->error("Detail [$id] failed to delete.");
+                return $this->error("Failed to delete $type::$id for some unknown reason");
         }
-        return $this->error('Cant delete Detail without id');
-    }
-    
-    /**
-     * Add detail set
-     *
-     * @return array
-     * @param array $data
-     */
-    private function addSet($data) {
-        if (isset($data['title'])) {
-            $title = trim($data['title']);
-            $set = DetailSet::create($title);
-            $id = $set->get('id');
-            return $this->success("Created set [$id]");
-        }
-        else {
-            return $this->error('Cant create set, title missing');
-        }
+        return $this->error("Cant delete $type without id");
     }
 }
