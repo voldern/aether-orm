@@ -1,167 +1,146 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
-/**
- * MySQLi Database Driver
- *
- * $Id: Mysqli.php 4344 2009-05-11 16:41:39Z zombor $
- *
- * @package    Core
- * @author     Kohana Team
- * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
- */
-class Database_Mysqli_Driver extends Database_Mysql_Driver {
+<?php
+
+class DatabaseMysqliDriver extends DatabaseMysqlDriver {
 
 	// Database connection link
 	protected $link;
-	protected $db_config;
+	protected $dbConfig;
 	protected $statements = array();
 
 	/**
 	 * Sets the config for the class.
 	 *
-	 * @param  array  database configuration
+	 * @param array $config database configuration
 	 */
-	public function __construct($config)
-	{
-		$this->db_config = $config;
+	public function __construct($config) {
+		$this->dbConfig = $config;
 
-		Kohana::log('debug', 'MySQLi Database Driver Initialized');
+		// ::log('debug', 'MySQLi Database Driver Initialized');
 	}
 
 	/**
 	 * Closes the database connection.
 	 */
-	public function __destruct()
-	{
-		is_object($this->link) and $this->link->close();
+	public function __destruct() {
+        if (is_object($this->link))
+            $this->link->close();
 	}
 
-	public function connect()
-	{
+	public function connect() {
 		// Check if link already exists
 		if (is_object($this->link))
 			return $this->link;
 
 		// Import the connect variables
-		extract($this->db_config['connection']);
+		extract($this->dbConfig['connection']);
 
 		// Build the connection info
 		$host = isset($host) ? $host : $socket;
 
 		// Make the connection and select the database
-		if ($this->link = new mysqli($host, $user, $pass, $database, $port))
-		{
-			if ($charset = $this->db_config['character_set'])
-			{
-				$this->set_charset($charset);
+		if ($this->link = new mysqli($host, $user, $pass, $database, $port)) {
+			if ($charset = $this->dbConfig['character_set']) {
+				$this->setCharset($charset);
 			}
 
 			// Clear password after successful connect
-			$this->db_config['connection']['pass'] = NULL;
+			$this->dbConfig['connection']['pass'] = NULL;
 
 			return $this->link;
 		}
 
-		return FALSE;
+		return false;
 	}
 
-	public function query($sql)
-	{
+	public function query($sql) {
 		// Only cache if it's turned on, and only cache if it's not a write statement
-		if ($this->db_config['cache'] AND ! preg_match('#\b(?:INSERT|UPDATE|REPLACE|SET|DELETE|TRUNCATE)\b#i', $sql))
-		{
-			$hash = $this->query_hash($sql);
+		if ($this->dbConfig['cache'] &&
+            !preg_match('#\b(?:INSERT|UPDATE|REPLACE|SET|DELETE|TRUNCATE)\b#i', $sql)) {
 
-			if ( ! isset($this->query_cache[$hash]))
-			{
+			$hash = $this->queryHash($sql);
+
+			if (!isset($this->queryCache[$hash])) {
 				// Set the cached object
-				$this->query_cache[$hash] = new Kohana_Mysqli_Result($this->link, $this->db_config['object'], $sql);
+				$this->queryCache[$hash] =
+                    new MysqliResult($this->link, $this->dbConfig['object'], $sql);
 			}
-			else
-			{
+			else {
 				// Rewind cached result
-				$this->query_cache[$hash]->rewind();
+				$this->queryCache[$hash]->rewind();
 			}
 
 			// Return the cached query
-			return $this->query_cache[$hash];
+			return $this->queryCache[$hash];
 		}
 
-		return new Kohana_Mysqli_Result($this->link, $this->db_config['object'], $sql);
+		return new MysqliResult($this->link, $this->dbConfig['object'], $sql);
 	}
 
-	public function set_charset($charset)
-	{
-		if ($this->link->set_charset($charset) === FALSE)
-			throw new Kohana_Database_Exception('database.error', $this->show_error());
+	public function setCharset($charset) {
+		if ($this->link->set_charset($charset) === false)
+			throw new DatabaseException('database error: ' . $this->showError());
 	}
 
-	public function escape_str($str)
-	{
-		if (!$this->db_config['escape'])
+	public function escapeStr($str) {
+		if (!$this->dbConfig['escape'])
 			return $str;
 
-		is_object($this->link) or $this->connect();
+        if (!is_object($this->link))
+            $this->connect();
 
 		return $this->link->real_escape_string($str);
 	}
 
-	public function show_error()
-	{
+	public function showError() {
 		return $this->link->error;
 	}
 
 } // End Database_Mysqli_Driver Class
 
-/**
- * MySQLi Result
- */
-class Kohana_Mysqli_Result extends Database_Result {
+
+class MysqliResult extends DatabaseResult {
 
 	// Database connection
 	protected $link;
 
 	// Data fetching types
-	protected $fetch_type  = 'mysqli_fetch_object';
-	protected $return_type = MYSQLI_ASSOC;
+	protected $fetchType  = 'mysqli_fetch_object';
+	protected $returnType = MYSQLI_ASSOC;
 
 	/**
 	 * Sets up the result variables.
 	 *
-	 * @param  object    database link
-	 * @param  boolean   return objects or arrays
-	 * @param  string    SQL query that was run
+	 * @param object $link database link
+	 * @param boolean $object return objects or arrays
+	 * @param string $sql SQL query that was run
 	 */
-	public function __construct($link, $object = TRUE, $sql)
-	{
+	public function __construct($link, $object = true, $sql) {
 		$this->link = $link;
 
-		if ( ! $this->link->multi_query($sql))
-		{
+		if (!$this->link->multi_query($sql)) {
 			// SQL error
-			throw new Kohana_Database_Exception('database.error', $this->link->error.' - '.$sql);
+			throw new DatabaseException('database error: ' . $this->link->error .
+                                        ' - ' . $sql);
 		}
-		else
-		{
+		else {
 			$this->result = $this->link->store_result();
 
 			// If the query is an object, it was a SELECT, SHOW, DESCRIBE, EXPLAIN query
-			if (is_object($this->result))
-			{
-				$this->current_row = 0;
-				$this->total_rows  = $this->result->num_rows;
-				$this->fetch_type = ($object === TRUE) ? 'fetch_object' : 'fetch_array';
+			if (is_object($this->result)) {
+				$this->currentRow = 0;
+				$this->totalRows  = $this->result->num_rows;
+				$this->fetchType = ($object === true) ?
+                    'fetch_object' : 'fetch_array';
 			}
-			elseif ($this->link->error)
-			{
+			elseif ($this->link->error) {
 				// SQL error
-				throw new Kohana_Database_Exception('database.error', $this->link->error.' - '.$sql);
+				throw new DatabaseException('database error: ' .
+                                            $this->link->error . ' - ' . $sql);
 			}
-			else
-			{
+			else {
 				// Its an DELETE, INSERT, REPLACE, or UPDATE query
-				$this->insert_id  = $this->link->insert_id;
-				$this->total_rows = $this->link->affected_rows;
+				$this->insertId  = $this->link->insert_id;
+				$this->totalRows = $this->link->affected_rows;
 			}
 		}
 
@@ -175,149 +154,122 @@ class Kohana_Mysqli_Result extends Database_Result {
 	/**
 	 * Magic __destruct function, frees the result.
 	 */
-	public function __destruct()
-	{
-		if (is_object($this->result))
-		{
+	public function __destruct() {
+		if (is_object($this->result)) {
 			$this->result->free_result();
 
 			// this is kinda useless, but needs to be done to avoid the "Commands out of sync; you
 			// can't run this command now" error. Basically, we get all results after the first one
 			// (the one we actually need) and free them.
-			if (is_resource($this->link) AND $this->link->more_results())
-			{
-				do
-				{
+			if (is_resource($this->link) && $this->link->more_results()) {
+				do {
 					if ($result = $this->link->store_result())
-					{
 						$result->free_result();
-					}
 				} while ($this->link->next_result());
 			}
 		}
 	}
 
-	public function result($object = TRUE, $type = MYSQLI_ASSOC)
-	{
-		$this->fetch_type = ((bool) $object) ? 'fetch_object' : 'fetch_array';
+	public function result($object = true, $type = MYSQLI_ASSOC) {
+		$this->fetchType = ((bool)$object) ? 'fetch_object' : 'fetch_array';
 
 		// This check has to be outside the previous statement, because we do not
 		// know the state of fetch_type when $object = NULL
 		// NOTE - The class set by $type must be defined before fetching the result,
 		// autoloading is disabled to save a lot of stupid overhead.
-		if ($this->fetch_type == 'fetch_object')
-		{
-			$this->return_type = (is_string($type) AND Kohana::auto_load($type)) ? $type : 'stdClass';
+		if ($this->fetchType == 'fetch_object') {
+			$this->returnType = (is_string($type) && Config::auto_load($type)) ?
+                $type : 'stdClass';
 		}
-		else
-		{
-			$this->return_type = $type;
+		else {
+			$this->returnType = $type;
 		}
 
 		return $this;
 	}
 
-	public function as_array($object = NULL, $type = MYSQLI_ASSOC)
-	{
-		return $this->result_array($object, $type);
+	public function asArray($object = NULL, $type = MYSQLI_ASSOC) {
+		return $this->resultArray($object, $type);
 	}
 
-	public function result_array($object = NULL, $type = MYSQLI_ASSOC)
-	{
+	public function resultArray($object = NULL, $type = MYSQLI_ASSOC) {
 		$rows = array();
 
-		if (is_string($object))
-		{
+		if (is_string($object)) {
 			$fetch = $object;
 		}
-		elseif (is_bool($object))
-		{
-			if ($object === TRUE)
-			{
+		elseif (is_bool($object)) {
+			if ($object === true) {
 				$fetch = 'fetch_object';
 
 				// NOTE - The class set by $type must be defined before fetching the result,
 				// autoloading is disabled to save a lot of stupid overhead.
-				$type = (is_string($type) AND Kohana::auto_load($type)) ? $type : 'stdClass';
+				$type = (is_string($type) && Config::auto_load($type)) ?
+                    $type : 'stdClass';
 			}
-			else
-			{
+			else {
 				$fetch = 'fetch_array';
 			}
 		}
-		else
-		{
+		else {
 			// Use the default config values
-			$fetch = $this->fetch_type;
+			$fetch = $this->fetchType;
 
-			if ($fetch == 'fetch_object')
-			{
-				$type = (is_string($type) AND Kohana::auto_load($type)) ? $type : 'stdClass';
+			if ($fetch == 'fetch_object') {
+				$type = (is_string($type) && Config::auto_load($type)) ?
+                    $type : 'stdClass';
 			}
 		}
 
-		if ($this->result->num_rows)
-		{
+		if ($this->result->num_rows) {
 			// Reset the pointer location to make sure things work properly
 			$this->result->data_seek(0);
 
 			while ($row = $this->result->$fetch($type))
-			{
 				$rows[] = $row;
-			}
 		}
 
 		return isset($rows) ? $rows : array();
 	}
 
-	public function list_fields()
-	{
-		$field_names = array();
+	public function listFields() {
+		$fieldNames = array();
 		while ($field = $this->result->fetch_field())
-		{
-			$field_names[] = $field->name;
-		}
+			$fieldNames[] = $field->name;
 
-		return $field_names;
+		return $fieldNames;
 	}
 
-	public function seek($offset)
-	{
-		if ($this->offsetExists($offset) AND $this->result->data_seek($offset))
-		{
+	public function seek($offset) {
+		if ($this->offsetExists($offset) && $this->result->data_seek($offset)) {
 			// Set the current row to the offset
-			$this->current_row = $offset;
+			$this->currentRow = $offset;
 
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
-	public function offsetGet($offset)
-	{
-		if ( ! $this->seek($offset))
-			return FALSE;
+	public function offsetGet($offset) {
+		if (!$this->seek($offset))
+			return false;
 
 		// Return the row
-		$fetch = $this->fetch_type;
-		return $this->result->$fetch($this->return_type);
+		$fetch = $this->fetchType;
+		return $this->result->$fetch($this->returnType);
 	}
 
-} // End Mysqli_Result Class
+}
 
-/**
- * MySQLi Prepared Statement (experimental)
- */
-class Kohana_Mysqli_Statement {
+class MysqliStatement {
 
 	protected $link = NULL;
 	protected $stmt;
-	protected $var_names = array();
-	protected $var_values = array();
+	protected $varNames = array();
+	protected $varValues = array();
 
-	public function __construct($sql, $link)
-	{
+	public function __construct($sql, $link) {
 		$this->link = $link;
 
 		$this->stmt = $this->link->prepare($sql);
@@ -325,33 +277,29 @@ class Kohana_Mysqli_Statement {
 		return $this;
 	}
 
-	public function __destruct()
-	{
+	public function __destruct() {
 		$this->stmt->close();
 	}
 
 	// Sets the bind parameters
-	public function bind_params($param_types, $params)
-	{
-		$this->var_names = array_keys($params);
-		$this->var_values = array_values($params);
-		call_user_func_array(array($this->stmt, 'bind_param'), array_merge($param_types, $var_names));
+	public function bindParams($paramTypes, $params) { 
+		$this->varNames = array_keys($params);
+		$this->varValues = array_values($params);
+		call_user_func_array(array($this->stmt, 'bind_param'),
+                             array_merge($paramTypes, $varNames));
 
 		return $this;
 	}
 
-	public function bind_result($params)
-	{
+	public function bindResult($params) {
 		call_user_func_array(array($this->stmt, 'bind_result'), $params);
 	}
 
 	// Runs the statement
-	public function execute()
-	{
-		foreach ($this->var_names as $key => $name)
-		{
-			$$name = $this->var_values[$key];
-		}
+	public function execute() {
+		foreach ($this->varNames as $key => $name)
+			$$name = $this->varValues[$key];
+        
 		$this->stmt->execute();
 		return $this->stmt;
 	}
