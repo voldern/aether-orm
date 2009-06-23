@@ -13,8 +13,7 @@ abstract class DatabaseDriver {
 	 * @param   array   where clause
 	 * @return  string
 	 */
-	public function delete($table, $where)
-	{
+	public function delete($table, $where) {
 		return 'DELETE FROM '.$this->escape_table($table).' WHERE '.implode(' ', $where);
 	}
 
