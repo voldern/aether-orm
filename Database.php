@@ -192,8 +192,7 @@ class Database {
      *
      * @return void
      */
-    public function connect()
-    {
+    public function connect() {
         // A link can be a resource or an object
         if (!is_resource($this->link) && !is_object($this->link)) {
             $this->link = $this->driver->connect();
@@ -245,7 +244,7 @@ class Database {
 
         if ($this->config['benchmark'] == true) {
             // Benchmark the query
-            Database::$benchmarks[] = array('query' => $sql,
+            Database::$benchmarkes[] = array('query' => $sql,
                                             'time' => $stop - $start,
                                             'rows' => count($result));
         }
@@ -850,8 +849,7 @@ class Database {
      * @param string $offset offset clause
      * @return string sql string
      */
-    public function compile($table = '', $limit = NULL, $offset = NULL)
-    {
+    public function compile($table = '', $limit = NULL, $offset = NULL) {
         if ($table != '')
             $this->from($table);
 
