@@ -14,7 +14,8 @@
                     <input type="text" name="articles" id="articles_input" />
                 </li>
                 <li>
-                    <input type="submit" value="Hent" id="image_import_submit" />
+                    <input type="submit" value="Hent" id="image_import_submit" /
+>
                 </li>
             </ul>
         </form>

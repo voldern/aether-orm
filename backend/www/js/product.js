@@ -1,7 +1,6 @@
 dojo.require("dojo.parser");
 dojo.require("modules.AutoSave");
 dojo.require("modules.Product");
-dojo.require('modules.ImageImport');
 
 dojo.addOnLoad(function() {
     // Add manifestation
@@ -51,9 +50,13 @@ dojo.addOnLoad(function() {
                 }
             });
     }));
+    
+    /* Autosave */
     var auto = new modules.AutoSave;
     auto.findNodes();
     auto.attachEvents();
+
+    /* Relase Date */
     dojo.query("#exact_date").connect('onfocus', function(evt) { evt.target.select(); });
     function fadePeriodCb(evt) {
         var node = evt.target;
@@ -67,9 +70,33 @@ dojo.addOnLoad(function() {
             dojo.query(period)
                 .animate({ opacity: 1 }, 1000, null, null);
         }
-        /* period.style.display = "none"; */
     }
     var exactDate = dojo.query("#exact_date");
     exactDate.connect('onkeyup', fadePeriodCb);
-    dojo.addOnLoad(function() { fadePeriodCb({ target: exactDate[0] }); });
+    fadePeriodCb({ target: exactDate[0] });
+
+    /* Image Importer */
+    dojo.query('#image_import_submit').connect(
+        'onclick', dojo.hitch(this, function(e) {
+            dojo.stopEvent(e);
+            var articles = dojo.byId('articles_input').value;
+            var products = dojo.byId('products_input').value;
+
+            dojo.xhrGet({
+                url: '',
+                content: {
+                    module: 'ImageImport',
+                    service: 'lookIn',
+                    articles: articles,
+                    products: products,
+                },
+                handleAs: 'json',
+                load: dojo.hitch(this, function(resp, ioArgs) {
+                    console.log(resp);
+                    console.log(ioArgs);
+                }),
+            });
+        })
+    );
+    
 });

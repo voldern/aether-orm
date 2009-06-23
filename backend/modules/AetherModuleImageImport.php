@@ -17,6 +17,8 @@ class AetherModuleImageImport extends AetherModule {
      * @return string
      */
     public function run() {
+        $tpl = $this->sl->getTemplate();
+        return $tpl->fetch("product/image_import.tpl");
     }
 
     public function service($name) {
