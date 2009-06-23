@@ -47,7 +47,7 @@ class Database {
      * @param mixed configuration array or DSN
      * @return DatabaseCore
      */
-    public static function & instance($name = 'default', $config = null) {
+    public static function instance($name = 'default', $config = null) {
         if (!isset(Database::$instances[$name])) {
             // Create new instance
             Database::$instances[$name] = new Database($config === null ?
