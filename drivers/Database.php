@@ -495,7 +495,7 @@ abstract class DatabaseResult implements ArrayAccess, Iterator, Countable {
             return false;
 
         // Return the row by calling the defined fetching callback
-        return call_user_func($this->fetch_type, $this->result, $this->return_type);
+        return call_user_func($this->fetchType, $this->result, $this->returnType);
     }
 
     /**
