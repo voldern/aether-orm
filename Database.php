@@ -199,7 +199,7 @@ class Database {
 			$this->link = $this->driver->connect();
 			if (!is_resource($this->link) && !is_object($this->link))
 				throw new DatabaseException('connection error: ' .
-                                            $this->driver->show_error());
+                                            $this->driver->showError());
 
 			// Clear password after successful connect
 			$this->config['connection']['pass'] = NULL;
