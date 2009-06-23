@@ -260,19 +260,19 @@ abstract class DatabaseDriver {
 			return $value;
 
 		switch (gettype($value)) {
-			case 'string':
-				$value = '\'' . $this->escapeStr($value) . '\'';
-                break;
-			case 'boolean':
-				$value = (int)$value;
-                break;
-			case 'double':
-				// Convert to non-locale aware float to prevent possible commas
-				$value = sprintf('%F', $value);
-                break;
-			default:
-				$value = ($value === NULL) ? 'NULL' : $value;
-                break;
+        case 'string':
+            $value = '\'' . $this->escapeStr($value) . '\'';
+            break;
+        case 'boolean':
+            $value = (int)$value;
+            break;
+        case 'double':
+            // Convert to non-locale aware float to prevent possible commas
+            $value = sprintf('%F', $value);
+            break;
+        default:
+            $value = ($value === NULL) ? 'NULL' : $value;
+            break;
 		}
 
 		return (string)$value;
@@ -352,20 +352,19 @@ abstract class DatabaseDriver {
 		// Fetch the field definition
 		$field = $sqlTypes[$type];
 
-		switch ($field['type'])
-		{
-			case 'string':
-			case 'float':
-				if (isset($close)) {
-					// Add the length to the field info
-					$field['length'] = substr($str, $open + 1, $close - $open);
-				}
-			break;
-			case 'int':
-				// Add unsigned value
-				$field['unsigned'] = (strpos($str, 'unsigned') !== false);
-			break;
-		}
+		switch ($field['type']) {
+        case 'string':
+        case 'float':
+            if (isset($close)) {
+                // Add the length to the field info
+                $field['length'] = substr($str, $open + 1, $close - $open);
+            }
+            break;
+        case 'int':
+            // Add unsigned value
+            $field['unsigned'] = (strpos($str, 'unsigned') !== false);
+            break;
+        }
 
 		return $field;
 	}
