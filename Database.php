@@ -1321,9 +1321,9 @@ class Database {
 
 			// Get the total rows from the last query executed
 			$result = $this->query(
-				'SELECT COUNT(*) AS ' . $this->escape_column('total_rows') .
+				'SELECT COUNT(*) AS ' . $this->escapeColumn('total_rows') .
                 ' FROM (' . trim($sql) . ') AS ' .
-                $this->escape_table('counted_results')
+                $this->escapeTable('counted_results')
 			);
 
 			// Return the total number of rows from the query
