@@ -125,7 +125,7 @@ class DatabaseMysqlDriver extends DatabaseDriver {
 				return $matches[1] . '(' . $this->escapeColumn($matches[2]) . ')';
 			elseif (count($matches) == 5)
 				return $matches[1] . '(' . $this->escapeColumn($matches[2]) .
-                    ') AS ' . $this->escapeColumn($matches[2]);
+                ') AS ' . $this->escapeColumn($matches[2]);
 		}
 		
 		// This matches any modifiers we support to SELECT.
