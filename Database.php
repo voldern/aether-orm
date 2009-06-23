@@ -100,7 +100,7 @@ class Database {
         $this->config = array_merge($this->config, $config);
 
         // If the connection is a DSN string
-        If (Is_String($this->config['connection'])) {
+        If (is_string($this->config['connection'])) {
             // Make sure the connection is valid
             if (strpos($this->config['connection'], '://') === false)
                 throw new DatabaseException('invalid_dsn ' . $this->config['connection']);
