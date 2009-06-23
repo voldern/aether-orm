@@ -429,3 +429,40 @@ class PgsqlResult extends DatabaseResult {
 		return $fetch($this->result, NULL, $this->returnType);
 	}
 }
+
+/**
+ * PostgreSQL Prepared Statement (experimental)
+ */
+class PgsqlStatement {
+
+    protected $link = NULL;
+    protected $stmt;
+
+    public function __construct($sql, $link) {
+        $this->link = $link;
+
+        $this->stmt = $this->link->prepare($sql);
+
+        return $this;
+    }
+
+    public function __destruct() {
+        $this->stmt->close();
+    }
+
+    // Sets the bind parameters
+    public function bindParams() {
+        $argv = func_get_args();
+        return $this;
+    }
+
+    // sets the statement values to the bound parameters
+    public function setVals() {
+        return $this;
+    }
+
+    // Runs the statement
+    public function execute() {
+        return $this;
+    }
+}
