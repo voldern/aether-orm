@@ -54,5 +54,22 @@ dojo.addOnLoad(function() {
     var auto = new modules.AutoSave;
     auto.findNodes();
     auto.attachEvents();
-    // Add manifestation
+    dojo.query("#exact_date").connect('onfocus', function(evt) { evt.target.select(); });
+    function fadePeriodCb(evt) {
+        var node = evt.target;
+        var period = node.parentNode.previousSibling.previousSibling;
+
+        if (node.value.length > 0) {
+            dojo.query(period) 
+                .animate({ opacity: 0.2 }, 1000, null, null);
+        }
+        else {
+            dojo.query(period)
+                .animate({ opacity: 1 }, 1000, null, null);
+        }
+        /* period.style.display = "none"; */
+    }
+    var exactDate = dojo.query("#exact_date");
+    exactDate.connect('onkeyup', fadePeriodCb);
+    dojo.addOnLoad(function() { fadePeriodCb({ target: exactDate[0] }); });
 });
