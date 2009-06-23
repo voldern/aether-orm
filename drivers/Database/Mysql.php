@@ -1,15 +1,6 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
-/**
- * MySQL Database Driver
- *
- * $Id: Mysql.php 4344 2009-05-11 16:41:39Z zombor $
- *
- * @package    Core
- * @author     Kohana Team
- * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
- */
-class Database_Mysql_Driver extends Database_Driver {
+<?php
+
+class DatabaseMysqlDriver extends DatabaseDriver {
 
 	/**
 	 * Database connection link
@@ -19,103 +10,100 @@ class Database_Mysql_Driver extends Database_Driver {
 	/**
 	 * Database configuration
 	 */
-	protected $db_config;
+	protected $dbConfig;
 
 	/**
 	 * Sets the config for the class.
 	 *
-	 * @param  array  database configuration
+	 * @param array $config database configuration
 	 */
-	public function __construct($config)
-	{
-		$this->db_config = $config;
+	public function __construct($config) {
+		$this->dbConfig = $config;
 
-		Kohana::log('debug', 'MySQL Database Driver Initialized');
+		// ::log('debug', 'MySQL Database Driver Initialized');
 	}
 
 	/**
 	 * Closes the database connection.
 	 */
-	public function __destruct()
-	{
-		is_resource($this->link) and mysql_close($this->link);
+	public function __destruct() {
+        if (is_resource($this->link))
+            mysql_close($this->link);
 	}
 
-	public function connect()
-	{
+	public function connect() {
 		// Check if link already exists
 		if (is_resource($this->link))
 			return $this->link;
 
 		// Import the connect variables
-		extract($this->db_config['connection']);
+		extract($this->dbConfig['connection']);
 
 		// Persistent connections enabled?
-		$connect = ($this->db_config['persistent'] == TRUE) ? 'mysql_pconnect' : 'mysql_connect';
+		$connect = ($this->dbConfig['persistent'] == true) ?
+            'mysql_pconnect' : 'mysql_connect';
 
 		// Build the connection info
 		$host = isset($host) ? $host : $socket;
 		$port = isset($port) ? ':'.$port : '';
 
 		// Make the connection and select the database
-		if (($this->link = $connect($host.$port, $user, $pass, TRUE)) AND mysql_select_db($database, $this->link))
-		{
-			if ($charset = $this->db_config['character_set'])
-			{
-				$this->set_charset($charset);
-			}
+		if (($this->link = $connect($host.$port, $user, $pass, true)) &&
+            mysql_select_db($database, $this->link)) {
+            
+			if ($charset = $this->dbConfig['character_set'])
+				$this->setCharset($charset);
 
 			// Clear password after successful connect
-			$this->db_config['connection']['pass'] = NULL;
+			$this->dbConfig['connection']['pass'] = NULL;
 
 			return $this->link;
 		}
 
-		return FALSE;
+		return false;
 	}
 
-	public function query($sql)
-	{
+	public function query($sql) {
 		// Only cache if it's turned on, and only cache if it's not a write statement
-		if ($this->db_config['cache'] AND ! preg_match('#\b(?:INSERT|UPDATE|REPLACE|SET|DELETE|TRUNCATE)\b#i', $sql))
-		{
-			$hash = $this->query_hash($sql);
+		if ($this->dbConfig['cache'] &&
+            !preg_match('#\b(?:INSERT|UPDATE|REPLACE|SET|DELETE|TRUNCATE)\b#i', $sql)) {
+            
+			$hash = $this->queryHash($sql);
 
-			if ( ! isset($this->query_cache[$hash]))
-			{
+			if (!isset($this->queryCache[$hash])) {
 				// Set the cached object
-				$this->query_cache[$hash] = new Mysql_Result(mysql_query($sql, $this->link), $this->link, $this->db_config['object'], $sql);
+				$this->queryCache[$hash] =
+                    new MysqlResult(mysql_query($sql, $this->link),
+                                    $this->link, $this->dbConfig['object'], $sql);
 			}
-			else
-			{
+			else {
 				// Rewind cached result
-				$this->query_cache[$hash]->rewind();
+				$this->queryCache[$hash]->rewind();
 			}
 
 			// Return the cached query
-			return $this->query_cache[$hash];
+			return $this->queryCache[$hash];
 		}
 
-		return new Mysql_Result(mysql_query($sql, $this->link), $this->link, $this->db_config['object'], $sql);
+		return new MysqlResult(mysql_query($sql, $this->link), $this->link,
+                               $this->dbConfig['object'], $sql);
 	}
 
-	public function set_charset($charset)
-	{
-		$this->query('SET NAMES '.$this->escape_str($charset));
+	public function setCharset($charset) {
+		$this->query('SET NAMES '.$this->escapeStr($charset));
 	}
 
-	public function escape_table($table)
-	{
-		if (!$this->db_config['escape'])
+	public function escapeTable($table) {
+		if (!$this->dbConfig['escape'])
 			return $table;
 
-		if (stripos($table, ' AS ') !== FALSE)
-		{
+		if (stripos($table, ' AS ') !== false) {
 			// Force 'AS' to uppercase
 			$table = str_ireplace(' AS ', ' AS ', $table);
 
 			// Runs escape_table on both sides of an AS statement
-			$table = array_map(array($this, __FUNCTION__), explode(' AS ', $table));
+			$table = array_map(array($this, __FUNCTION__),
+                               explode(' AS ', $table));
 
 			// Re-create the AS statement
 			return implode(' AS ', $table);
@@ -123,37 +111,35 @@ class Database_Mysql_Driver extends Database_Driver {
 		return '`'.str_replace('.', '`.`', $table).'`';
 	}
 
-	public function escape_column($column)
-	{
-		if (!$this->db_config['escape'])
+	public function escapeColumn($column) {
+		if (!$this->dbConfig['escape'])
 			return $column;
 
 		if ($column == '*')
 			return $column;
 
 		// This matches any functions we support to SELECT.
-		if ( preg_match('/(avg|count|sum|max|min)\(\s*(.*)\s*\)(\s*as\s*(.+)?)?/i', $column, $matches))
-		{
-			if ( count($matches) == 3)
-			{
-				return $matches[1].'('.$this->escape_column($matches[2]).')';
-			}
-			else if ( count($matches) == 5)
-			{
-				return $matches[1].'('.$this->escape_column($matches[2]).') AS '.$this->escape_column($matches[2]);
-			}
+		if (preg_match('/(avg|count|sum|max|min)\(\s*(.*)\s*\)(\s*as\s*(.+)?)?/i',
+                       $column, $matches)) {
+			if (count($matches) == 3)
+				return $matches[1] . '(' . $this->escapeColumn($matches[2]) . ')';
+			elseif (count($matches) == 5)
+				return $matches[1] . '(' . $this->escapeColumn($matches[2]) .
+                    ') AS ' . $this->escapeColumn($matches[2]);
 		}
 		
 		// This matches any modifiers we support to SELECT.
-		if ( ! preg_match('/\b(?:rand|all|distinct(?:row)?|high_priority|sql_(?:small_result|b(?:ig_result|uffer_result)|no_cache|ca(?:che|lc_found_rows)))\s/i', $column))
-		{
-			if (stripos($column, ' AS ') !== FALSE)
-			{
+        $regex = '/\b(?:rand|all|distinct(?:row)?|high_priority|sql_ ' .
+            '(?:small_result|b(?:ig_result|uffer_result)|no_cache|' .
+            'ca(?:che|lc_found_rows)))\s/i';
+        if (!preg_match($regex, $column)) {
+			if (stripos($column, ' AS ') !== false) {
 				// Force 'AS' to uppercase
 				$column = str_ireplace(' AS ', ' AS ', $column);
 
 				// Runs escape_column on both sides of an AS statement
-				$column = array_map(array($this, __FUNCTION__), explode(' AS ', $column));
+				$column = array_map(array($this, __FUNCTION__),
+                                    explode(' AS ', $column));
 
 				// Re-create the AS statement
 				return implode(' AS ', $column);
@@ -165,102 +151,85 @@ class Database_Mysql_Driver extends Database_Driver {
 		$parts = explode(' ', $column);
 		$column = '';
 
-		for ($i = 0, $c = count($parts); $i < $c; $i++)
-		{
+		for ($i = 0, $c = count($parts); $i < $c; $i++) {
 			// The column is always last
 			if ($i == ($c - 1))
-			{
 				$column .= preg_replace('/[^.*]+/', '`$0`', $parts[$i]);
-			}
 			else // otherwise, it's a modifier
-			{
 				$column .= $parts[$i].' ';
-			}
 		}
 		return $column;
 	}
 
-	public function regex($field, $match, $type, $num_regexs)
-	{
-		$prefix = ($num_regexs == 0) ? '' : $type;
+	public function regex($field, $match, $type, $numRegexs) {
+		$prefix = ($numRegexs == 0) ? '' : $type;
 
-		return $prefix.' '.$this->escape_column($field).' REGEXP \''.$this->escape_str($match).'\'';
+		return $prefix.' '.$this->escapeColumn($field) .
+            ' REGEXP \'' . $this->escapeStr($match).'\'';
 	}
 
-	public function notregex($field, $match, $type, $num_regexs)
-	{
-		$prefix = $num_regexs == 0 ? '' : $type;
+	public function notregex($field, $match, $type, $numRegexs) {
+		$prefix = $numRegexs == 0 ? '' : $type;
 
-		return $prefix.' '.$this->escape_column($field).' NOT REGEXP \''.$this->escape_str($match) . '\'';
+		return $prefix . ' ' . $this->escapeColumn($field) .
+            ' NOT REGEXP \'' . $this->escapeStr($match) . '\'';
 	}
 
-	public function merge($table, $keys, $values)
-	{
+	public function merge($table, $keys, $values) {
 		// Escape the column names
 		foreach ($keys as $key => $value)
-		{
-			$keys[$key] = $this->escape_column($value);
-		}
-		return 'REPLACE INTO '.$this->escape_table($table).' ('.implode(', ', $keys).') VALUES ('.implode(', ', $values).')';
+			$keys[$key] = $this->escapeColumn($value);
+        
+		return 'REPLACE INTO ' . $this->escapeTable($table) . ' (' .
+            implode(', ', $keys) . ') VALUES (' . implode(', ', $values).')';
 	}
 
-	public function limit($limit, $offset = 0)
-	{
+	public function limit($limit, $offset = 0) {
 		return 'LIMIT '.$offset.', '.$limit;
 	}
 
-	public function compile_select($database)
-	{
-		$sql = ($database['distinct'] == TRUE) ? 'SELECT DISTINCT ' : 'SELECT ';
-		$sql .= (count($database['select']) > 0) ? implode(', ', $database['select']) : '*';
+	public function compileSelect($database) {
+		$sql = ($database['distinct'] == true) ? 'SELECT DISTINCT ' : 'SELECT ';
+		$sql .= (count($database['select']) > 0) ?
+            implode(', ', $database['select']) : '*';
 
-		if (count($database['from']) > 0)
-		{
+		if (count($database['from']) > 0) {
 			// Escape the tables
 			$froms = array();
 			foreach ($database['from'] as $from)
-			{
-				$froms[] = $this->escape_column($from);
-			}
+				$froms[] = $this->escapeColumn($from);
+
 			$sql .= "\nFROM (";
 			$sql .= implode(', ', $froms).")";
 		}
 
-		if (count($database['join']) > 0)
-		{
+		if (count($database['join']) > 0) {
 			foreach($database['join'] AS $join)
-			{
-				$sql .= "\n".$join['type'].'JOIN '.implode(', ', $join['tables']).' ON '.$join['conditions'];
-			}
+				$sql .= "\n" . $join['type'] . 'JOIN ' .
+                implode(', ', $join['tables']) . ' ON ' . $join['conditions'];
 		}
 
 		if (count($database['where']) > 0)
-		{
 			$sql .= "\nWHERE ";
-		}
 
 		$sql .= implode("\n", $database['where']);
 
-		if (count($database['groupby']) > 0)
-		{
+		if (count($database['groupby']) > 0) {
 			$sql .= "\nGROUP BY ";
 			$sql .= implode(', ', $database['groupby']);
 		}
 
-		if (count($database['having']) > 0)
-		{
+		if (count($database['having']) > 0) {
 			$sql .= "\nHAVING ";
 			$sql .= implode("\n", $database['having']);
 		}
 
-		if (count($database['orderby']) > 0)
-		{
+		if (count($database['orderby']) > 0) {
 			$sql .= "\nORDER BY ";
 			$sql .= implode(', ', $database['orderby']);
 		}
 
-		if (is_numeric($database['limit']))
-		{
+		if (is_numeric($database['limit'])) {
 			$sql .= "\n";
 			$sql .= $this->limit($database['limit'], $database['offset']);
 		}
@@ -268,113 +237,103 @@ class Database_Mysql_Driver extends Database_Driver {
 		return $sql;
 	}
 
-	public function escape_str($str)
-	{
-		if (!$this->db_config['escape'])
+	public function escapeStr($str) {
+		if (!$this->dbConfig['escape'])
 			return $str;
 
-		is_resource($this->link) or $this->connect();
+        if (!is_resource($this->link))
+            $this->connect();
 
 		return mysql_real_escape_string($str, $this->link);
 	}
 
-	public function list_tables()
-	{
+	public function listTables() {
 		$tables = array();
 
-		if ($query = $this->query('SHOW TABLES FROM '.$this->escape_table($this->db_config['connection']['database'])))
-		{
-			foreach ($query->result(FALSE) as $row)
-			{
+        $query = $this->query('SHOW TABLES FROM ' .
+                              $this->escapeTable(
+                                  $this->dbConfig['connection']['database']));
+		if ($query) {
+			foreach ($query->result(false) as $row)
 				$tables[] = current($row);
-			}
 		}
 
 		return $tables;
 	}
 
-	public function show_error()
-	{
+	public function showError() {
 		return mysql_error($this->link);
 	}
 
-	public function list_fields($table)
-	{
+	public function listFields($table) {
 		$result = NULL;
 
-		foreach ($this->field_data($table) as $row)
-		{
+		foreach ($this->fieldData($table) as $row) {
 			// Make an associative array
-			$result[$row->Field] = $this->sql_type($row->Type);
+			$result[$row->Field] = $this->sqlType($row->Type);
 
-			if ($row->Key === 'PRI' AND $row->Extra === 'auto_increment')
-			{
+			if ($row->Key === 'PRI' && $row->Extra === 'auto_increment') {
 				// For sequenced (AUTO_INCREMENT) tables
-				$result[$row->Field]['sequenced'] = TRUE;
+				$result[$row->Field]['sequenced'] = true;
 			}
 
-			if ($row->Null === 'YES')
-			{
+			if ($row->Null === 'YES') {
 				// Set NULL status
-				$result[$row->Field]['null'] = TRUE;
+				$result[$row->Field]['null'] = true;
 			}
 		}
 
 		if (!isset($result))
-			throw new Kohana_Database_Exception('database.table_not_found', $table);
+			throw new DatabaseException('table_not_found ' . $table);
 
 		return $result;
 	}
 
-	public function field_data($table)
-	{
-		$result = $this->query('SHOW COLUMNS FROM '.$this->escape_table($table));
+	public function fieldData($table) {
+		$result = $this->query('SHOW COLUMNS FROM ' . $this->escapeTable($table));
 
-		return $result->result_array(TRUE);
+		return $result->resultArray(true);
 	}
 
-} // End Database_Mysql_Driver Class
+}
 
 /**
  * MySQL Result
  */
-class Mysql_Result extends Database_Result {
+class MysqlResult extends DatabaseResult {
 
 	// Fetch function and return type
-	protected $fetch_type  = 'mysql_fetch_object';
-	protected $return_type = MYSQL_ASSOC;
+	protected $fetchType  = 'mysql_fetch_object';
+	protected $returnType = MYSQL_ASSOC;
 
 	/**
 	 * Sets up the result variables.
 	 *
-	 * @param  resource  query result
-	 * @param  resource  database link
-	 * @param  boolean   return objects or arrays
-	 * @param  string    SQL query that was run
+	 * @param resource $result query result
+	 * @param resource $link database link
+	 * @param boolean $object return objects or arrays
+	 * @param string $sql SQL query that was run
 	 */
-	public function __construct($result, $link, $object = TRUE, $sql)
-	{
+	public function __construct($result, $link, $object = true, $sql) {
 		$this->result = $result;
 
 		// If the query is a resource, it was a SELECT, SHOW, DESCRIBE, EXPLAIN query
-		if (is_resource($result))
-		{
-			$this->current_row = 0;
-			$this->total_rows  = mysql_num_rows($this->result);
-			$this->fetch_type = ($object === TRUE) ? 'mysql_fetch_object' : 'mysql_fetch_array';
+		if (is_resource($result)) {
+			$this->currentRow = 0;
+			$this->totalRows  = mysql_num_rows($this->result);
+			$this->fetchType = ($object === true) ?
+                'mysql_fetch_object' : 'mysql_fetch_array';
 		}
-		elseif (is_bool($result))
-		{
-			if ($result == FALSE)
-			{
+		elseif (is_bool($result)) {
+			if ($result == false) {
 				// SQL error
-				throw new Kohana_Database_Exception('database.error', mysql_error($link).' - '.$sql);
+				throw new DatabaseException('mysql error: ' .  mysql_error($link)
+                                            . ' - ' . $sql);
 			}
-			else
-			{
+			else {
 				// Its an DELETE, INSERT, REPLACE, or UPDATE query
-				$this->insert_id  = mysql_insert_id($link);
-				$this->total_rows = mysql_affected_rows($link);
+				$this->insertId  = mysql_insert_id($link);
+				$this->totalRows = mysql_affected_rows($link);
 			}
 		}
 
@@ -388,78 +347,68 @@ class Mysql_Result extends Database_Result {
 	/**
 	 * Destruct, the cleanup crew!
 	 */
-	public function __destruct()
-	{
+	public function __destruct() {
 		if (is_resource($this->result))
-		{
 			mysql_free_result($this->result);
-		}
 	}
 
-	public function result($object = TRUE, $type = MYSQL_ASSOC)
-	{
-		$this->fetch_type = ((bool) $object) ? 'mysql_fetch_object' : 'mysql_fetch_array';
+	public function result($object = true, $type = MYSQL_ASSOC) {
+		$this->fetchType = ((bool)$object) ?
+            'mysql_fetch_object' : 'mysql_fetch_array';
 
 		// This check has to be outside the previous statement, because we do not
 		// know the state of fetch_type when $object = NULL
 		// NOTE - The class set by $type must be defined before fetching the result,
 		// autoloading is disabled to save a lot of stupid overhead.
-		if ($this->fetch_type == 'mysql_fetch_object' AND $object === TRUE)
-		{
-			$this->return_type = (is_string($type) AND Kohana::auto_load($type)) ? $type : 'stdClass';
-		}
+		if ($this->fetchType == 'mysql_fetch_object' && $object === true)
+			$this->returnType = (is_string($type) && Config::autoLoad($type))
+                ? $type : 'stdClass';
 		else
-		{
-			$this->return_type = $type;
-		}
+			$this->returnType = $type;
 
 		return $this;
 	}
 
-	public function as_array($object = NULL, $type = MYSQL_ASSOC)
-	{
-		return $this->result_array($object, $type);
+	public function asArray($object = NULL, $type = MYSQL_ASSOC) {
+		return $this->resultArray($object, $type);
 	}
 
-	public function result_array($object = NULL, $type = MYSQL_ASSOC)
-	{
+	public function resultArray($object = NULL, $type = MYSQL_ASSOC) {
 		$rows = array();
 
-		if (is_string($object))
-		{
+		if (is_string($object)) {
 			$fetch = $object;
 		}
-		elseif (is_bool($object))
-		{
-			if ($object === TRUE)
-			{
+		elseif (is_bool($object)) {
+			if ($object === true) {
 				$fetch = 'mysql_fetch_object';
 
-				$type = (is_string($type) AND Kohana::auto_load($type)) ? $type : 'stdClass';
+				$type = (is_string($type) && Config::autoLoad($type)) ?
+                    $type : 'stdClass';
 			}
-			else
-			{
+			else {
 				$fetch = 'mysql_fetch_array';
 			}
 		}
-		else
-		{
+		else {
 			// Use the default config values
-			$fetch = $this->fetch_type;
+			$fetch = $this->fetchType;
 
-			if ($fetch == 'mysql_fetch_object')
-			{
-				$type = (is_string($this->return_type) AND Kohana::auto_load($this->return_type)) ? $this->return_type : 'stdClass';
+			if ($fetch == 'mysql_fetch_object') {
+                if (is_string($this->returnType) &&
+                    Config::autoLoad($this->returnType)) {
+                    $type = $this->returnType;
+                }
+                else
+                    $type = 'stdClass';
 			}
 		}
 
-		if (mysql_num_rows($this->result))
-		{
+		if (mysql_num_rows($this->result)) {
 			// Reset the pointer location to make sure things work properly
 			mysql_data_seek($this->result, 0);
 
-			while ($row = $fetch($this->result, $type))
-			{
+			while ($row = $fetch($this->result, $type)) {
 				$rows[] = $row;
 			}
 		}
@@ -467,30 +416,24 @@ class Mysql_Result extends Database_Result {
 		return isset($rows) ? $rows : array();
 	}
 
-	public function list_fields()
-	{
-		$field_names = array();
+	public function listFields() {
+		$fieldNames = array();
 		while ($field = mysql_fetch_field($this->result))
-		{
-			$field_names[] = $field->name;
-		}
+			$fieldNames[] = $field->name;
 
-		return $field_names;
+		return $fieldNames;
 	}
 
-	public function seek($offset)
-	{
-		if ($this->offsetExists($offset) AND mysql_data_seek($this->result, $offset))
-		{
+	public function seek($offset) {
+		if ($this->offsetExists($offset) && mysql_data_seek($this->result, $offset)) {
 			// Set the current row to the offset
-			$this->current_row = $offset;
+			$this->currentRow = $offset;
 
-			return TRUE;
+			return true;
 		}
-		else
-		{
-			return FALSE;
+		else {
+			return false;
 		}
 	}
 
-} // End Mysql_Result Class
+}
