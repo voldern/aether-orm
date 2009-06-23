@@ -393,7 +393,7 @@ abstract class DatabaseDriver {
 	 * @param string $sql SQL query
 	 * @return string
 	 */
-	protected function query_hash($sql) {
+	protected function queryHash($sql) {
 		return sha1(str_replace("\n", ' ', trim($sql)));
 	}
 }
