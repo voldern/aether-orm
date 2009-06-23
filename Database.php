@@ -244,7 +244,7 @@ class Database {
 
         if ($this->config['benchmark'] == true) {
             // Benchmark the query
-            Database::$benchmarkes[] = array('query' => $sql,
+            Database::$benchmarks[] = array('query' => $sql,
                                             'time' => $stop - $start,
                                             'rows' => count($result));
         }
