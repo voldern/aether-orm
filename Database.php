@@ -17,7 +17,7 @@ class Database {
 		'object'        => true,
 		'cache'         => false,
 		'escape'        => true,
-	);
+        );
 
 	// Database driver object
 	protected $driver;
@@ -114,7 +114,7 @@ class Database {
 				'port'     => FALSE,
 				'socket'   => FALSE,
 				'database' => FALSE
-			);
+                );
 
 			// Get the protocol and arguments
 			list ($db['type'], $connection) = explode('://', $this->config['connection'], 2);
@@ -1039,7 +1039,7 @@ class Database {
 	 * @return string SQL
 	 */
 	public function lastQuery() {
-	   return $this->lastQuery;
+        return $this->lastQuery;
 	}
 
 	/**
@@ -1324,7 +1324,7 @@ class Database {
 				'SELECT COUNT(*) AS ' . $this->escapeColumn('total_rows') .
                 ' FROM (' . trim($sql) . ') AS ' .
                 $this->escapeTable('counted_results')
-			);
+                );
 
 			// Return the total number of rows from the query
 			return (int)$result->current()->total_rows;
