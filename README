@@ -1,1 +1,16 @@
 AetherORM
+
+Usage:
+<?php
+require 'Database.php';
+require 'Config.php';
+spl_autoload_register('Config::autoLoad');
+
+$db = Database::instance('prisguide');
+$result = $db->select('id, title')->from('manifestation_view')->limit(10)->get();
+print_r($result->asArray());
+?>
+
+
+For more usage examples please check out the Kohana documentation:
+http://docs.kohanaphp.com/libraries/database
