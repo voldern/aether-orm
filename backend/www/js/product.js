@@ -52,7 +52,6 @@ dojo.addOnLoad(function() {
     }));
     
     /* Autosave */
-    var auto = new modules.AutoSave;
     auto.findNodes();
     auto.attachEvents();
 
