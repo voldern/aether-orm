@@ -90,7 +90,7 @@ class ORM {
      */
     public function __construct($id = NULL) {
         // Set the object name and plural name
-        $this->objectName   = strtolower(substr(get_class($this), 0, -5));
+        $this->objectName = strtolower(substr(get_class($this), 0, -5));
         $this->objectPlural = Inflector::plural($this->objectName);
 
         if (!isset($this->sorting)) {
@@ -470,7 +470,7 @@ class ORM {
             $parentPath = $this->tableName;
         }
         else {
-            if( ! isset($this->withApplied[$parentPath])) {
+            if(!isset($this->withApplied[$parentPath])) {
                 // If the parent object hasn't been joined yet,
                 // do it first (otherwise LEFT JOINs fail)
                 $this->with($parentPath);
@@ -1105,7 +1105,7 @@ class ORM {
                 $this->object[$column] = $value;
             }
             else {
-                list ($prefix, $column) = explode(':', $column, 2);
+                list($prefix, $column) = explode(':', $column, 2);
                 $related[$prefix][$column] = $value;
             }
         }
@@ -1192,7 +1192,7 @@ class ORM {
 
         if (!isset($this->dbApplied['select'])) {
             // Select all columns by default
-            $this->db->select($this->tableName.'.*');
+            $this->db->select($this->tableName . '.*');
         }
 
         if (!empty($this->loadWith)) {
@@ -1203,7 +1203,6 @@ class ORM {
                     $this->with($alias);
                 }
                 else {
-                 
                     // Use object
                     $this->with($object);
                 }
@@ -1216,7 +1215,7 @@ class ORM {
                 if (strpos($column, '.') === false) {
                     // Keeps sorting working properly when using JOINs on
                     // tables with columns of the same name
-                    $column = $this->tableName.'.'.$column;
+                    $column = $this->tableName .'.'. $column;
                 }
                 
                 $sorting[$column] = $direction;
