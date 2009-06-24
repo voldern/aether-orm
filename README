@@ -1,8 +1,7 @@
 AetherORM
 
-Usage:
+Database and QB usage:
 <?php
-require 'Database.php';
 require 'Config.php';
 spl_autoload_register('Config::autoLoad');
 
@@ -14,3 +13,21 @@ print_r($result->asArray());
 
 For more usage examples please check out the Kohana documentation:
 http://docs.kohanaphp.com/libraries/database
+
+ORM usage:
+<?php
+require_once('Config.php');
+spl_autoload_register('Config::autoLoad');
+
+class PersonModel extends ORM {
+    protected $db = 'test_mysql';
+}
+
+$person = ORM::factory('person');
+$person->first_name = 'Jadda';
+$person->sur_name = 'Masa';
+$person->save();
+?>
+
+For more usage examples please check out the Kohana documentation:
+http://docs.kohanaphp.com/libraries/orm
