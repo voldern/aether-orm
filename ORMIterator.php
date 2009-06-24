@@ -1,14 +1,4 @@
 <?php
-/**
- * Object Relational Mapping (ORM) result iterator.
- *
- * $Id: ORM_Iterator.php 3769 2008-12-15 00:48:56Z zombor $
- *
- * @package    ORM
- * @author     Kohana Team
- * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
- */
 class ORMIterator implements Iterator, ArrayAccess, Countable {
 
     // Class attributes
@@ -195,8 +185,7 @@ class ORMIterator implements Iterator, ArrayAccess, Countable {
      *
      * @throws  Kohana_Database_Exception
      */
-    public function offsetUnset($offset)
-    {
+    public function offsetUnset($offset) {
         throw new DatabaseException('database.result_read_only');
     }
 
