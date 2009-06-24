@@ -132,7 +132,7 @@ class ORM {
 
                 if ($this->tableNamesPlural === true) {
                     // Make the table name plural
-                    $this->tableName = inflector::plural($this->tableName);
+                    $this->tableName = Inflector::plural($this->tableName);
                 }
         }
 
@@ -279,11 +279,11 @@ class ORM {
         }
         elseif (isset($this->hasMany[$column])) {
             // Load the "middle" model
-            $through = ORM::factory(inflector::singular(
+            $through = ORM::factory(Inflector::singular(
                                         $this->hasMany[$column]));
 
             // Load the "end" model
-            $model = ORM::factory(inflector::singular($column));
+            $model = ORM::factory(Inflector::singular($column));
 
             // Join ON target model's primary key set to 'through' model's foreign key
             // User-defined foreign keys must be defined in the 'through' model
@@ -299,14 +299,14 @@ class ORM {
         }
         elseif (in_array($column, $this->hasMany)) {
             // one<>many relationship
-            $model = ORM::factory(inflector::singular($column));
+            $model = ORM::factory(Inflector::singular($column));
             return $this->related[$column] = $model
                 ->where($this->foreignKey($column, $model->tableName),
                         $this->object[$this->primaryKey])->findAll();
         }
         elseif (in_array($column, $this->hasAndBelongsToMany)) {
             // Load the remote model, always singular
-            $model = ORM::factory(inflector::singular($column));
+            $model = ORM::factory(Inflector::singular($column));
 
             if ($this->has($model, true)) {
                     // many<>many relationship
@@ -364,7 +364,7 @@ class ORM {
         }
         elseif (in_array($column, $this->hasAndBelongsToMany) && is_array($value)) {
                 // Load relations
-                $model = ORM::factory(inflector::singular($column));
+                $model = ORM::factory(Inflector::singular($column));
 
                 if (!isset($this->objectRelations[$column])) {
                     // Load relations
@@ -692,7 +692,7 @@ class ORM {
                 unset($this->related[$column]);
 
                 // Load the model
-                $model = ORM::factory(inflector::singular($column));
+                $model = ORM::factory(Inflector::singular($column));
 
                 if (($join_table =
                      array_search($column, $this->hasAndBelongsToMany)) === false)
@@ -1026,7 +1026,7 @@ class ORM {
 
                 if ($this->tableNamesPlural === true) {
                     // Make the key name singular
-                    $table = inflector::singular($table);
+                    $table = Inflector::singular($table);
                 }
             }
 
