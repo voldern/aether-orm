@@ -77,7 +77,7 @@ class ORM {
      */
     public static function factory($model, $id = NULL) {
         // Set class name
-        $model = ucfirst($model).'Model';
+        $model = ucfirst($model) . 'Model';
 
         return new $model($id);
     }
@@ -90,8 +90,8 @@ class ORM {
      */
     public function __construct($id = NULL) {
         // Set the object name and plural name
-        $this->objectName   = strtolower(substr(get_class($this), 0, -6));
-        $this->objectPlural = inflector::plural($this->objectName);
+        $this->objectName   = strtolower(substr(get_class($this), 0, -5));
+        $this->objectPlural = Inflector::plural($this->objectName);
 
         if (!isset($this->sorting)) {
             // Default sorting
