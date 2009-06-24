@@ -44,8 +44,10 @@ class Config {
         }
         else {
             // Try to check if there is a file with the name of the class
-            if (file_exists($dir . $class . '.php'))
+            if (file_exists($dir . $class . '.php')) {
                 require($dir . $class . '.php');
+                return true;
+            }
             else
                 return false;
         }
