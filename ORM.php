@@ -31,8 +31,8 @@ class ORM {
     protected $object  = array();
     protected $changed = array();
     protected $related = array();
-    protected $loaded  = FALSE;
-    protected $saved   = FALSE;
+    protected $loaded  = false;
+    protected $saved   = false;
     protected $sorting;
 
     // Related objects
@@ -54,8 +54,8 @@ class ORM {
     protected $foreignKey = array();
 
     // Model configuration
-    protected $tableNamesPlural = TRUE;
-    protected $reloadOnWakeup   = TRUE;
+    protected $tableNamesPlural = true;
+    protected $reloadOnWakeup   = true;
 
     // Database configuration
     protected $db = 'default';
@@ -478,7 +478,7 @@ class ORM {
         }
 
         // Add to with_applied to prevent duplicate joins
-        $this->withApplied[$targetPath] = TRUE;
+        $this->withApplied[$targetPath] = true;
 
         // Use the keys of the empty object to determine the columns
         $select = array_keys($target->object);
@@ -495,12 +495,12 @@ class ORM {
         if (in_array($target->objectName, $parent->belongsTo) ||
             !isset($target->object[$parent->foreignKey($targetName)])) {
             // Parent belongs_to target, use target's primary key as join column
-            $joinCol1 = $target->foreignKey(TRUE, $targetPath);
+            $joinCol1 = $target->foreignKey(true, $targetPath);
             $joinCol2 = $parent->foreignKey($targetName, $parentPath);
         }
         else {
             // Parent has_one target, use parent's primary key as join column
-            $joinCol2 = $parent->foreignKey(TRUE, $parentPath);
+            $joinCol2 = $parent->foreignKey(true, $parentPath);
             $joinCol1 = $parent->foreignKey($targetName, $targetPath);
         }
 
@@ -557,7 +557,7 @@ class ORM {
             $this->offset($offset);
         }
 
-        return $this->loadResult(TRUE);
+        return $this->loadResult(true);
     }
 
     /**
@@ -588,7 +588,7 @@ class ORM {
      */
     /*
       TODO: Port validation
-    public function validate(Validation $array, $save = FALSE) {
+    public function validate(Validation $array, $save = false) {
         $safeArray = $array->safe_array();
 
         if (!$array->submitted()) {
@@ -813,7 +813,7 @@ class ORM {
      * @param   boolean  force reloading
      * @return  ORM
      */
-    public function reloadColumns($force = FALSE) {
+    public function reloadColumns($force = false) {
         if ($force === true || empty($this->tableColumns)) {
             if (isset(ORM::$columnCache[$this->objectName])) {
                 // Use cached column information
@@ -908,7 +908,7 @@ class ORM {
         $column = $model->objectPlural;
 
         if (($key = array_search($model->primaryKeyValue,
-                                 $this->changedRelations[$column])) === FALSE) {
+                                 $this->changedRelations[$column])) === false) {
             return false;
         }
 
