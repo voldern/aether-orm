@@ -14,7 +14,7 @@ abstract class DatabaseDriver {
      * @return  string
      */
     public function delete($table, $where) {
-        return 'DELETE FROM '.$this->escape_table($table).' WHERE '.implode(' ', $where);
+        return 'DELETE FROM '.$this->escapeTable($table).' WHERE '.implode(' ', $where);
     }
 
     /**
@@ -427,7 +427,7 @@ abstract class DatabaseResult implements ArrayAccess, Iterator, Countable {
      * @return  mixed
      */
     public function insertId() {
-        return $this->insert_id;
+        return $this->insertId;
     }
 
     /**
