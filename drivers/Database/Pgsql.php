@@ -1,5 +1,9 @@
 <?php
-
+/**
+ *
+ * @package Database
+ * @author Espen Volden
+ */
 class AetherDatabasePgsqlDriver extends AetherDatabaseDriver {
     // Database connection link
     protected $link;

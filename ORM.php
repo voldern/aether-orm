@@ -8,14 +8,9 @@
  * [ref-orm]: http://wikipedia.org/wiki/Object-relational_mapping
  * [ref-act]: http://wikipedia.org/wiki/Active_record
  *
- * $Id: ORM.php 4354 2009-05-15 16:51:37Z kiall $
- *
- * @package    ORM
- * @author     Kohana Team
- * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @package ORM
+ * @author Espen Volden
  */
-
 class AetherORM {
 
     // Current relationships
@@ -70,7 +65,6 @@ class AetherORM {
     /**
      * Creates and returns a new model.
      *
-     * @chainable
      * @param string $model model name
      * @param mixed $id parameter for find()
      * @return AetherORM
@@ -519,7 +513,6 @@ class AetherORM {
     /**
      * Finds and loads a single database row into the object.
      *
-     * @chainable
      * @param mixed $id primary key or an array of clauses
      * @return AetherORM
      */
@@ -542,7 +535,6 @@ class AetherORM {
     /**
      * Finds multiple database rows and returns an iterator of the rows found.
      *
-     * @chainable
      * @param integer $limit SQL limit
      * @param integer $offset SQL offset
      * @return AetherORMIterator
@@ -638,7 +630,6 @@ class AetherORM {
     /**
      * Saves the current object.
      *
-     * @chainable
      * @return AetherORM
      */
     public function save() {
@@ -737,7 +728,6 @@ class AetherORM {
      * Deletes the current object from the database. This does NOT destroy
      * relationships that have been created with other objects.
      *
-     * @chainable
      * @return AetherORM
      */
     public function delete($id = NULL) {
@@ -756,7 +746,6 @@ class AetherORM {
      * Delete all objects in the associated table. This does NOT destroy
      * relationships that have been created with other objects.
      *
-     * @chainable
      * @param array $ids ids to delete
      * @return AetherORM
      */
@@ -783,7 +772,6 @@ class AetherORM {
     /**
      * Unloads the current object and clears the status.
      *
-     * @chainable
      * @return AetherORM
      */
     public function clear() {
@@ -800,7 +788,6 @@ class AetherORM {
     /**
      * Reloads the current object from the database.
      *
-     * @chainable
      * @return AetherORM
      */
     public function reload() {
@@ -810,7 +797,6 @@ class AetherORM {
     /**
      * Reload column definitions.
      *
-     * @chainable
      * @param boolean $force force reloading
      * @return AetherORM
      */
@@ -962,7 +948,6 @@ class AetherORM {
     /**
      * Proxy method to Database field_data.
      *
-     * @chainable
      * @param string $sql SQL query to clear
      * @return AetherORM
      */
@@ -1080,7 +1065,6 @@ class AetherORM {
     /**
      * Loads an array of values into into the current object.
      *
-     * @chainable
      * @param array $values values to load
      * @return AetherORM
      */
@@ -1180,7 +1164,6 @@ class AetherORM {
      * Loads a database result, either as a new object for this model, or as
      * an iterator for multiple rows.
      *
-     * @chainable
      * @param boolean $array return an iterator or load a single row
      * @return AetherORM for single rows
      * @return AetherORMIterator for multiple rows

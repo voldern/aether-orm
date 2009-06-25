@@ -1,5 +1,11 @@
 <?php
 
+/**
+ *
+ *
+ * @package ORM
+ * @author Espen Volden
+ */
 class AetherORMIterator implements Iterator, ArrayAccess, Countable {
 
     // Class attributes

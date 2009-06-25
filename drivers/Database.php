@@ -1,5 +1,9 @@
 <?php
-
+/**
+ *
+ * @package Database
+ * @author Espen Volden
+ */
 abstract class AetherDatabaseDriver {
     protected $queryCache;
 

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ *
+ * @package Database
+ * @author Espen Volden
+ */
 class AetherDatabase {
     // AetherDatabase instances
     public static $instances = array();
@@ -117,7 +121,8 @@ class AetherDatabase {
                 );
 
             // Get the protocol and arguments
-            list ($db['type'], $connection) = explode('://', $this->config['connection'], 2);
+            list($db['type'], $connection) =
+                explode('://', $this->config['connection'], 2);
             
             if (strpos($connection, '@') !== false) {
                 // Get the username and password
@@ -141,7 +146,8 @@ class AetherDatabase {
                 if (preg_match('/^unix\([^)]++\)/', $connection)) {
                     // This one is a little hairy: we explode based on the end of
                     // the socket, removing the 'unix(' from the connection string
-                    list ($db['socket'], $connection) = explode(')', substr($connection, 5), 2);
+                    list($db['socket'], $connection) =
+                        explode(')', substr($connection, 5), 2);
                 }
                 elseif (strpos($connection, ':') !== false) {
                     // Fetch the host and port name

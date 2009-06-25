@@ -1,5 +1,10 @@
 <?php
-
+/**
+ *
+ *
+ * @package Database
+ * @author Espen Volden
+ */
 class AetherDatabaseMysqliDriver extends AetherDatabaseMysqlDriver {
 
     // Database connection link
