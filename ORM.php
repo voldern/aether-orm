@@ -117,7 +117,7 @@ class AetherORM {
     public function __initialize() {
         if (!is_object($this->db)) {
             // Get database instance
-            $this->db = Database::instance($this->db);
+            $this->db = AetherDatabase::instance($this->db);
         }
 
         if (empty($this->tableName)) {
