@@ -505,10 +505,11 @@ class AetherORM {
         }
 
         // This allows for models to use different table prefixes (sharing the same database)
-        $joinTable = new DatabaseExpression($target->db->tablePrefix() .
-                                            $target->tableName .' AS ' .
-                                            $this->db->tablePrefix() . $targetPath);
-
+        $joinTable =
+            new AetherDatabaseExpression($target->db->tablePrefix() .
+                                         $target->tableName .' AS ' .
+                                         $this->db->tablePrefix() . $targetPath);
+        
         // Join the related object into the result
         $this->db->join($joinTable, $joinCol1, $joinCol2, 'LEFT');
 

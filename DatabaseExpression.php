@@ -1,6 +1,6 @@
 <?php
 
-class DatabaseExpression {
+class AetherDatabaseExpression {
 
 	protected $expression;
 
