@@ -63,7 +63,7 @@ class Database {
      * @param Database instance of Database
      * @return string
      */
-    public static function instance_name(Database $db) {
+    public static function instanceName(Database $db) {
         return array_search($db, Database::$instances, true);
     }
 
