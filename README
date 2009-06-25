@@ -5,7 +5,7 @@ Database and QB usage:
 require 'Config.php';
 spl_autoload_register('Config::autoLoad');
 
-$db = Database::instance('prisguide');
+$db = AetherDatabase::instance('prisguide');
 $result = $db->select('id, title')->from('manifestation_view')->limit(10)->get();
 print_r($result->asArray());
 ?>
@@ -19,11 +19,11 @@ ORM usage:
 require_once('Config.php');
 spl_autoload_register('Config::autoLoad');
 
-class PersonModel extends ORM {
+class PersonModel extends AetherORM {
     protected $db = 'test_mysql';
 }
 
-$person = ORM::factory('person');
+$person = AetherORM::factory('person');
 $person->first_name = 'Jadda';
 $person->sur_name = 'Masa';
 $person->save();
