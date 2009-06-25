@@ -18,7 +18,6 @@ class Config {
     }
     
     public static function autoLoad($class) {
-        echo "Autloaded looking for $class\n";
         if (class_exists($class, false))
             return true;
 
