@@ -1,4 +1,5 @@
 <?php
+
 class AetherORMIterator implements Iterator, ArrayAccess, Countable {
 
     // Class attributes
@@ -9,13 +10,13 @@ class AetherORMIterator implements Iterator, ArrayAccess, Countable {
     // Database result object
     protected $result;
 
-    public function __construct(AetherORM $model, DatabaseResult $result) {
+    public function __construct(AetherORM $model, AetherDatabaseResult $result) {
         // Class attributes
         $this->className  = get_class($model);
         $this->primaryKey = $model->primaryKey;
         $this->primaryVal = $model->primaryVal;
 
-        // Database result
+        // AetherDatabase result
         $this->result = $result->result(true);
     }
 
@@ -174,7 +175,7 @@ class AetherORMIterator implements Iterator, ArrayAccess, Countable {
     /**
      * ArrayAccess: offsetSet
      *
-     * @throws  Kohana_Database_Exception
+     * @throws  DatabaseException
      */
     public function offsetSet($offset, $value) {
         throw new DatabaseException('database.result_read_only');
@@ -183,7 +184,7 @@ class AetherORMIterator implements Iterator, ArrayAccess, Countable {
     /**
      * ArrayAccess: offsetUnset
      *
-     * @throws  Kohana_Database_Exception
+     * @throws  DatabaseException
      */
     public function offsetUnset($offset) {
         throw new DatabaseException('database.result_read_only');
