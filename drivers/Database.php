@@ -1,6 +1,6 @@
 <?php
 
-abstract class DatabaseDriver {
+abstract class AetherDatabaseDriver {
     protected $queryCache;
 
     abstract public function connect();
@@ -397,7 +397,7 @@ abstract class DatabaseDriver {
     }
 }
 
-abstract class DatabaseResult implements ArrayAccess, Iterator, Countable {
+abstract class AetherDatabaseResult implements ArrayAccess, Iterator, Countable {
 
     // Result resource, insert id, and SQL
     protected $result;
@@ -435,7 +435,7 @@ abstract class DatabaseResult implements ArrayAccess, Iterator, Countable {
      *
      * @param boolean $object return rows as objects
      * @param mixed $type type
-     * @return DatabaseResult
+     * @return AetherDatabaseResult
      */
     abstract function result($object = TRUE, $type = FALSE);
 
@@ -501,7 +501,7 @@ abstract class DatabaseResult implements ArrayAccess, Iterator, Countable {
     /**
      * ArrayAccess: offsetSet
      *
-     * @throws  Kohana_Database_Exception
+     * @throws  DatabaseException
      */
     final public function offsetSet($offset, $value) {
         throw new DatabaseException('result_read_only');
@@ -510,7 +510,7 @@ abstract class DatabaseResult implements ArrayAccess, Iterator, Countable {
     /**
      * ArrayAccess: offsetUnset
      *
-     * @throws  Kohana_Database_Exception
+     * @throws  DatabaseException
      */
     final public function offsetUnset($offset) {
         throw new DatabaseException('result_read_only');

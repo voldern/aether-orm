@@ -1,7 +1,7 @@
 <?php
 
-class Database {
-    // Database instances
+class AetherDatabase {
+    // AetherDatabase instances
     public static $instances = array();
 
     // Global benchmark
@@ -19,7 +19,7 @@ class Database {
         'escape'        => true,
         );
 
-    // Database driver object
+    // AetherDatabase driver object
     protected $driver;
     protected $link;
 
@@ -42,19 +42,19 @@ class Database {
     protected $queryHistory = array();
 
     /**
-     * Returns a singleton instance of Database
+     * Returns a singleton instance of AetherDatabase
      *
      * @param mixed configuration array or DSN
-     * @return DatabaseCore
+     * @return AetherDatabase
      */
     public static function instance($name = 'default', $config = null) {
-        if (!isset(Database::$instances[$name])) {
+        if (!isset(AetherDatabase::$instances[$name])) {
             // Create new instance
-            Database::$instances[$name] = new Database($config === null ?
-                                                       $name : $config);
+            AetherDatabase::$instances[$name] =
+                new AetherDatabase($config === null ? $name : $config);
         }
 
-        return Database::$instances[$name];
+        return AetherDatabase::$instances[$name];
     }
 
     /**
@@ -63,8 +63,8 @@ class Database {
      * @param Database instance of Database
      * @return string
      */
-    public static function instanceName(Database $db) {
-        return array_search($db, Database::$instances, true);
+    public static function instanceName(AetherDatabase $db) {
+        return array_search($db, AetherDatabase::$instances, true);
     }
 
     /**
@@ -167,7 +167,7 @@ class Database {
         }
 
         // Set the driver name
-        $driver = 'Database' . ucfirst($this->config['connection']['type']) .
+        $driver = 'AetherDatabase' . ucfirst($this->config['connection']['type']) .
             'Driver';
 
         // Load the driver
@@ -179,7 +179,7 @@ class Database {
         $this->driver = new $driver($this->config);
 
         // Validate the driver
-        if (!($this->driver instanceof DatabaseDriver))
+        if (!($this->driver instanceof AetherDatabaseDriver))
             throw new DatabaseException('driver ' .
                                         $this->config['connection']['type'] .
                                         ' does not implement DatabaseDriver');
@@ -209,7 +209,7 @@ class Database {
      * Runs a query into the driver and returns the result.
      *
      * @param string $sql SQL query to execute
-     * @return DatabaseResult
+     * @return AetherDatabaseResult
      */
     public function query($sql = '') {
         if ($sql == '')
@@ -244,9 +244,9 @@ class Database {
 
         if ($this->config['benchmark'] == true) {
             // Benchmark the query
-            Database::$benchmarks[] = array('query' => $sql,
-                                            'time' => $stop - $start,
-                                            'rows' => count($result));
+            AetherDatabase::$benchmarks[] = array('query' => $sql,
+                                                  'time' => $stop - $start,
+                                                  'rows' => count($result));
         }
 
         return $result;
@@ -256,7 +256,7 @@ class Database {
      * Selects the column names for a database query.
      *
      * @param string $sql string or array of column names to select
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function select($sql = '*') {
         if (func_num_args() > 1) {
@@ -299,7 +299,7 @@ class Database {
      * Selects the from table(s) for a database query.
      *
      * @param string $sql string or array of tables to select
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function from($sql) {
         if (func_num_args() > 1) {
@@ -346,7 +346,7 @@ class Database {
      * @param string|array $key where key or array of key => value pairs
      * @param string $value where value
      * @param string $type type of join
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function join($table, $key, $value = NULL, $type = '') {
         $join = array();
@@ -422,7 +422,7 @@ class Database {
      * @param string|array $key key name or array of key => value pairs
      * @param string $value value to match with key
      * @param boolean $quote disable quoting of WHERE clause
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function where($key, $value = NULL, $quote = true) {
         $quote = (func_num_args() < 2 && !is_array($key)) ? -1 : $quote;
@@ -454,7 +454,7 @@ class Database {
      * @param string|array $key key name or array of key => value pairs
      * @param string $value value to match with key
      * @param boolean $quote disable quoting of WHERE clause
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function orwhere($key, $value = NULL, $quote = true) {
         $quote = (func_num_args() < 2 && !is_array($key)) ? -1 : $quote;
@@ -486,7 +486,7 @@ class Database {
      * @param string|array $field field name or array of field => match pairs
      * @param string $match like value to match with field
      * @param boolean $auto automatically add starting and ending wildcards
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function like($field, $match = '', $auto = true) {
         $fields = is_array($field) ? $field : array($field => $match);
@@ -505,10 +505,10 @@ class Database {
     /**
      * Selects the or like(s) for a database query.
      *
-     * @param   string|array  field name or array of field => match pairs
-     * @param   string        like value to match with field
-     * @param   boolean       automatically add starting and ending wildcards
-     * @return  Database_Core        This Database object.
+     * @param string|array $field field name or array of field => match pairs
+     * @param string $match like value to match with field
+     * @param boolean $auto automatically add starting and ending wildcards
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function orlike($field, $match = '', $auto = true) {
         $fields = is_array($field) ? $field : array($field => $match);
@@ -530,7 +530,7 @@ class Database {
      * @param string|array $field field name or array of field => match pairs
      * @param string $match like value to match with field
      * @param boolean $auto automatically add starting and ending wildcards
-     * @return Database This Database object.
+     * @return AetherDatabase This AehterDatabase object.
      */
     public function notlike($field, $match = '', $auto = true) {
         $fields = is_array($field) ? $field : array($field => $match);
@@ -551,7 +551,7 @@ class Database {
      *
      * @param string|array $field field name or array of field => match pairs
      * @param string $match like value to match with field
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function ornotlike($field, $match = '', $auto = true) {
         $fields = is_array($field) ? $field : array($field => $match);
@@ -572,7 +572,7 @@ class Database {
      *
      * @param string|array $field field name or array of field => match pairs
      * @param string $match like value to match with field
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function regex($field, $match = '') {
         $fields = is_array($field) ? $field : array($field => $match);
@@ -593,7 +593,7 @@ class Database {
      *
      * @param string|array $field field name or array of field => match pairs
      * @param string $match like value to match with field
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function orregex($field, $match = '') {
         $fields = is_array($field) ? $field : array($field => $match);
@@ -614,7 +614,7 @@ class Database {
      *
      * @param string|array $field field name or array of field => match pairs
      * @param string $match regex value to match with field
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function notregex($field, $match = '') {
         $fields = is_array($field) ? $field : array($field => $match);
@@ -635,7 +635,7 @@ class Database {
      *
      * @param string|array $field field name or array of field => match pairs
      * @param string $match regex value to match with field
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function ornotregex($field, $match = '') {
         $fields = is_array($field) ? $field : array($field => $match);
@@ -655,7 +655,7 @@ class Database {
      * Chooses the column to group by in a select query.
      *
      * @param string $by column name to group by
-     * @return Database  This Database object.
+     * @return AetherDatabase  This AetherDatabase object.
      */
     public function groupby($by) {
         if (!is_array($by)) {
@@ -683,7 +683,7 @@ class Database {
      * @param string|array $key key name or array of key => value pairs
      * @param string $value value to match with key
      * @param boolean $quote disable quoting of WHERE clause
-     * @return Database        This Database object.
+     * @return AehterDatabase This AetherDatabase object.
      */
     public function having($key, $value = '', $quote = true) {
         $this->having[] = $this->driver->where($key, $value, 'AND',
@@ -697,7 +697,7 @@ class Database {
      * @param string|array $key key name or array of key => value pairs
      * @param string $value value to match with key
      * @param boolean $quote disable quoting of WHERE clause
-     * @return Database This Database object.
+     * @return AetherDatabase This AehterDatabase object.
      */
     public function orhaving($key, $value = '', $quote = true) {
         $this->having[] = $this->driver->where($key, $value, 'OR', count($this->having), TRUE);
@@ -710,7 +710,7 @@ class Database {
      * @param string|array $orderby column(s) to order on, can be an array,
      * single column, or comma seperated list of columns
      * @param string $direction direction of the order
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function orderby($orderby, $direction = NULL) {
         if (!is_array($orderby))
@@ -741,7 +741,7 @@ class Database {
      *
      * @param integer $limit number of rows to limit result to
      * @param integer $offset offset in result to start returning rows from
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function limit($limit, $offset = NULL) {
         $this->limit = (int)$limit;
@@ -756,7 +756,7 @@ class Database {
      * Sets the offset portion of a query.
      *
      * @param integer $value offset value
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function offset($value) {
         $this->offset = (int)$value;
@@ -769,7 +769,7 @@ class Database {
      *
      * @param string|array $key key name or array of key => value pairs
      * @param string $value value to match with key
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function set($key, $value = '') {
         if (!is_array($key))
@@ -792,7 +792,7 @@ class Database {
      * @param string $table table name
      * @param string $limit limit clause
      * @param string $offset offset clause
-     * @return Database
+     * @return AetherDatabase
      */
     public function get($table = '', $limit = NULL, $offset = NULL) {
         if ($table != '')
@@ -819,7 +819,7 @@ class Database {
      * @param array $where  where clause
      * @param string $limit limit clause
      * @param string $offset offset clause
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function getwhere($table = '', $where = NULL, $limit = NULL, $offset = NULL) {
         if ($table != '')
@@ -868,7 +868,7 @@ class Database {
      *
      * @param string $table table name
      * @param array $set array of key/value pairs to insert
-     * @return Database Query result
+     * @return AetherDatabase Query result
      */
     public function insert($table = '', $set = NULL) {
         if (!is_null($set))
@@ -903,7 +903,7 @@ class Database {
      * @param string $field Name of the column being examined
      * @param mixed $values An array or string to match against
      * @param bool $not Generate a NOT IN clause instead
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function in($field, $values, $not = false) {
         if (is_array($values)) {
@@ -934,7 +934,7 @@ class Database {
      *
      * @param string $field Name of the column being examined
      * @param mixed $values An array or string to match against
-     * @return Database  This Database object.
+     * @return AetherDatabase  This AetherDatabase object.
      */
     public function notin($field, $values) {
         return $this->in($field, $values, true);
@@ -945,7 +945,7 @@ class Database {
      *
      * @param string $table table name
      * @param array $set array of key/value pairs to merge
-     * @return Database Query result
+     * @return AetherDatabase Query result
      */
     public function merge($table = '', $set = NULL) {
         if (!is_null($set))
@@ -975,7 +975,7 @@ class Database {
      * @param string $table table name
      * @param array $set associative array of update values
      * @param array $where where clause
-     * @return Database  Query result
+     * @return AetherDatabase  Query result
      */
     public function update($table = '', $set = NULL, $where = NULL) {
         if (is_array($set))
@@ -1006,7 +1006,7 @@ class Database {
      *
      * @param string $table table name
      * @param array $where where clause
-     * @return Database Query result
+     * @return AetherDatabase Query result
      */
     public function delete($table = '', $where = NULL) {
         if ($table == '') {
@@ -1227,7 +1227,7 @@ class Database {
      * Clears the query cache.
      *
      * @param string|TRUE $sql clear cache by SQL statement or TRUE for last query
-     * @return Database This Database object.
+     * @return AetherDatabase This AetherDatabase object.
      */
     public function clearCache($sql = NULL)
     {
@@ -1249,7 +1249,7 @@ class Database {
      * and pop to prevent queries from clashing before they are
      * executed
      *
-     * @return Database This Databaes object
+     * @return AetherDatabase This Databaes object
      */
     public function push() {
         array_push($this->query_history, array(
@@ -1275,7 +1275,7 @@ class Database {
     /**
      * Pops from query stack into the current query space.
      *
-     * @return Database This Databaes object
+     * @return AetherDatabase This Databaes object
      */
     public function pop() {
         if (count($this->queryHistory) == 0) {

@@ -1,6 +1,6 @@
 <?php
 
-class DatabaseMysqlDriver extends DatabaseDriver {
+class AetherDatabaseMysqlDriver extends AetherDatabaseDriver {
 
     /**
      * Database connection link
@@ -73,8 +73,9 @@ class DatabaseMysqlDriver extends DatabaseDriver {
             if (!isset($this->queryCache[$hash])) {
                 // Set the cached object
                 $this->queryCache[$hash] =
-                    new MysqlResult(mysql_query($sql, $this->link),
-                                    $this->link, $this->dbConfig['object'], $sql);
+                    new AetherMysqlResult(mysql_query($sql, $this->link),
+                                          $this->link, $this->dbConfig['object'],
+                                          $sql);
             }
             else {
                 // Rewind cached result
@@ -85,8 +86,8 @@ class DatabaseMysqlDriver extends DatabaseDriver {
             return $this->queryCache[$hash];
         }
 
-        return new MysqlResult(mysql_query($sql, $this->link), $this->link,
-                               $this->dbConfig['object'], $sql);
+        return new AetherMysqlResult(mysql_query($sql, $this->link), $this->link,
+                                     $this->dbConfig['object'], $sql);
     }
 
     public function setCharset($charset) {
@@ -300,7 +301,7 @@ class DatabaseMysqlDriver extends DatabaseDriver {
 /**
  * MySQL Result
  */
-class MysqlResult extends DatabaseResult {
+class AetherMysqlResult extends AetherDatabaseResult {
 
     // Fetch function and return type
     protected $fetchType  = 'mysql_fetch_object';

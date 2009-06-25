@@ -1,6 +1,6 @@
 <?php
 
-class DatabasePdosqliteDriver extends DatabaseDriver {
+class AetherDatabasePdosqliteDriver extends AetherDatabaseDriver {
 
     // Database connection link
     protected $link;
@@ -50,8 +50,8 @@ class DatabasePdosqliteDriver extends DatabaseDriver {
             throw new DatabaseException('database error: ' . $e->getMessage());
         }
         
-        return new PdosqliteResult($sth, $this->link, $this->dbConfig['object'],
-                                   $sql);
+        return new AetherPdosqliteResult($sth, $this->link,
+                                         $this->dbConfig['object'], $sql);
     }
 
     public function setCharset($charset) {
@@ -236,7 +236,7 @@ class DatabasePdosqliteDriver extends DatabaseDriver {
 /*
  * PDO-sqlite Result
  */
-class PdosqliteResult extends DatabaseResult {
+class AetherPdosqliteResult extends AetherDatabaseResult {
 
     // Data fetching types
     protected $fetchType  = PDO::FETCH_OBJ;

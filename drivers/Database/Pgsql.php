@@ -1,6 +1,6 @@
 <?php
 
-class DatabasePgsqlDriver extends DatabaseDriver {
+class AetherDatabasePgsqlDriver extends AetherDatabaseDriver {
     // Database connection link
     protected $link;
     protected $dbConfig;
@@ -58,8 +58,8 @@ class DatabasePgsqlDriver extends DatabaseDriver {
             if (!isset($this->queryCache[$hash])) {
                 // Set the cached object
                 $this->queryCache[$hash] =
-                    new PgsqlResult(pg_query($this->link, $sql), $this->link,
-                                    $this->dbConfig['object'], $sql);
+                    new AetherPgsqlResult(pg_query($this->link, $sql), $this->link,
+                                          $this->dbConfig['object'], $sql);
             }
             else {
                 // Rewind cached result
@@ -70,8 +70,8 @@ class DatabasePgsqlDriver extends DatabaseDriver {
         }
 
         // Suppress warning triggered when a database error occurs (e.g., a constraint violation)
-        return new PgsqlResult(@pg_query($this->link, $sql), $this->link,
-                               $this->dbConfig['object'], $sql);
+        return new AetherPgsqlResult(@pg_query($this->link, $sql), $this->link,
+                                     $this->dbConfig['object'], $sql);
     }
 
     public function setCharset($charset) {
@@ -265,7 +265,7 @@ class DatabasePgsqlDriver extends DatabaseDriver {
     }
 }
 
-class PgsqlResult extends DatabaseResult {
+class AetherPgsqlResult extends AetherDatabaseResult {
     // Data fetching types
     protected $fetchType  = 'pgsql_fetch_object';
     protected $returnType = PGSQL_ASSOC;
