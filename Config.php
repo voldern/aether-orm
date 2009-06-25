@@ -29,7 +29,13 @@ class Config {
         // MUST BE CAMELCASE!
         $matches = preg_split('/([A-Z][^A-Z]+)/', $class, -1, PREG_SPLIT_NO_EMPTY |
                               PREG_SPLIT_DELIM_CAPTURE);
-        
+
+        // We dont use the aether part to find the filename
+        if ($matches[0] == 'Aether') {
+            array_shift($matches);
+            $class = implode($matches);
+        }
+
         $suffix = array_pop($matches);
 
         if ($suffix == 'Driver') {
