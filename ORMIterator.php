@@ -189,4 +189,4 @@ class AetherORMIterator implements Iterator, ArrayAccess, Countable {
         throw new DatabaseException('database.result_read_only');
     }
 
-} // End ORMIterator
+}
