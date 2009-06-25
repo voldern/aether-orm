@@ -1,5 +1,5 @@
 <?php
-class ORMIterator implements Iterator, ArrayAccess, Countable {
+class AetherORMIterator implements Iterator, ArrayAccess, Countable {
 
     // Class attributes
     protected $className;
@@ -9,7 +9,7 @@ class ORMIterator implements Iterator, ArrayAccess, Countable {
     // Database result object
     protected $result;
 
-    public function __construct(ORM $model, DatabaseResult $result) {
+    public function __construct(AetherORM $model, DatabaseResult $result) {
         // Class attributes
         $this->className  = get_class($model);
         $this->primaryKey = $model->primaryKey;
@@ -20,7 +20,7 @@ class ORMIterator implements Iterator, ArrayAccess, Countable {
     }
 
     /**
-     * Returns an array of the results as ORM objects.
+     * Returns an array of the results as AetherORM objects.
      *
      * @return  array
      */

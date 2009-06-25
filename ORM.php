@@ -16,7 +16,7 @@
  * @license    http://kohanaphp.com/license.html
  */
 
-class ORM {
+class AetherORM {
 
     // Current relationships
     protected $hasOne = array();
@@ -73,7 +73,7 @@ class ORM {
      * @chainable
      * @param string $model model name
      * @param mixed $id parameter for find()
-     * @return ORM
+     * @return AetherORM
      */
     public static function factory($model, $id = NULL) {
         // Set class name
@@ -207,7 +207,7 @@ class ORM {
                 case 0:
                     if (in_array($method, array('openParen', 'closeParen',
                                                 'enableCache', 'disableCache'))) {
-                        // Should return ORM, not Database
+                        // Should return AetherORM, not Database
                         $this->db->$method();
                     }
                     else {
@@ -279,11 +279,11 @@ class ORM {
         }
         elseif (isset($this->hasMany[$column])) {
             // Load the "middle" model
-            $through = ORM::factory(Inflector::singular(
-                                        $this->hasMany[$column]));
+            $through = AetherORM::factory(Inflector::singular(
+                                              $this->hasMany[$column]));
 
             // Load the "end" model
-            $model = ORM::factory(Inflector::singular($column));
+            $model = AetherORM::factory(Inflector::singular($column));
 
             // Join ON target model's primary key set to 'through' model's foreign key
             // User-defined foreign keys must be defined in the 'through' model
@@ -299,14 +299,14 @@ class ORM {
         }
         elseif (in_array($column, $this->hasMany)) {
             // one<>many relationship
-            $model = ORM::factory(Inflector::singular($column));
+            $model = AetherORM::factory(Inflector::singular($column));
             return $this->related[$column] = $model
                 ->where($this->foreignKey($column, $model->tableName),
                         $this->object[$this->primaryKey])->findAll();
         }
         elseif (in_array($column, $this->hasAndBelongsToMany)) {
             // Load the remote model, always singular
-            $model = ORM::factory(Inflector::singular($column));
+            $model = AetherORM::factory(Inflector::singular($column));
 
             if ($this->has($model, true)) {
                     // many<>many relationship
@@ -364,7 +364,7 @@ class ORM {
         }
         elseif (in_array($column, $this->hasAndBelongsToMany) && is_array($value)) {
                 // Load relations
-                $model = ORM::factory(Inflector::singular($column));
+                $model = AetherORM::factory(Inflector::singular($column));
 
                 if (!isset($this->objectRelations[$column])) {
                     // Load relations
@@ -520,7 +520,7 @@ class ORM {
      *
      * @chainable
      * @param mixed $id primary key or an array of clauses
-     * @return ORM
+     * @return AetherORM
      */
     public function find($id = NULL) {
         if ($id !== NULL) {
@@ -544,7 +544,7 @@ class ORM {
      * @chainable
      * @param integer $limit SQL limit
      * @param integer $offset SQL offset
-     * @return ORMIterator
+     * @return AetherORMIterator
      */
     public function findAll($limit = NULL, $offset = NULL) {
         if ($limit !== NULL && !isset($this->dbApplied['limit'])) {
@@ -638,7 +638,7 @@ class ORM {
      * Saves the current object.
      *
      * @chainable
-     * @return  ORM
+     * @return AetherORM
      */
     public function save() {
         if (!empty($this->changed)) {
@@ -692,7 +692,7 @@ class ORM {
                 unset($this->related[$column]);
 
                 // Load the model
-                $model = ORM::factory(Inflector::singular($column));
+                $model = AetherORM::factory(Inflector::singular($column));
 
                 if (($join_table =
                      array_search($column, $this->hasAndBelongsToMany)) === false)
@@ -737,7 +737,7 @@ class ORM {
      * relationships that have been created with other objects.
      *
      * @chainable
-     * @return  ORM
+     * @return AetherORM
      */
     public function delete($id = NULL) {
         if ($id === NULL && $this->loaded) {
@@ -757,7 +757,7 @@ class ORM {
      *
      * @chainable
      * @param array $ids ids to delete
-     * @return ORM
+     * @return AetherORM
      */
     public function deleteAll($ids = NULL) {
         if (is_array($ids)) {
@@ -783,7 +783,7 @@ class ORM {
      * Unloads the current object and clears the status.
      *
      * @chainable
-     * @return  ORM
+     * @return AetherORM
      */
     public function clear() {
         // Create an array with all the columns set to NULL
@@ -800,7 +800,7 @@ class ORM {
      * Reloads the current object from the database.
      *
      * @chainable
-     * @return  ORM
+     * @return AetherORM
      */
     public function reload() {
         return $this->find($this->object[$this->primaryKey]);
@@ -810,18 +810,18 @@ class ORM {
      * Reload column definitions.
      *
      * @chainable
-     * @param   boolean  force reloading
-     * @return  ORM
+     * @param boolean $force force reloading
+     * @return AetherORM
      */
     public function reloadColumns($force = false) {
         if ($force === true || empty($this->tableColumns)) {
-            if (isset(ORM::$columnCache[$this->objectName])) {
+            if (isset(AetherORM::$columnCache[$this->objectName])) {
                 // Use cached column information
-                $this->tableColumns = ORM::$columnCache[$this->objectName];
+                $this->tableColumns = AetherORM::$columnCache[$this->objectName];
             }
             else {
                 // Load table columns
-                ORM::$columnCache[$this->objectName] = $this->tableColumns =
+                AetherORM::$columnCache[$this->objectName] = $this->tableColumns =
                     $this->listFields();
             }
         }
@@ -832,11 +832,11 @@ class ORM {
     /**
      * Tests if this object has a relationship to a different model.
      *
-     * @param object $model related ORM model
+     * @param object $model related AetherORM model
      * @param boolean $any check for any relations to given model
      * @return boolean
      */
-    public function has(ORM $model, $any = false) {
+    public function has(AetherORM $model, $any = false) {
         // Determine plural or singular relation name
         $related = ($model->tableNamesPlural === true) ?
             $model->objectPlural : $model->objectName;
@@ -873,10 +873,10 @@ class ORM {
     /**
      * Adds a new relationship to between this model and another.
      *
-     * @param object $model related ORM model
+     * @param object $model related AetherORM model
      * @return boolean
      */
-    public function add(ORM $model) {
+    public function add(AetherORM $model) {
         if ($this->has($model))
             return true;
 
@@ -897,10 +897,10 @@ class ORM {
     /**
      * Adds a new relationship to between this model and another.
      *
-     * @param object $model related ORM model
+     * @param object $model related AetherORM model
      * @return boolean
      */
-    public function remove(ORM $model) {
+    public function remove(AetherORM $model) {
         if (!$this->has($model))
             return false;
 
@@ -963,13 +963,13 @@ class ORM {
      *
      * @chainable
      * @param string $sql SQL query to clear
-     * @return ORM
+     * @return AetherORM
      */
     public function clearCache($sql = NULL) {
         // Proxy to database
         $this->db->clearCache($sql);
 
-        ORM::$columnCache = array();
+        AetherORM::$columnCache = array();
 
         return $this;
     }
@@ -1058,18 +1058,18 @@ class ORM {
     }
 
     /**
-     * Returns an ORM model for the given object name;
+     * Returns an AetherORM model for the given object name;
      *
      * @param string $object object name
-     * @return ORM
+     * @return AetherORM
      */
     protected function relatedObject($object) {
         if (isset($this->hasOne[$object]))
-            $object = ORM::factory($this->hasOne[$object]);
+            $object = AetherORM::factory($this->hasOne[$object]);
         elseif (isset($this->belongsTo[$object]))
-            $object = ORM::factory($this->belongsTo[$object]);
+            $object = AetherORM::factory($this->belongsTo[$object]);
         elseif (in_array($object, $this->hasOne) || in_array($object, $this->belongsTo))
-            $object = ORM::factory($object);
+            $object = AetherORM::factory($object);
         else
             return false;
 
@@ -1081,7 +1081,7 @@ class ORM {
      *
      * @chainable
      * @param array $values values to load
-     * @return ORM
+     * @return AetherORM
      */
     public function loadValues(array $values) {
         if (array_key_exists($this->primaryKey, $values)) {
@@ -1181,8 +1181,8 @@ class ORM {
      *
      * @chainable
      * @param boolean $array return an iterator or load a single row
-     * @return ORM for single rows
-     * @return ORMIterator for multiple rows
+     * @return AetherORM for single rows
+     * @return AetherORMIterator for multiple rows
      */
     protected function loadResult($array = false) {
         if ($array === false) {
@@ -1230,7 +1230,7 @@ class ORM {
 
         if ($array === true) {
             // Return an iterated result
-            return new ORMIterator($this, $result);
+            return new AetherORMIterator($this, $result);
         }
 
         if ($result->count() === 1) {
@@ -1249,10 +1249,10 @@ class ORM {
      * Return an array of all the primary keys of the related table.
      *
      * @param string $table table name
-     * @param object $model ORM model to find relations of
+     * @param object $model AetherORM model to find relations of
      * @return array
      */
-    protected function loadRelations($table, ORM $model) {
+    protected function loadRelations($table, AetherORM $model) {
         // Save the current query chain (otherwise the next call will clash)
         $this->db->push();
         
