@@ -59,7 +59,7 @@ dojo.declare("modules.Upload",
         console.log("Success " + file.name);
     },
     uploadCompleteCb: function(file) {
-        console.log("Complete " + file.name);
+        dojo.publish("upload.finished", file);
     },
     debugCb: function(message) {
         console.log("DEBUG: " + message);

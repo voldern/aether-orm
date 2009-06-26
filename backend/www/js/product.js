@@ -75,6 +75,29 @@ dojo.addOnLoad(function() {
     fadePeriodCb({ target: exactDate[0] });
 
     /* Image Importer */
+    function updateImageList(file) {
+        var eid = dojo.byId("eid").value;
+        dojo.xhrGet({
+            url: '',
+            content: {
+                module: 'ImageImport',
+                service: 'lookIn',
+                products: eid,
+                width: 150
+            },
+            handleAs: 'json',
+            load: dojo.hitch(this, function(resp, ioArgs) {
+                var images = dojo.byId("unpublishedImages");
+                var eid = dojo.byId("eid").value;
+
+                images.innerHTML = '';
+                for (i in resp.products[eid]) {
+                    if (resp.products[eid][i].url != undefined)
+                        images.innerHTML += '<img src="' + resp.products[eid][i].url + '" />';
+                }
+            }),
+        });
+    }
     dojo.query('#image_import_submit').connect(
         'onclick', dojo.hitch(this, function(e) {
             dojo.stopEvent(e);
@@ -97,5 +120,6 @@ dojo.addOnLoad(function() {
             });
         })
     );
-    
+    updateImageList();
+    dojo.subscribe("upload.finished", updateImageList);
 });

@@ -85,7 +85,9 @@ class AetherModuleImageImport extends AetherModule {
             $productResult = $pgDB->query($sql);
 
             foreach ($productResult as $prod) {
-                $img = new NewImage($prod['imageId']);
+                $img = RecordFinder::locate("NewImage", array("id = {$prod['imageId']}"));
+
+                $img = $img->first;
                 $res = array(
                     'id' => $img->get('id'),
                     'name' => $img->get('title'),
