@@ -20,22 +20,22 @@ dojo.declare("modules.Upload",
     uploadUrl: "/upload/",
     swfuploadLoadedCb: function() {
         this.uploadProgressText.textContent = "Last opp filer";
-        console.log("SWF loaded");
+        dojo.publish("upload.swf_loaded", []);
     },
     dialogStartCb: function() {
-        console.log("Opened dialog");
+        dojo.publish("upload.open_dialog", []);
         this.totalSizeQueued = 0;
         this.totalSizeComplete = 0;
     },
     fileQueuedCb: function(file) {
-        console.log("Queued " + file.name);
+        dojo.publish("upload.queued", [file]);
         this.totalSizeQueued += file.size;
     },
     fileQueueErrorCb: function(file, errorCode, errorMessage) {
-        console.log("Queue error " + file.name + " " + errorMessage);
+        dojo.publish("upload.queue_error", [file, errorMessage]);
     },
     dialogCompleteCb: function(numFilesSelected, numFilesQueued, numFilesInQueue) {
-        console.log("Starting upload");
+        dojo.publish("upload.starting", []);
         if (numFilesSelected > 0) 
             this.uploadProgressText.textContent = "(0%) Starter opplasting..";
         else
@@ -43,26 +43,26 @@ dojo.declare("modules.Upload",
         this.swfu.startUpload();
     },
     uploadStartCb: function(file) {
-        console.log("Start " + file.name);
+        dojo.publish("upload.start", [file]);
     },
     uploadProgressCb: function(file, bytesLoaded, bytesTotal) {
-        console.log("Progress " + file.name);
+        dojo.publish("upload.progress", [file, bytesLoaded, bytesTotal]);
         this.totalSizeComplete += bytesLoaded;
 
         var progress = this.totalSizeComplete / this.totalSizeQueued;
         this.updateProgress(file, progress);
     },
     uploadErrorCb: function(file, errorCode, errorMessage) {
-        console.log("Upload error " + file.name + " " + errorMessage);
+        dojo.publish("upload.error", [file, errorCode, errorMessage]);
     },
     uploadSuccessCb: function(file, serverData, response) {
-        console.log("Success " + file.name);
+        dojo.publish("upload.success", [file, response]);
     },
     uploadCompleteCb: function(file) {
         dojo.publish("upload.finished", [file]);
     },
     debugCb: function(message) {
-        console.log("DEBUG: " + message);
+        dojo.publish("upload.debug", [message]);
     },
     updateProgress: function(file, progress) {
         this.uploadProgressBar.style.width = 
