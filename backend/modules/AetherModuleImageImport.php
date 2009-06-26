@@ -7,7 +7,9 @@
  * @author Espen Volden
  * @package prisguide.backend.modules
  */
+require_once(PG_PATH . 'backend/lib/EntityImage.php');
 require_once(LIB_PATH . 'image/NewImage.php');
+require_once(LIB_PATH . 'upload/UploadManager.lib.php');
 
 class AetherModuleImageImport extends AetherModule {
     /**
@@ -18,6 +20,9 @@ class AetherModuleImageImport extends AetherModule {
      */
     public function run() {
         $tpl = $this->sl->getTemplate();
+        $config = $this->sl->get('aetherConfig');
+        $eid = $config->getUrlVar('product_id');
+        $tpl->set('eid', $eid);
         return $tpl->fetch("product/image_import.tpl");
     }
 
@@ -31,6 +36,11 @@ class AetherModuleImageImport extends AetherModule {
             break;
         case 'unlink':
             $response = $this->serviceUnlink($_GET);
+            break;
+        case 'upload':
+            $files = $_FILES;
+            $eid = $_GET['eid'];
+            $response = $this->serviceUpload($eid, $files);
             break;
         default:
             $response = array('error' => 'No/Unknown service requested');
@@ -53,6 +63,7 @@ class AetherModuleImageImport extends AetherModule {
         }
 
         $imgDB = new Database('images');
+        $pgDB = new Database('pg2_backend');
         $result = array('products' => array(), 'articles' => array());
 
         if (isset($GET['products']) && !empty($GET['products'])) {
@@ -66,14 +77,27 @@ class AetherModuleImageImport extends AetherModule {
                 return array('error' => $error);
 
             $qb = new QueryBuilder;
-            $qb->addFrom('image_product_link');
+            $qb->addFrom('entity_image');
             $qb->addSelect('image_id', 'imageId');
-            $qb->addSelect('product_id', 'productId');
-            $qb->addWhere('product_id', 'IN', $products);
-            $productResult = $imgDB->query($qb->build());
+            $qb->addSelect('entity_id', 'entityId');
+            $qb->addWhere('entity_id', 'IN', $products);
+            $sql = $qb->build();
+            $productResult = $pgDB->query($sql);
 
             foreach ($productResult as $prod) {
-                $result['products'][$prod['productId']][] = $prod['imageId'];
+                $img = new NewImage($prod['imageId']);
+                $res = array(
+                    'id' => $img->get('id'),
+                    'name' => $img->get('title'),
+                    'publishedAt' => $img->get('publishedAt'),
+                    'published' => $img->isPublished()
+                );
+                if (isset($GET['width'])) {
+                    if (!isset($GET['height']))
+                        $GET['height'] = false;
+                    $res['url'] = "http://img.gfx.no" . $img->getSizeUrl($GET['width'], $GET['height']);
+                }
+                $result['products'][$prod['entityId']][] = $res;
             }
         }
 
@@ -166,6 +190,43 @@ class AetherModuleImageImport extends AetherModule {
 
         foreach ($result->getAll() as $row)
             $row->delete();
+
+        return array('status' => 'success');
+    }
+
+
+    /**
+     * Unlinks image -> product link
+     *
+     * @access private
+     * @return array
+     * @param array $GET
+     */
+    private function serviceUpload($eid, $files) {
+        if (!isset($eid) || empty($eid))
+            return array('error' => 'Need eid');
+
+        $saveDir = "/tmp";
+
+        $um = new UploadManager();
+        $um->setSavePath($saveDir);
+        $um->addFile($files['Filedata']);
+        if ($um->upload()) {
+            $uploadFiles = $um->getFiles(); 
+
+            foreach ($uploadFiles as $file) {
+                $i = new NewImage(); //FIXME: REMOVE
+                $i->set('title', basename($file));
+                $i->set('published', 1);
+                $i->save();
+                $i->uploadFromFile($file);
+                
+                $ei = new EntityImage();
+                $ei->set('entityId', $eid);
+                $ei->set('imageId', $i->get('id'));
+                $ei->save();
+            }
+        }
 
         return array('status' => 'success');
     }

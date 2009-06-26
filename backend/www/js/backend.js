@@ -51,5 +51,5 @@ dojo.addOnLoad(function() {
     // Add focus to e-mail if login is required
     if (dojo.byId("email"))
         dojo.byId("email").focus();
-    var auto = new modules.AutoSave;
+    auto = new modules.AutoSave;
 });

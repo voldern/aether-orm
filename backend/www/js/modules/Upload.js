@@ -2,6 +2,8 @@
  * Dojo module for handling multiple uploads with progress reporting
  */
 
+dojo.registerModulePath("upload", "../../../upload");
+
 dojo.provide("modules.Upload");
 dojo.require('upload.swfupload');
 dojo.require('upload.swfuploadqueue');
@@ -12,6 +14,10 @@ dojo.require("dijit.ProgressBar");
 dojo.declare("modules.Upload", 
     [dijit._Widget, dojox.dtl._DomTemplated], {
     templatePath: dojo.moduleUrl("modules.templates", "upload.html"),
+    constructor: function(args, node) {
+        dojo.mixin(this, args);
+    },
+    uploadUrl: "/upload/",
     swfuploadLoadedCb: function() {
         this.uploadProgressText.textContent = "Last opp filer";
         console.log("SWF loaded");
@@ -68,7 +74,7 @@ dojo.declare("modules.Upload",
     },
     postCreate: function() {
         this.swfu = new SWFUpload({
-            upload_url: "/testupload.php",
+            upload_url: this.uploadUrl,
             flash_url: "/js/upload/swfupload.swf",
             file_size_limit: "1500 MB",
             file_types: "*.*",

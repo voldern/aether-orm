@@ -7,6 +7,7 @@ class EntityImage extends ActiveRecord {
     protected $entityId;
     protected $imageId;
     protected $order;
+    protected $createdAt;
     
     public $tableInfo = array(
         'database' => 'pg2_backend',
@@ -34,7 +35,7 @@ class EntityImage extends ActiveRecord {
         if ($idFromTable == false)
             $idFromTable = $this->tableInfo['table'];
 
-        $this->set('created_at', date('c'));
+        $this->set('createdAt', date('c'));
         parent::save($idFromTable);
     }
 }

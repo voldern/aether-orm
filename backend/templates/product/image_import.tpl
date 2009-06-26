@@ -1,5 +1,9 @@
 <div>
     <fieldset>
+        <legend>Upload images</legend>
+        <div dojoType="modules.Upload" uploadUrl="/products/?module=ImageImport&service=upload&eid={$eid}"></div>
+    </fieldset>
+    <fieldset>
         <legend>Import image</legend>
         <form action="/products/?module=ImageImport&service=lookIn"
               method="post" id="image_import_search">
