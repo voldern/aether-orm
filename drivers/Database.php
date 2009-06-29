@@ -331,7 +331,7 @@ abstract class AetherDatabaseDriver {
 
         if ($sqlTypes === NULL) {
             // Load SQL data types
-            $sqlTypes = Config::retrieve('sql_types');
+            $sqlTypes = AetherDatabaseConfig::retrieve('sql_types');
         }
 
         $str = strtolower(trim($str));
@@ -350,7 +350,7 @@ abstract class AetherDatabaseDriver {
 
         if (empty($sqlTypes[$type])) {
             exit('Unknown field type: ' . $type . '. ' .
-                 'Please report this: drift@hardware.no!');
+                 'Please report this to: drift@hardware.no!');
         }
 
         // Fetch the field definition

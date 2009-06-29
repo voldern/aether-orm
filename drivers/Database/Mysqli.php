@@ -182,8 +182,10 @@ class AetherMysqliResult extends AetherDatabaseResult {
         // NOTE - The class set by $type must be defined before fetching the result,
         // autoloading is disabled to save a lot of stupid overhead.
         if ($this->fetchType == 'fetch_object') {
-            $this->returnType = (is_string($type) && Config::auto_load($type)) ?
-                $type : 'stdClass';
+            if (is_string($type) && AetherDatabaseConfig::autoLoad($type))
+                $this->returnType = $type;
+            else
+                $this->returnType = 'stdClass';
         }
         else {
             $this->returnType = $type;
@@ -208,7 +210,7 @@ class AetherMysqliResult extends AetherDatabaseResult {
 
                 // NOTE - The class set by $type must be defined before fetching the result,
                 // autoloading is disabled to save a lot of stupid overhead.
-                $type = (is_string($type) && Config::auto_load($type)) ?
+                $type = (is_string($type) && AetherDatabaseConfig::autoLoad($type)) ?
                     $type : 'stdClass';
             }
             else {
@@ -220,7 +222,7 @@ class AetherMysqliResult extends AetherDatabaseResult {
             $fetch = $this->fetchType;
 
             if ($fetch == 'fetch_object') {
-                $type = (is_string($type) && Config::auto_load($type)) ?
+                $type = (is_string($type) && AetherDatabaseConfig::autoLoad($type)) ?
                     $type : 'stdClass';
             }
         }

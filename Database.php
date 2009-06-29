@@ -79,7 +79,7 @@ class AetherDatabase {
     public function __construct($config = array()) {
         if (empty($config)) {
             // Load the default config
-            $config = Config::retrieve('default');
+            $config = AetherDatabaseConfig::retrieve('database.default');
         }
         elseif (is_array($config) && count($config) > 0) {
             if (!array_key_exists('connection', $config)) {
@@ -95,7 +95,8 @@ class AetherDatabase {
                 $name = $config;
                 // Test the config name
 
-                if (($config = Config::retrieve($config)) === null)
+                if (($config =
+                     AetherDatabaseConfig::retrieve('database.' . $config)) === null)
                     throw new DatabaseException("undefined config $name");
             }
         }
@@ -177,7 +178,7 @@ class AetherDatabase {
             'Driver';
 
         // Load the driver
-        if (!Config::autoLoad($driver))
+        if (!AetherDatabaseConfig::autoLoad($driver))
             throw new DatabaseException('driver_not_found ' .
                                         $this->config['connection']['type']);
 

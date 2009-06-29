@@ -317,11 +317,15 @@ class AetherPdosqliteResult extends AetherDatabaseResult {
     public function result($object = TRUE, $type = PDO::FETCH_BOTH) {
         $this->fetchType = (bool) $object ? PDO::FETCH_OBJ : PDO::FETCH_BOTH;
 
-        if ($this->fetchType == PDO::FETCH_OBJ)
-            $this->returnType = (is_string($type) && Config::autoLoad($type)) ?
-                $type : 'stdClass';
-        else
+        if ($this->fetchType == PDO::FETCH_OBJ) {
+            if (is_string($type) && AetherDatabaseConfig::autoLoad($type))
+                $this->returnType = $type;
+            else
+                $this->returnType = 'stdClass';
+        }
+        else {
             $this->returnType = $type;
+        }
 
         return $this;
     }
@@ -342,7 +346,7 @@ class AetherPdosqliteResult extends AetherDatabaseResult {
 
                 // NOTE - The class set by $type must be defined before fetching the result,
                 // autoloading is disabled to save a lot of stupid overhead.
-                $type = (is_string($type) && Config::autoLoad($type)) ?
+                $type = (is_string($type) && AetherDatabaseConfig::autoLoad($type)) ?
                     $type : 'stdClass';
             }
             else {
@@ -354,7 +358,7 @@ class AetherPdosqliteResult extends AetherDatabaseResult {
             $fetch = $this->fetchType;
 
             if ($fetch == PDO::FETCH_OBJ) 
-                $type = (is_string($type) && Config::autoLoad($type)) ?
+                $type = (is_string($type) && AetherDatabaseConfig::autoLoad($type)) ?
                     $type : 'stdClass';
         }
         

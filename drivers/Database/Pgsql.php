@@ -328,7 +328,7 @@ class AetherPgsqlResult extends AetherDatabaseResult {
         // NOTE - The class set by $type must be defined before fetching the result,
         // autoloading is disabled to save a lot of stupid overhead.
         if ($this->fetchType == 'pg_fetch_object') {
-            $this->returnType = (is_string($type) && Config::autoLoad($type)) ?
+            $this->returnType = (is_string($type) && AetherDatabaseConfig::autoLoad($type)) ?
                 $type : 'stdClass';
         }
         else {
@@ -354,7 +354,7 @@ class AetherPgsqlResult extends AetherDatabaseResult {
 
                 // NOTE - The class set by $type must be defined before fetching the result,
                 // autoloading is disabled to save a lot of stupid overhead.
-                $type = (is_string($type) && Config::autoLoad($type)) ?
+                $type = (is_string($type) && AetherDatabaseConfig::autoLoad($type)) ?
                     $type : 'stdClass';
             }
             else {
@@ -366,7 +366,8 @@ class AetherPgsqlResult extends AetherDatabaseResult {
             $fetch = $this->fetchType;
 
             if ($fetch == 'pg_fetch_object') {
-                $type = (is_string($type) && Config::autoLoad($type)) ? $type : 'stdClass';
+                $type = (is_string($type) && AetherDatabaseConfig::autoLoad($type)) ?
+                    $type : 'stdClass';
             }
         }
 
