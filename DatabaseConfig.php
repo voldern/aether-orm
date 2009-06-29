@@ -1,193 +1,68 @@
 <?php
 
-$config = array();
+class AetherDatabaseConfig {
 
+    private static $configuration = array();
 
-$config['default'] = array(
-    'benchmark'     => true,
-    'persistent'    => false,
-    'connection'    => array(
-        'type'     => 'mysql',
-        'user'     => 'dbuser',
-        'pass'     => 'p@ssw0rd',
-        'host'     => 'localhost',
-        'port'     => false,
-        'socket'   => false,
-        'database' => 'kohana'
-        ),
-    'character_set' => 'utf8',
-    'table_prefix'  => '',
-    'object'        => true,
-    'cache'         => false,
-    'escape'        => true
-    );
+    public static function retrieve($name) {
+        if (!isset($configuration[$name])) {
+            include 'DatabaseConfig.php';
 
-$config['prisguide'] = array(
-    'benchmark'     => true,
-    'persistent'    => false,
-    'connection'    => array(
-        'type'     => 'pgsql',
-        'user'     => 'prisguide',
-        'pass'     => 'j7ieaRKWaNkayD',
-        'host'     => 'dev.raw.no',
-        'port'     => false,
-        'socket'   => false,
-        'database' => 'prisguide'
-        ),
-    'character_set' => 'utf8',
-    'table_prefix'  => '',
-    'object'        => true,
-    'cache'         => true,
-    'escape'        => true
-    );
+            if (!isset($config[$name]))
+                throw new Exception($name . ' config does not exist');
 
-$config['test_mysql'] = array(
-    'benchmark'     => true,
-    'persistent'    => false,
-    'connection'    => array(
-        'type'     => 'mysql',
-        'user'     => 'testdb',
-        'pass'     => 'TYfusaK5CaPaB7fR',
-        'host'     => 'dev.raw.no',
-        'port'     => false,
-        'socket'   => false,
-        'database' => 'testdb'
-        ),
-    'character_set' => 'utf8',
-    'table_prefix'  => '',
-    'object'        => true,
-    'cache'         => false,
-    'escape'        => true
-    );
+            self::$configuration[$name] = $config[$name];
+        }
 
-$config['test_mysqli'] = array(
-    'benchmark'     => true,
-    'persistent'    => false,
-    'connection'    => array(
-        'type'     => 'mysqli',
-        'user'     => 'testdb',
-        'pass'     => 'TYfusaK5CaPaB7fR',
-        'host'     => 'dev.raw.no',
-        'port'     => false,
-        'socket'   => false,
-        'database' => 'testdb'
-        ),
-    'character_set' => 'utf8',
-    'table_prefix'  => '',
-    'object'        => true,
-    'cache'         => false,
-    'escape'        => true
-    );
+        return self::$configuration[$name];
+    }
+    
+    public static function autoLoad($class) {
+        if (class_exists($class, false))
+            return true;
 
-$config['sql_types'] = array(
-    'tinyint' => array('type' => 'int', 'max' => 127),
-    'smallint' => array('type' => 'int', 'max' => 32767),
-    'mediumint' => array('type' => 'int', 'max' => 8388607),
-    'int' => array('type' => 'int', 'max' => 2147483647),
-    'integer' => array('type' => 'int', 'max' => 2147483647),
-    'bigint' => array('type' => 'int', 'max' => 9223372036854775807),
-    'float' => array('type' => 'float'),
-    'float unsigned' => array('type' => 'float', 'min' => 0),
-    'boolean' => array('type' => 'boolean'),
-    'time' => array('type' => 'string', 'format' => '00:00:00'),
-    'time with time zone' => array('type' => 'string'),
-    'date' => array('type' => 'string', 'format' => '0000-00-00'),
-    'year' => array('type' => 'string', 'format' => '-1'),
-    'datetime' => array('type' => 'string', 'format' => '0000-00-00 00:00:00'),
-    'timestamp with time zone' => array('type' => 'string'),
-    'char' => array('type' => 'string', 'exact' => TRUE),
-    'binary' => array('type' => 'string', 'binary' => TRUE, 'exact' => TRUE),
-    'varchar' => array('type' => 'string'),
-    'varbinary' => array('type' => 'string', 'binary' => TRUE),
-    'blob' => array('type' => 'string', 'binary' => TRUE),
-    'text' => array('type' => 'string')
-    );
+        // Get this directory
+        $dir = dirname(__FILE__) . '/';
 
-// double
-$config['sql_types']['double'] = $config['sql_types']['double precision'] =
-    $config['sql_types']['decimal'] = $config['sql_types']['real'] =
-    $config['sql_types']['numeric'] = $config['sql_types']['float'];
+        // Split up the class name into logical parts
+        // MUST BE CAMELCASE!
+        $matches = preg_split('/([A-Z][^A-Z]+)/', $class, -1, PREG_SPLIT_NO_EMPTY |
+                              PREG_SPLIT_DELIM_CAPTURE);
 
-// bit
-$config['sql_types']['bit'] = $config['sql_types']['boolean'];
+        // We dont use the aether part to find the filename
+        if ($matches[0] == 'Aether') {
+            array_shift($matches);
+            $class = implode($matches);
+        }
 
-// timestamp
-$config['sql_types']['timestamp'] =
-    $config['sql_types']['timestamp without time zone'] =
-    $config['sql_types']['datetime'];
+        $suffix = array_pop($matches);
 
-// enum
-$config['sql_types']['enum'] = $config['sql_types']['set'] =
-    $config['sql_types']['varchar'];
+        if ($suffix == 'Driver') {
+            $type = 'drivers/';
 
-// text
-$config['tinytext'] = $config['sql_types']['mediumtext'] =
-    $config['sql_types']['longtext'] = $config['sql_types']['text'];
+            if (count($matches) == 1)
+                $file = array_shift($matches) . '.php';
+            elseif (count($matches) == 2)
+                $file = array_shift($matches) . '/' . array_shift($matches) . '.php';
+            else
+                return false;
+        }
+        else {
+            // Try to check if there is a file with the name of the class
+            if (file_exists($dir . $class . '.php')) {
+                require($dir . $class . '.php');
+                return true;
+            }
+            else
+                return false;
+        }
 
-// blob
-$config['sql_types']['tsvector'] = $config['sql_types']['tinyblob'] =
-    $config['sql_types']['mediumblob'] = $config['sql_types']['longblob'] =
-    $config['sql_types']['clob'] = $config['sql_types']['bytea'] =
-    $config['sql_types']['blob'];
+        // Check that the file exists
+        if (!file_exists($dir . $type . $file))
+            return false;
 
-// CHARACTER
-$config['sql_types']['character'] = $config['sql_types']['char'];
-$config['sql_types']['character varying'] = $config['sql_types']['varchar'];
+        require $dir . $type . $file;
 
-// TIME
-$config['sql_types']['time without time zone'] = $config['sql_types']['time'];
-
-$config['uncountable'] = array(
-    'access',
-    'advice',
-    'art',
-    'baggage',
-    'dances',
-    'equipment',
-    'fish',
-    'fuel',
-    'furniture',
-    'food',
-    'heat',
-    'honey',
-    'homework',
-    'impatience',
-    'information',
-    'knowledge',
-    'luggage',
-    'money',
-    'music',
-    'news',
-    'patience',
-    'progress',
-    'pollution',
-    'research',
-    'rice',
-    'sand',
-    'series',
-    'sheep',
-    'sms',
-    'species',
-    'staff',
-    'toothpaste',
-    'traffic',
-    'understanding',
-    'water',
-    'weather',
-    'work',
-    );
-
-$config['irregular'] = array(
-    'child' => 'children',
-    'clothes' => 'clothing',
-    'man' => 'men',
-    'movie' => 'movies',
-    'person' => 'people',
-    'woman' => 'women',
-    'mouse' => 'mice',
-    'goose' => 'geese',
-    'ox' => 'oxen',
-    'leaf' => 'leaves',
-    'course' => 'courses',
-    'size' => 'sizes',
-    );
+        return true;
+    }
+}
