@@ -85,7 +85,7 @@ class AetherDatabaseConfig {
         $suffix = array_pop($matches);
 
         if ($suffix == 'Driver') {
-            $type = 'drivers/';
+            $type = 'driver/';
 
             if (count($matches) == 1)
                 $file = array_shift($matches) . '.php';
