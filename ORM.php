@@ -179,7 +179,7 @@ class AetherORM {
     public function __call($method, array $args) {
         if (method_exists($this->db, $method)) {
             if (in_array($method, array('query', 'get', 'insert', 'update', 'delete')))
-                throw new Kohana_Exception('orm.query_methods_not_allowed');
+                throw new DatabaseException('Query methods not allowed in ORM');
 
             // Method has been applied to the database
             $this->dbApplied[$method] = $method;
