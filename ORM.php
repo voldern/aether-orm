@@ -40,6 +40,7 @@ class AetherORM {
     protected $tableName;
     protected $tableColumns;
     protected $ignoredColumns;
+    protected $columnAlias;
 
     // Table primary key and value
     protected $primaryKey = 'id';
@@ -246,7 +247,7 @@ class AetherORM {
         if (array_key_exists($column, $this->object)) {
                 return $this->object[$column];
         }
-        elseif (isset($this->related[$column])) {
+        elseif (array_key_exists($column, $this->related)) {
                 return $this->related[$column];
         }
         elseif ($column === 'primaryKeyValue') {
@@ -808,8 +809,18 @@ class AetherORM {
             }
             else {
                 // Load table columns
+                $rawFields = $this->listFields();
+                $fields = array();
+                foreach ($rawFields as $name => $row) {
+                    // Check if there is an alias for this column
+                    if (($alias = $this->getColumnAlias($name)) !== NULL)
+                        $fields[$alias] = $row;
+                    else
+                        $fields[$name] = $row;
+                }
+
                 AetherORM::$columnCache[$this->objectName] = $this->tableColumns =
-                    $this->listFields();
+                    $fields;
             }
         }
 
@@ -1176,7 +1187,12 @@ class AetherORM {
 
         if (!isset($this->dbApplied['select'])) {
             // Select all columns by default
-            $this->db->select($this->tableName . '.*');
+            foreach ($this->tableColumns as $name => $row) {
+                if (($column = $this->getColumnByAlias($name)) !== NULL)
+                    $this->db->select("$this->tableName.$column as $name");
+                else
+                    $this->db->select("$this->tableName.$name");
+            }
         }
 
         if (!empty($this->loadWith)) {
@@ -1264,6 +1280,38 @@ class AetherORM {
     protected function emptyPrimaryKey() {
         return (empty($this->object[$this->primaryKey]) &&
                 $this->object[$this->primaryKey] !== '0');
+    }
+
+    /**
+     * Returns the alias for a column
+     *
+     * @param string $column
+     * @return mixed
+     */
+    protected function getColumnAlias($column) {
+        if (is_array($this->columnAlias) &&
+            isset($this->columnAlias[$column])) {
+            return $this->columnAlias[$column];
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Returns the column name for an alias
+     *
+     * @param string $column
+     * @return mixed
+     */
+    protected function getColumnByAlias($column) {
+        if (!is_array($this->columnAlias))
+            return NULL;
+        
+        $array = array_flip($this->columnAlias);
+        if (isset($array[$column]))
+            return $array[$column];
+
+        return NULL;
     }
 
 }
