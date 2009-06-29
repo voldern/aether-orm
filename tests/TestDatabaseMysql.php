@@ -1,16 +1,15 @@
 <?php
 
 require_once('PHPUnit/Framework.php');
-require_once('../Database.php');
-require_once('../Config.php');
-spl_autoload_register('Config::autoLoad');
+require_once('../DatabaseConfig.php');
+spl_autoload_register('AetherDatabaseConfig::autoLoad');
 
 class TestDatabaseMysql extends PHPUnit_Framework_TestCase {
     protected $db;
     protected $fixture;
     
     public function setUp() {
-        $this->db = Database::instance('test_mysql');
+        $this->db = AetherDatabase::instance('test_mysql');
         
         // Empty the test database
         if ($this->db->query('TRUNCATE TABLE test_database') === false)
