@@ -1065,7 +1065,7 @@ class AetherDatabase {
         if ($where !== NULL)
             $this->where($where);
 
-        $query = $this->select('COUNT(*) AS ' . $this->escape_column('records_found'))->
+        $query = $this->select('COUNT(*) AS ' . $this->escapeColumn('records_found'))->
             get()->result(true);
 
         return (int)$query->current()->records_found;
