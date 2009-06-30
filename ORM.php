@@ -638,7 +638,10 @@ class AetherORM {
             $data = array();
             foreach ($this->changed as $column) {
                 // Compile changed data
-                $data[$column] = $this->object[$column];
+                if (($rColumn = $this->getColumnByAlias($column)) !== NULL)
+                    $data[$rColumn] = $this->object[$column];
+                else
+                    $data[$column] = $this->object[$column];
             }
 
             if ($this->loaded === true) {
