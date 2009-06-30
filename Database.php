@@ -45,6 +45,9 @@ class AetherDatabase {
     // Stack of queries for push/pop
     protected $queryHistory = array();
 
+    // Column alias
+    protected $columnAlias;
+
     /**
      * Returns a singleton instance of AetherDatabase
      *
@@ -1336,6 +1339,57 @@ class AetherDatabase {
         }
 
         return false;
+    }
+
+    /**
+     * Sets aliases for certain columns in a table
+     *
+     * @param string $table Table to set alias for
+     * @param array $aliases array with aliases
+     * @return void
+     */
+    public function setColumnAlias($table, $aliases) {
+        if ($this->columnAlias === NULL)
+            $this->columnAlias = array();
+
+        if (!is_array($aliases) && $aliases !== NULL)
+            throw new Exception('Aliases needs to be an array or NULL');
+
+        $this->columnAlias[$table] = $aliases;
+    }
+
+    /**
+     * Get the alias for a column name
+     * 
+     * @param string $table Table to get alias for
+     * @param string $column Column to get alias for
+     * @return mixed
+     */
+    public function getColumnAlias($table, $column) {
+        if (!isset($this->columnAlias[$table]) ||
+            !isset($this->columnAlias[$table][$column]))
+            return NULL;
+
+        return $this->columnAlias[$table][$column];
+    }
+
+    /**
+     * Get a column name by resolving an alias
+     *
+     * @param string $table Table to get column name for
+     * @param string $column Alias to get column name for
+     * @return mixed
+     */
+    public function getColumnByAlias($table, $alias) {
+        if (!isset($this->columnAlias[$table]))
+            return NULL;
+        
+        $array = array_flip($this->columnAlias[$table]);
+
+        if (isset($array[$alias]))
+            return $array[$alias];
+        else
+            return NULL;
     }
 }
 
