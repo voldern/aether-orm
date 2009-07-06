@@ -31,6 +31,9 @@ class AetherModuleImageImport extends AetherModule {
         case 'lookIn':
             $response = $this->serviceLookIn($_GET);
             break;
+        case 'publish':
+            $response = $this->servicePublish($_GET);
+            break;
         case 'connect':
             $response = $this->serviceConnect($_GET);
             break;
@@ -126,6 +129,39 @@ class AetherModuleImageImport extends AetherModule {
         }
 
         return $result;
+    }
+
+    private function servicePublish($GET) {
+        if (!isset($GET['imageId']) || empty($GET['imageId']) ||
+            !is_numeric($GET['imageId']))
+            return array('error' => 'No/Unknown imageIdd');
+        
+        // Check if the imageId exists
+		try {
+			$image = RecordFinder::locate('NewImage', array(
+											   "id = {$GET['imageId']}"));
+			$image = $image->getByPosition(0);
+		} catch (NoRecordsFoundException $e) {
+			return array('error' => 'Image not found');
+		}
+        
+        if (isset($_GET['unpublish'])) {
+            $image->set('publishedAt', null);
+            $image->save();
+			return array('return' => array('status' => 'Unpublished'));
+        }
+        else {
+            if (isset($_GET['date'])) {
+                $date = $_GET['date'];
+                $image->set('publishedAt', $date);
+            }
+            else {
+                $date = date("Y-m-d H:i:s");
+                $image->set('publishedAt', $date);
+            }
+            $image->save();
+			return array('return' => array('status' => 'Published', 'date' => $date));
+        }
     }
 
     private function serviceConnect($GET) {

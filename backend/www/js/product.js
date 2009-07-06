@@ -75,6 +75,21 @@ dojo.addOnLoad(function() {
     fadePeriodCb({ target: exactDate[0] });
 
     /* Image Importer */
+    function publishAndRemoveImageDOM(ev) {
+        dojo.xhrGet({
+            url: '',
+            content: {
+                module: 'ImageImport',
+                service: 'publish',
+                imageId: this.imageId
+            },
+            handleAs: 'json',
+            load: dojo.hitch(this, function(resp, ioArgs) {
+                this.parentNode.removeChild(this);
+                dojo.publish("imageList.updated");
+            }),
+        });
+    }
     function updateImageList(file) {
         var eid = dojo.byId("eid").value;
         dojo.xhrGet({
@@ -90,12 +105,20 @@ dojo.addOnLoad(function() {
                 var images = dojo.byId("unpublishedImages");
                 var eid = dojo.byId("eid").value;
 
-                images.innerHTML = '<ol class="imageList">';
+                images.innerHTML = '';
+                var ol = dojo.create("ol", {class:"imageList"});
                 for (i in resp.products[eid]) {
-                    if (resp.products[eid][i].url != undefined)
-                        images.innerHTML += '<li><img src="' + resp.products[eid][i].url + '" /><p>' + resp.products[eid][i].name + '</p></li>';
+                    if (resp.products[eid][i].published == false) {
+                        var li = dojo.create('li');
+                        li.appendChild(dojo.create("img", {src: resp.products[eid][i].url}));
+                        li.appendChild(dojo.create("a", {innerHTML: resp.products[eid][i].name}));
+                        li.imageId = resp.products[eid][i].id;
+                        li.entityId = eid;
+                        dojo.connect(li, "onclick", publishAndRemoveImageDOM);
+                        ol.appendChild(li);
+                    }
                 }
-                image.innerHTML += '</ol>';
+                images.appendChild(ol);
             }),
         });
     }
