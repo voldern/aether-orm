@@ -71,7 +71,8 @@ h4 {
     margin: 0.3 0 0.4em;
 }
 
-ul {
+ul,
+ol {
     list-style: none;
 }
 
@@ -92,6 +93,11 @@ ul span {
 
 p {
     margin: 0.6em 0;
+}
+
+img {
+    border: none;
+    line-height: 0;
 }
 
 /* Table style */
@@ -422,4 +428,20 @@ li.selected,
 li.selected * {
     background-color: #333366;
     color: #FFF;
+}
+
+
+#product .imageList {
+    margin: 10px 0;
+}
+
+#product .imageList li {
+    padding: 2px;
+    margin-right: 10px;
+    border: 2px solid #333366;
+    line-height: 0;
+}
+
+#product .imageList li:hover {
+    border-color: #add8e6; 
 }

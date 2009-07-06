@@ -106,12 +106,11 @@ dojo.addOnLoad(function() {
                 var eid = dojo.byId("eid").value;
 
                 images.innerHTML = '';
-                var ol = dojo.create("ol", {class:"imageList"});
-                for (i in resp.products[eid]) {
+                var ol = dojo.create("ol", {className:"imageList clearfix"});
+                for (var i in resp.products[eid]) {
                     if (resp.products[eid][i].published == false) {
-                        var li = dojo.create('li');
+                        var li = dojo.create('li', { className: 'fLeft' });
                         li.appendChild(dojo.create("img", {src: resp.products[eid][i].url}));
-                        li.appendChild(dojo.create("a", {innerHTML: resp.products[eid][i].name}));
                         li.imageId = resp.products[eid][i].id;
                         li.entityId = eid;
                         dojo.connect(li, "onclick", publishAndRemoveImageDOM);
