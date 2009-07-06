@@ -90,11 +90,12 @@ dojo.addOnLoad(function() {
                 var images = dojo.byId("unpublishedImages");
                 var eid = dojo.byId("eid").value;
 
-                images.innerHTML = '';
+                images.innerHTML = '<ol class="imageList">';
                 for (i in resp.products[eid]) {
                     if (resp.products[eid][i].url != undefined)
-                        images.innerHTML += '<img src="' + resp.products[eid][i].url + '" />';
+                        images.innerHTML += '<li><img src="' + resp.products[eid][i].url + '" /><p>' + resp.products[eid][i].name + '</p></li>';
                 }
+                image.innerHTML += '</ol>';
             }),
         });
     }
