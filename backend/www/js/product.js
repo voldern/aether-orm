@@ -111,6 +111,7 @@ dojo.addOnLoad(function() {
                     if (resp.products[eid][i].published == false) {
                         var li = dojo.create('li', { className: 'fLeft' });
                         li.appendChild(dojo.create("img", {src: resp.products[eid][i].url}));
+                        li.appendChild(dojo.create("p", {innerHTML: resp.products[eid][i].name, className: "alignCenter"}));
                         li.imageId = resp.products[eid][i].id;
                         li.entityId = eid;
                         dojo.connect(li, "onclick", publishAndRemoveImageDOM);
