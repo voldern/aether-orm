@@ -381,7 +381,7 @@ class AetherDatabase {
             if (is_string($value)) {
                 // Only escape if it's a string
                 $value =
-                    $this->driver->escapeColumn($this->config['table_prefix'] .
+                    $this->driver->realColumn($this->config['table_prefix'] .
                                                 $value);
             }
 
@@ -413,7 +413,7 @@ class AetherDatabase {
                 }
             }
 
-            $join['tables'][] = $this->driver->escapeColumn($t);
+            $join['tables'][] = $this->driver->realColumn($t);
         }
 
         $join['conditions'] = '('.trim(implode(' ', $cond)).')';
@@ -679,7 +679,7 @@ class AetherDatabase {
                 if(strpos($val, '.'))
                     $val = $this->config['table_prefix'] . $val;
 
-                $this->groupby[] = $this->driver->escapeColumn($val);
+                $this->groupby[] = $this->driver->realColumn($val);
             }
         }
 
@@ -738,7 +738,7 @@ class AetherDatabase {
             if (strpos($column, '.'))
                 $column = $this->config['table_prefix'] . $column;
 
-            $this->orderby[] = $this->driver->escapeColumn($column) .
+            $this->orderby[] = $this->driver->realColumn($column) .
                 ' ' . $direction;
         }
 
@@ -921,7 +921,7 @@ class AetherDatabase {
                 if (is_numeric($v))
                     $escapedValues[] = $v;
                 else
-                    $escapedValues[] = "'" . $this->driver->escape_str($v) . "'";
+                    $escapedValues[] = "'" . $this->driver->escapeStr($v) . "'";
             }
             
             $values = implode(",", $escapedValues);
@@ -930,7 +930,7 @@ class AetherDatabase {
         if (strpos($field, '.') !== false)
             $field = $this->config['table_prefix'] . $field;
 
-        $where = $this->driver->escapeColumn($field) . ' ' .
+        $where = $this->driver->realColumn($field) . ' ' .
             ($not === true ? 'NOT ' : '') . 'IN (' . $values . ')';
         $this->where[] = $this->driver->where($where, '', 'AND ',
                                               count($this->where), -1);

@@ -243,7 +243,7 @@ abstract class AetherDatabaseDriver {
             $match = '%'.str_replace('%', '\\%', $match).'%';
         }
 
-        return $prefix . ' ' . $this->escapeColumn($field) . " LIKE '$match'";
+        return $prefix . ' ' . $this->realColumn($field) . " LIKE '$match'";
     }
 
     /**
@@ -266,7 +266,7 @@ abstract class AetherDatabaseDriver {
             $match = '%'.$match.'%';
         }
 
-        return $prefix . ' ' . $this->escapeColumn($field) . " NOT LIKE '$match'";
+        return $prefix . ' ' . $this->realColumn($field) . " NOT LIKE '$match'";
     }
 
     /**

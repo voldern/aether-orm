@@ -99,7 +99,6 @@ class AetherDatabasePgsqlDriver extends AetherDatabaseDriver {
         // This matches any functions we support to SELECT.
         if (preg_match('/(avg|count|sum|max|min)\(\s*(.*)\s*\)(\s*as\s*(.+)?)?/i',
                        $column, $matches)) {
-            
             if (count($matches) == 3) {
                 return $matches[1] . '(' . $this->escapeColumn($matches[2]) . ')';
             }
@@ -145,7 +144,7 @@ class AetherDatabasePgsqlDriver extends AetherDatabaseDriver {
     public function regex($field, $match, $type, $numRegexs) {
         $prefix = ($numRegexs == 0) ? '' : $type;
 
-        return $prefix . ' ' . $this->escapeColumn($field) .
+        return $prefix . ' ' . $this->realColumn($field) .
             ' ~* \'' . $this->escapeStr($match) . '\'';
     }
 
@@ -205,8 +204,7 @@ class AetherDatabasePgsqlDriver extends AetherDatabaseDriver {
         return $sql;
     }
 
-    public function escapeStr($str)
-    {
+    public function escapeStr($str) {
         if (!$this->dbConfig['escape'])
             return $str;
 
