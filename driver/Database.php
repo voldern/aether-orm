@@ -192,6 +192,7 @@ abstract class AetherDatabaseDriver {
         }
         else {
             if ($value === null) {
+                $key = $this->realColumn($key);
                 if (!$this->hasOperator($key))
                     $key .= ' IS';
 
