@@ -40,13 +40,10 @@ class AetherDatabase {
     protected $distinct   = FALSE;
     protected $limit      = FALSE;
     protected $offset     = FALSE;
-    protected $lastQuery = '';
+    Protected $lastQuery = '';
 
     // Stack of queries for push/pop
     protected $queryHistory = array();
-
-    // Column alias
-    protected $columnAlias;
 
     /**
      * Returns a singleton instance of AetherDatabase
@@ -296,7 +293,7 @@ class AetherDatabase {
                         $this->config['table_prefix'] . $val : $val;
                 }
 
-                $val = $this->driver->escapeColumn($val);
+                $val = $this->driver->realColumn($val);
             }
 
             $this->select[] = $val;
@@ -1341,56 +1338,45 @@ class AetherDatabase {
         return false;
     }
 
+    public function setColumnAlias($table, $aliases) {
+        $this->driver->setColumnAlias($table, $aliases);
+    }
+    
     /**
-     * Sets aliases for certain columns in a table
+     * Sets the working table. This is currently only used for aliases
      *
-     * @param string $table Table to set alias for
-     * @param array $aliases array with aliases
+     * @param string $table
      * @return void
      */
-    public function setColumnAlias($table, $aliases) {
-        if ($this->columnAlias === NULL)
-            $this->columnAlias = array();
-
-        if (!is_array($aliases) && $aliases !== NULL)
-            throw new Exception('Aliases needs to be an array or NULL');
-
-        $this->columnAlias[$table] = $aliases;
-    }
-
-    /**
-     * Get the alias for a column name
-     * 
-     * @param string $table Table to get alias for
-     * @param string $column Column to get alias for
-     * @return mixed
-     */
-    public function getColumnAlias($table, $column) {
-        if (!isset($this->columnAlias[$table]) ||
-            !isset($this->columnAlias[$table][$column]))
-            return NULL;
-
-        return $this->columnAlias[$table][$column];
-    }
-
-    /**
-     * Get a column name by resolving an alias
-     *
-     * @param string $table Table to get column name for
-     * @param string $column Alias to get column name for
-     * @return mixed
-     */
-    public function getColumnByAlias($table, $alias) {
-        if (!isset($this->columnAlias[$table]))
-            return NULL;
+    public function setWorkingTable($table) {
+        if ($table !== NULL && (!is_string($table) || empty($table)))
+            throw new Exception('Table must be NULL or a non-empty string');
         
-        $array = array_flip($this->columnAlias[$table]);
-
-        if (isset($array[$alias]))
-            return $array[$alias];
-        else
-            return NULL;
+        $this->driver->workingTable = $table;
     }
+
+    /**
+     * Returns the escaped column for an alias
+     * If there is no column with this alias just return the escaped column
+     *
+     * @param string $column alias to resolve
+     * @return string
+     */
+    public function realColumn($column) {
+        return $this->driver->realColum($column);
+    }
+
+    /**
+     * Returns the escaped alias for a column
+     * If there is no alias just return the escaped column
+     *
+     * @param string $column column
+     * @return string
+     */
+    public function aliasColumn($column) {
+        return $this->driver->aliasColumn($column);
+    }
+
 }
 
 class DatabaseException extends Exception {

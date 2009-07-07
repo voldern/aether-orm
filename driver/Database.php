@@ -7,6 +7,15 @@
 abstract class AetherDatabaseDriver {
     protected $queryCache;
 
+    protected $columnAlias = array();
+
+    /**
+     * If this is set aliasColumn and realColumn will look for
+     * aliases for the table set in the variable
+     * @var $workingTable
+     */
+    public $workingTable;
+
     abstract public function connect();
 
     abstract public function query($sql);
@@ -64,6 +73,90 @@ abstract class AetherDatabaseDriver {
     abstract public function escapeColumn($column);
 
     /**
+     * Returns the escaped alias for a column
+     * If there is no alias just return the escaped column
+     *
+     * @param string $column column
+     * @return string
+     */
+    public function aliasColumn($column) {
+        // If there is no aliases for this table just return
+        // the column name escaped as is
+        if ($this->workingTable === NULL ||
+            !isset($this->columnAlias[$this->workingTable]))
+            return $this->escapeColumn($column);
+
+        // If the column name has a table prefix remove it before resolving
+        // the alias
+        if (strpos($column, '.') !== false) {
+            $column = explode($column, '.');
+            if (count($column) !== 2)
+                throw new Exception('Invalid column name');
+
+            $prefix = $column[0];
+            $column = $column[1];
+        }
+
+        if (isset($this->columnAlias[$this->workingTable][$column]))
+            $column = $this->columnAlias[$this->workingTable][$column];
+
+        if (isset($prefix))
+            return $this->escapeColumn($prefix . '.' . $column);
+        else
+            return $this->escapeColumn($column);
+        
+    }
+
+    /**
+     * Returns the escaped column for an alias
+     * If there is no column with this alias just return the escaped column
+     *
+     * @param string $column alias to resolve
+     * @return string
+     */
+    public function realColumn($column) {
+        // If there is no aliases for this table just return
+        // the column name escaped as is
+        if ($this->workingTable === NULL ||
+            !isset($this->columnAlias[$this->workingTable]))
+            return $this->escapeColumn($column);
+        
+        // If the column name has a table prefix remove it before resolving
+        // the alias
+        if (strpos($column, '.') !== false) {
+            $column = explode($column, '.');
+            if (count($column) !== 2)
+                throw new Exception('Invalid column name');
+
+            $prefix = $column[0];
+            $column = $column[1];
+        }
+
+        $aliases = array_flip($this->columnAlias[$this->workingTable]);
+        if (isset($aliases[$column]))
+            $column = $aliases[$column];
+
+        if (isset($prefix))
+            return $this->escapeColumn($prefix . '.' . $column);
+        else
+            return $this->escapeColumn($column);
+    }
+
+    /**
+     * Sets aliases for certain columns in a table
+     *
+     * @param string $table Table to set alias for
+     * @param array $aliases array with aliases
+     * @return void
+     */
+    public function setColumnAlias($table, $aliases) {
+        if (!is_array($aliases) && $aliases !== NULL)
+            throw new Exception('Aliases needs to be an array or NULL');
+
+        $this->columnAlias[$table] = $aliases;
+    }
+
+    /**
      * Builds a WHERE portion of a query.
      *
      * @param mixed $key key
@@ -95,12 +188,12 @@ abstract class AetherDatabaseDriver {
             }
             else {
                 if (!$this->hasOperator($key) && !empty($key)) {
-                    $key = $this->escapeColumn($key) . ' =';
+                    $key = $this->realColumn($key) . ' =';
                 }
                 else {
                     preg_match('/^(.+?)([<>!=]+|\bIS(?:\s+NULL))\s*$/i', $key, $matches);
                     if (isset($matches[1]) && isset($matches[2])) {
-                        $key = $this->escapeColumn(trim($matches[1])) . ' ' .
+                        $key = $this->realColumn(trim($matches[1])) . ' ' .
                             trim($matches[2]);
                     }
                 }
