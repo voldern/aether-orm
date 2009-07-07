@@ -449,3 +449,8 @@ li.selected * {
 #product .imageList li:hover {
     border-color: #add8e6; 
 }
+
+fieldset.upload {
+    float: left;
+    margin-right: 20px;
+}

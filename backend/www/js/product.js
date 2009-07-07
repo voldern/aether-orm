@@ -75,6 +75,30 @@ dojo.addOnLoad(function() {
     fadePeriodCb({ target: exactDate[0] });
 
     /* Image Importer */
+    function selectDOM(ev) {
+        if (dojo.hasClass(this, "selected")) {
+            dojo.removeClass(this, "selected");
+            if (this.parentNode.parentNode.id == "publishedImages") {
+                var values = dojo.byId("image_depublish").imageIds.value.split(",");
+                values.removeValue(this.imageId.toString());
+                dojo.byId("image_depublish").imageIds.value = values.join(",");
+            }
+            else if (this.parentNode.parentNode.id == "unpublishedImages") {
+                var values = dojo.byId("image_publish").imageIds.value.split(",");
+                values.removeValue(this.imageId.toString());
+                dojo.byId("image_publish").imageIds.value = values.join(",");
+            }
+        }
+        else {
+            dojo.addClass(this, "selected");
+            if (this.parentNode.parentNode.id == "publishedImages") {
+                dojo.byId("image_publish").imageIds.value += "," + this.imageId;
+            }
+            else if (this.parentNode.parentNode.id == "unpublishedImages") {
+                dojo.byId("image_depublish").imageIds.value += "," + this.imageId;
+            }
+        }
+    }
     function publishAndRemoveImageDOM(ev) {
         dojo.xhrGet({
             url: '',
@@ -102,23 +126,31 @@ dojo.addOnLoad(function() {
             },
             handleAs: 'json',
             load: dojo.hitch(this, function(resp, ioArgs) {
-                var images = dojo.byId("unpublishedImages");
+                var unpubImages = dojo.byId("unpublishedImages");
+                var pubImages = dojo.byId("publishedImages");
                 var eid = dojo.byId("eid").value;
 
-                images.innerHTML = '';
-                var ol = dojo.create("ol", {className:"imageList clearfix"});
+                unpubImages.innerHTML = '';
+                pubImages.innerHTML = '';
+                var unpubOl = dojo.create("ol", {className:"imageList clearfix"});
+                var pubOl = dojo.create("ol", {className:"imageList clearfix"});
                 for (var i in resp.products[eid]) {
+                    var li = dojo.create('li', { className: 'fLeft' });
+                    li.appendChild(dojo.create("img", {src: resp.products[eid][i].url}));
+                    li.appendChild(dojo.create("p", {innerHTML: resp.products[eid][i].name, className: "alignCenter"}));
+                    li.imageId = resp.products[eid][i].id;
+                    li.entityId = eid;
                     if (resp.products[eid][i].published == false) {
-                        var li = dojo.create('li', { className: 'fLeft' });
-                        li.appendChild(dojo.create("img", {src: resp.products[eid][i].url}));
-                        li.appendChild(dojo.create("p", {innerHTML: resp.products[eid][i].name, className: "alignCenter"}));
-                        li.imageId = resp.products[eid][i].id;
-                        li.entityId = eid;
-                        dojo.connect(li, "onclick", publishAndRemoveImageDOM);
-                        ol.appendChild(li);
+                        unpubOl.appendChild(li);
+                        dojo.connect(li, "onclick", selectDOM);
+                    }
+                    else {
+                        pubOl.appendChild(li);
+                        dojo.connect(li, "onclick", selectDOM);
                     }
                 }
-                images.appendChild(ol);
+                unpubImages.appendChild(unpubOl);
+                pubImages.appendChild(pubOl);
             }),
         });
     }
