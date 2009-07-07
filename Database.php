@@ -275,7 +275,6 @@ class AetherDatabase {
         else {
             $sql = (array)$sql;
         }
-
         foreach ($sql as $val) {
             if (($val = trim($val)) === '')
                 continue;
@@ -293,7 +292,10 @@ class AetherDatabase {
                         $this->config['table_prefix'] . $val : $val;
                 }
 
-                $val = $this->driver->realColumn($val);
+                if (($alias = $this->driver->realColumn($val, false)) != $val)
+                    $val = $this->driver->realColumn("$alias as $val");
+                else 
+                    $val = $this->driver->realColumn($val);
             }
 
             $this->select[] = $val;
