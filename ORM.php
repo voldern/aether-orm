@@ -645,7 +645,7 @@ class AetherORM {
             $data = array();
             foreach ($this->changed as $column) {
                 // Compile changed data
-                if (($rColumn = $this->db->realColumn($column)) !== NULL)
+                if (($rColumn = $this->db->realColumn($column, false)) != $column)
                     $data[$rColumn] = $this->object[$column];
                 else
                     $data[$column] = $this->object[$column];
@@ -823,8 +823,9 @@ class AetherORM {
                 $fields = array();
                 foreach ($rawFields as $name => $row) {
                     // Check if there is an alias for this column
-                    if (($alias = $this->db->aliasColumn($name)) !== NULL)
+                    if (($alias = $this->db->aliasColumn($name, false)) != $name) {
                         $fields[$alias] = $row;
+                    }
                     else
                         $fields[$name] = $row;
                 }
@@ -1198,7 +1199,7 @@ class AetherORM {
         if (!isset($this->dbApplied['select'])) {
             // Select all columns by default
             foreach ($this->tableColumns as $name => $row) {
-                if (($column = $this->db->realColumn($name)) !== NULL)
+                if (($column = $this->db->realColumn($name, false)) != $name)
                     $this->db->select("$this->tableName.$column as $name");
                 else
                     $this->db->select("$this->tableName.$name");

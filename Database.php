@@ -1360,10 +1360,11 @@ class AetherDatabase {
      * If there is no column with this alias just return the escaped column
      *
      * @param string $column alias to resolve
+     * @param bool $escape
      * @return string
      */
-    public function realColumn($column) {
-        return $this->driver->realColum($column);
+    public function realColumn($column, $escape = false) {
+        return $this->driver->realColumn($column, $escape);
     }
 
     /**
@@ -1371,10 +1372,11 @@ class AetherDatabase {
      * If there is no alias just return the escaped column
      *
      * @param string $column column
+     * @param bool $escape
      * @return string
      */
-    public function aliasColumn($column) {
-        return $this->driver->aliasColumn($column);
+    public function aliasColumn($column, $escape = false) {
+        return $this->driver->aliasColumn($column, $escape);
     }
 
 }

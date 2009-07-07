@@ -77,9 +77,10 @@ abstract class AetherDatabaseDriver {
      * If there is no alias just return the escaped column
      *
      * @param string $column column
+     * @param bool $escape
      * @return string
      */
-    public function aliasColumn($column) {
+    public function aliasColumn($column, $escape = true) {
         // If there is no aliases for this table just return
         // the column name escaped as is
         if ($this->workingTable === NULL ||
@@ -89,7 +90,7 @@ abstract class AetherDatabaseDriver {
         // If the column name has a table prefix remove it before resolving
         // the alias
         if (strpos($column, '.') !== false) {
-            $column = explode($column, '.');
+            $column = explode('.', $column);
             if (count($column) !== 2)
                 throw new Exception('Invalid column name');
 
@@ -100,10 +101,18 @@ abstract class AetherDatabaseDriver {
         if (isset($this->columnAlias[$this->workingTable][$column]))
             $column = $this->columnAlias[$this->workingTable][$column];
 
-        if (isset($prefix))
-            return $this->escapeColumn($prefix . '.' . $column);
-        else
-            return $this->escapeColumn($column);
+        if ($escape === true) {
+            if (isset($prefix))
+                return $this->escapeColumn($prefix . '.' . $column);
+            else
+                return $this->escapeColumn($column);
+        }
+        else {
+            if (isset($prefix))
+                return $prefix . '.' . $column;
+            else
+                return $column;
+        }
         
     }
 
@@ -112,9 +121,10 @@ abstract class AetherDatabaseDriver {
      * If there is no column with this alias just return the escaped column
      *
      * @param string $column alias to resolve
+     * @param bool $escape
      * @return string
      */
-    public function realColumn($column) {
+    public function realColumn($column, $escape = true) {
         // If there is no aliases for this table just return
         // the column name escaped as is
         if ($this->workingTable === NULL ||
@@ -124,7 +134,7 @@ abstract class AetherDatabaseDriver {
         // If the column name has a table prefix remove it before resolving
         // the alias
         if (strpos($column, '.') !== false) {
-            $column = explode($column, '.');
+            $column = explode('.', $column);
             if (count($column) !== 2)
                 throw new Exception('Invalid column name');
 
@@ -136,10 +146,18 @@ abstract class AetherDatabaseDriver {
         if (isset($aliases[$column]))
             $column = $aliases[$column];
 
-        if (isset($prefix))
-            return $this->escapeColumn($prefix . '.' . $column);
-        else
-            return $this->escapeColumn($column);
+        if ($escape === true) {
+            if (isset($prefix))
+                return $this->escapeColumn($prefix . '.' . $column);
+            else
+                return $this->escapeColumn($column);
+        }
+        else {
+            if (isset($prefix))
+                return $prefix . '.' . $column;
+            else
+                return $column;
+        }
     }
 
     /**
