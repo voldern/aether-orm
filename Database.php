@@ -919,7 +919,7 @@ class AetherDatabase {
                 if (is_numeric($v))
                     $escapedValues[] = $v;
                 else
-                    $escapedValues[] = "'" . $this->driver->escape_str($v) . "'";
+                    $escapedValues[] = "'" . $this->driver->escapeStr($v) . "'";
             }
             
             $values = implode(",", $escapedValues);
@@ -1065,7 +1065,7 @@ class AetherDatabase {
         if ($where !== NULL)
             $this->where($where);
 
-        $query = $this->select('COUNT(*) AS ' . $this->escape_column('records_found'))->
+        $query = $this->select('COUNT(*) AS ' . $this->escapeColumn('records_found'))->
             get()->result(true);
 
         return (int)$query->current()->records_found;
