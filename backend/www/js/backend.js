@@ -15,6 +15,34 @@ Array.prototype.removeValue = function(value) {
     this.length = this.length - (rest.length + 1);
     return this.push.apply(this,rest);
 };
+
+/**
+ * Toggles the selection of a node and saves the node id to a result node
+ * (pref. an input field)
+ * Requires that the selectable nodes have the attribute .selectionId
+ * and the resultForm has a field named .selectedIds
+ */
+function toggleDOM(targetNode, resultNode) {
+    if (targetNode.selectionId == undefined)
+        return;
+    if (resultNode.selectedIds == undefined) {
+        console.log("Form has no input field named selectedIds");
+        return;
+    }
+
+    if (dojo.hasClass(targetNode, "selected")) {
+        dojo.removeClass(targetNode, "selected");
+
+        var values = resultNode.selectedIds.value.split(",");
+        values.removeValue(targetNode.selectionId.toString());
+        resultNode.selectedIds.value = values.join(",");
+    }
+    else {
+        dojo.addClass(targetNode, "selected");
+        resultNode.selectedIds.value += "," + targetNode.selectionId;
+    }
+}
+
 // Register custom module path
 dojo.registerModulePath("modules", "../../../modules");
 

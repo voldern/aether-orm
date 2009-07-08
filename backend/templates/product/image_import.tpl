@@ -23,8 +23,7 @@
                         <input type="text" name="articles" id="articles_input" />
                     </li>
                     <li>
-                        <input type="submit" value="Hent" id="image_import_submit" /
-    >
+                        <input type="submit" value="Hent" id="image_import_submit" />
                     </li>
                 </ul>
             </form>
@@ -34,7 +33,7 @@
         <h3>Unpublished Images <span id="textSelectedUnpublished"></span></h3>
         <form action="/products/?module=ImageImport&service=publish"
                 method="post" id="image_publish">
-            <input type="hidden" name="imageIds" value="" />
+            <input type="hidden" name="selectedIds" value="" />
             <input type="text" name="publish" id="datePublish" />
             <button id="buttonPublish">Publish</button>
         </form>
@@ -48,7 +47,7 @@
         <h3>Published Images <span id="textSelectedUnpublished"></span></h3>
         <form action="/products/?module=ImageImport&service=depublish"
                 method="post" id="image_depublish">
-            <input type="hidden" name="imageIds" value="" />
+            <input type="hidden" name="selectedIds" value="" />
             <input type="hidden" name="depublish" value="1" />
             <button id="buttonPublish">Depublish</button>
         </form>
