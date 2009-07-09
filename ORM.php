@@ -144,6 +144,14 @@ class AetherORM {
             $this->db->setWorkingTable($this->tableName);
         }
 
+        // Its not possible to have an alias for the id and to set primaryKey to
+        // be the column
+        if ($this->db->aliasColumn($this->primaryKey, false) !=
+            $this->primaryKey) {
+            throw new Exception('Its impossible to set the primaryKey to '.
+                                'something different then the alias');
+        }
+
         // Load column information
         $this->reloadColumns();
     }
