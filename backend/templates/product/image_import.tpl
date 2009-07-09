@@ -12,18 +12,18 @@
             <form action="/products/?module=ImageImport&service=lookIn"
                   method="post" id="image_import_search">
                 <input id="eid" type="hidden" name="eid" value="{$eid}" />
-                <p>IDer skal være separert med komma (123,452,169 etc)</p>
+                <p>Comma seperated list of product- and articleids (123,452,169 etc)</p>
                 <ul>
                     <li>
-                        <label for="products_input">Produkter</label>
+                        <label for="products_input">Products</label>
                         <input type="text" name="products" id="products_input" />
                     </li>
                     <li>
-                        <label for="articles_input">Artikler</label>
+                        <label for="articles_input">Articles</label>
                         <input type="text" name="articles" id="articles_input" />
                     </li>
                     <li>
-                        <input type="submit" value="Hent" id="image_import_submit" />
+                        <input type="submit" value="Fetch" id="image_import_submit" />
                     </li>
                 </ul>
             </form>
@@ -39,7 +39,8 @@
         </form>
         <form action="/products/?module=ImageImport&service=delete"
                 method="post" id="image_delete">
-            <input type="hidden" name="imageIds" value="" />
+            <input type="hidden" name="eid" value="{$eid}" />
+            <input type="hidden" name="selectedIds" value="" />
             <button id="buttonDelete">Delete</button>
         </form>
         <div id="unpublishedImages"></div>

@@ -7,7 +7,7 @@
  * @author Espen Volden
  * @package prisguide.backend.modules
  */
-require_once(PG_PATH . 'backend/lib/EntityImage.php');
+require_once("/home/lib/Autoload.php");
 require_once(LIB_PATH . 'image/NewImage.php');
 require_once(LIB_PATH . 'upload/UploadManager.lib.php');
 
@@ -27,26 +27,34 @@ class AetherModuleImageImport extends AetherModule {
     }
 
     public function service($name) {
+        $GET = $_GET;
+        if (isset($_GET['selectedIds']))
+            $GET['imageIds'] = split(",", $_GET['selectedIds']);
         switch ($name) {
-        case 'lookIn':
-            $response = $this->serviceLookIn($_GET);
-            break;
-        case 'publish':
-            $response = $this->servicePublish($_GET);
-            break;
-        case 'connect':
-            $response = $this->serviceConnect($_GET);
-            break;
-        case 'unlink':
-            $response = $this->serviceUnlink($_GET);
-            break;
-        case 'upload':
-            $files = $_FILES;
-            $eid = $_GET['eid'];
-            $response = $this->serviceUpload($eid, $files);
-            break;
-        default:
-            $response = array('error' => 'No/Unknown service requested');
+            case 'lookIn':
+                $response = $this->serviceLookIn($_GET);
+                break;
+            case 'depublish':
+                $GET['depublish'] = 1;
+                $response = $this->servicePublish($GET);
+                break;
+            case 'publish':
+                $GET = $_GET;
+                $response = $this->servicePublish($GET);
+                break;
+            case 'connect':
+                $response = $this->serviceConnect($_GET);
+                break;
+            case 'unlink':
+                $response = $this->serviceUnlink($GET);
+                break;
+            case 'upload':
+                $files = $_FILES;
+                $eid = $_GET['eid'];
+                $response = $this->serviceUpload($eid, $files);
+                break;
+            default:
+                $response = array('error' => 'No/Unknown service requested');
         }
 
         return new AetherJSONResponse($response);
@@ -132,36 +140,32 @@ class AetherModuleImageImport extends AetherModule {
     }
 
     private function servicePublish($GET) {
-        if (!isset($GET['imageId']) || empty($GET['imageId']) ||
-            !is_numeric($GET['imageId']))
-            return array('error' => 'No/Unknown imageIdd');
+        if (!isset($GET['imageIds']) || !is_array($GET['imageIds']) ||
+            count($GET['imageIds']) == 0)
+            return array('error' => 'No/Unknown imageIds');
         
         // Check if the imageId exists
-		try {
-			$image = RecordFinder::locate('NewImage', array(
-											   "id = {$GET['imageId']}"));
-			$image = $image->getByPosition(0);
-		} catch (NoRecordsFoundException $e) {
-			return array('error' => 'Image not found');
-		}
-        
-        if (isset($_GET['unpublish'])) {
-            $image->set('publishedAt', null);
-            $image->save();
-			return array('return' => array('status' => 'Unpublished'));
-        }
-        else {
-            if (isset($_GET['date'])) {
-                $date = $_GET['date'];
-                $image->set('publishedAt', $date);
+		$images = AetherORM::factory("Image")->in('image_id', $GET['imageIds'])->findAll();
+        foreach ($images as $image) {
+            if (isset($GET['depublish'])) {
+                $image->publishedAt = null;
+                $image->save();
+                $status[] = array($image->id => array('status' => 'Depublished'));
             }
             else {
-                $date = date("Y-m-d H:i:s");
-                $image->set('publishedAt', $date);
+                if (isset($_GET['date'])) {
+                    $date = $_GET['date'];
+                    $image->publishedAt = $date;
+                }
+                else {
+                    $date = date("Y-m-d H:i:s");
+                    $image->publishedAt = $date;
+                }
+                $image->save();
+                $status[] = array($image->id => array('status' => 'Published', 'date' => $date));
             }
-            $image->save();
-			return array('return' => array('status' => 'Published', 'date' => $date));
         }
+        return array('return' => $status);
     }
 
     private function serviceConnect($GET) {
@@ -214,20 +218,10 @@ class AetherModuleImageImport extends AetherModule {
      * @param array $GET
      */
     private function serviceUnlink($GET) {
-        if ((!isset($GET['product']) || empty($GET['product'])) ||
-            (!isset($GET['image']) || empty($GET['image'])))
-            return array('error' => 'Need image and product id');
+		$images = AetherORM::factory("EntityImage")->where('entityId', $GET['eid'])->in('image_id', $GET['imageIds'])->findAll();
 
-        try {
-            $result = RecordFinder::find('EntityImage', array(
-                                             'imageId' => $GET['image'],
-                                             'entityId' => $GET['product']));
-        } catch (NoRecordsFoundException $e) {
-            return array('error' => 'Image -> product link not found');
-        }
-
-        foreach ($result->getAll() as $row)
-            $row->delete();
+        foreach ($images as $image) 
+            $image->delete();
 
         return array('status' => 'success');
     }

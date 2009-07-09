@@ -120,13 +120,13 @@ dojo.addOnLoad(function() {
                     if (resp.products[eid][i].published == false) {
                         unpubOl.appendChild(li);
                         dojo.connect(li, "onclick", function(evt) {
-                            toggleDOM(this, dojo.byId("image_publish"));
+                            toggleDOM(this, [dojo.byId("image_publish"), dojo.byId("image_delete")]);
                         });
                     }
                     else {
                         pubOl.appendChild(li);
                         dojo.connect(li, "onclick", function(evt) {
-                            toggleDOM(this, dojo.byId("image_depublish"));
+                            toggleDOM(this, [dojo.byId("image_depublish")]);
                         });
                     }
                 }
@@ -157,6 +157,61 @@ dojo.addOnLoad(function() {
             });
         })
     );
+    dojo.query("#image_depublish").connect('onsubmit', 
+        dojo.hitch(this, function(e) {
+            dojo.stopEvent(e);
+
+            dojo.xhrGet({
+                url: '',
+                form: dojo.byId("image_depublish"),
+                content: {
+                    module: 'ImageImport',
+                    service: 'depublish'
+                },
+                handleAs: 'json',
+                load: dojo.hitch(this, function(resp, ioArgs) {
+                    dojo.publish("imageList.changed", []);
+                }),
+            });
+        }
+    ));
+    dojo.query("#image_publish").connect('onsubmit', 
+        dojo.hitch(this, function(e) {
+            dojo.stopEvent(e);
+
+            dojo.xhrGet({
+                url: '',
+                form: dojo.byId("image_publish"),
+                content: {
+                    module: 'ImageImport',
+                    service: 'publish'
+                },
+                handleAs: 'json',
+                load: dojo.hitch(this, function(resp, ioArgs) {
+                    dojo.publish("imageList.changed", []);
+                }),
+            });
+        }
+    ));
+    dojo.query("#image_delete").connect('onsubmit', 
+        dojo.hitch(this, function(e) {
+            dojo.stopEvent(e);
+
+            dojo.xhrGet({
+                url: '',
+                form: dojo.byId("image_delete"),
+                content: {
+                    module: 'ImageImport',
+                    service: 'unlink'
+                },
+                handleAs: 'json',
+                load: dojo.hitch(this, function(resp, ioArgs) {
+                    dojo.publish("imageList.changed", []);
+                }),
+            });
+        }
+    ));
     updateImageList();
+    dojo.subscribe("imageList.changed", updateImageList);
     dojo.subscribe("upload.finished", updateImageList);
 });

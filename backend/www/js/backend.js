@@ -17,29 +17,31 @@ Array.prototype.removeValue = function(value) {
 };
 
 /**
- * Toggles the selection of a node and saves the node id to a result node
- * (pref. an input field)
+ * Toggles the selection of a node and saves the node id to a result nodes
+ * (a form with an inputfield named selectedIds)
  * Requires that the selectable nodes have the attribute .selectionId
  * and the resultForm has a field named .selectedIds
  */
-function toggleDOM(targetNode, resultNode) {
+function toggleDOM(targetNode, resultNodes) {
     if (targetNode.selectionId == undefined)
         return;
-    if (resultNode.selectedIds == undefined) {
-        console.log("Form has no input field named selectedIds");
-        return;
-    }
 
     if (dojo.hasClass(targetNode, "selected")) {
         dojo.removeClass(targetNode, "selected");
 
-        var values = resultNode.selectedIds.value.split(",");
-        values.removeValue(targetNode.selectionId.toString());
-        resultNode.selectedIds.value = values.join(",");
+        dojo.forEach(resultNodes, function (resultNode) {
+            var values = resultNode.selectedIds.value.split(",");
+            values.removeValue(targetNode.selectionId.toString());
+            resultNode.selectedIds.value = values.join(",");
+        });
     }
     else {
         dojo.addClass(targetNode, "selected");
-        resultNode.selectedIds.value += "," + targetNode.selectionId;
+        dojo.forEach(resultNodes, function (resultNode) {
+            if (resultNode.selectedIds.value.length > 0)
+                resultNode.selectedIds.value += ",";
+            resultNode.selectedIds.value += targetNode.selectionId;
+        });
     }
 }
 
