@@ -457,6 +457,7 @@ fieldset.upload {
 
 #editImages li {
     float: left;
+    padding: 5px;
 }
 
 div.imageContainer {
@@ -467,4 +468,10 @@ div.imageContainer {
 div.imageProperties {
     float: left;
     padding: 5px;
+}
+div.imageProperties label {
+    float: left;
+    width: 100px;
+    margin-right: 4px;
+    text-align: right;
 }
