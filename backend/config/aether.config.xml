@@ -22,6 +22,7 @@
                 <module provides="entity">Entity</module>
                 <module provides="details">Details</module>
                 <module provides="imageImport">ImageImport</module>
+                <module provides="imageEditor">ImageEditor</module>
                 <rule pattern="/[0-9]+/" store="product_id">
                     <template>generic.tpl</template>
                     <section>Generic</section>

@@ -120,7 +120,7 @@ dojo.addOnLoad(function() {
                     if (resp.products[eid][i].published == false) {
                         unpubOl.appendChild(li);
                         dojo.connect(li, "onclick", function(evt) {
-                            toggleDOM(this, [dojo.byId("image_publish"), dojo.byId("image_delete")]);
+                            toggleDOM(this, [dojo.byId("image_publish"), dojo.byId("image_delete"), dojo.byId("image_edit")]);
                         });
                     }
                     else {
@@ -214,4 +214,32 @@ dojo.addOnLoad(function() {
     updateImageList();
     dojo.subscribe("imageList.changed", updateImageList);
     dojo.subscribe("upload.finished", updateImageList);
+
+    /* Image editor */
+    dojo.query("#image_edit").connect('onsubmit', 
+        dojo.hitch(this, function(e) {
+            dojo.stopEvent(e);
+
+            dojo.xhrGet({
+                url: '',
+                form: dojo.byId("image_edit"),
+                content: {
+                    module: 'ImageEditor',
+                    service: 'showEditor'
+                },
+                handleAs: 'text',
+                load: dojo.hitch(this, function(resp, ioArgs) {
+                    var editImages = dojo.byId("editImages");
+                    editImages.innerHTML = resp;
+                    dojo.query("#closeEdit").connect("onclick", 
+                        function(e) { 
+                            dojo.byId("editImages").innerHTML = '';
+                        }
+                    );
+                    auto.findNodes(editImages);
+                    auto.attachEvents();
+                }),
+            });
+        }
+    ));
 });

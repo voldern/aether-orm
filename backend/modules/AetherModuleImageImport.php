@@ -145,7 +145,7 @@ class AetherModuleImageImport extends AetherModule {
             return array('error' => 'No/Unknown imageIds');
         
         // Check if the imageId exists
-		$images = AetherORM::factory("Image")->in('image_id', $GET['imageIds'])->findAll();
+		$images = AetherORM::factory("Image")->in('id', $GET['imageIds'])->findAll();
         foreach ($images as $image) {
             if (isset($GET['depublish'])) {
                 $image->publishedAt = null;

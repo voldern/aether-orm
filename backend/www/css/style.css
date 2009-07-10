@@ -454,3 +454,17 @@ fieldset.upload {
     float: left;
     margin-right: 20px;
 }
+
+#editImages li {
+    float: left;
+}
+
+div.imageContainer {
+    float: left;
+    width: 200px;
+    height: 200px;
+}
+div.imageProperties {
+    float: left;
+    padding: 5px;
+}

@@ -27,6 +27,42 @@ class ImageModel extends AetherORM {
         'image_modified_by' => 'modifiedBy',
         'image_original_source' => 'original'
     );
+
+    public function getSizeUrl($width, $height = false, $force = true) {
+        $original = $this->original;
+        $path = pathinfo($original);
+
+        $ratio = $this->ratio;
+        if (!$height) {
+            if ($ratio > 0) {
+                $height = round($width / $ratio);
+            }
+            else {
+                return false;
+            }
+        }
+
+        if ($force)
+            $height .= "!";
+        $url = sprintf("%s/%s.%sx%s.%s", $path['dirname'], $path['filename'],
+                $width, $height, $path['extension']);
+        return $url;
+    }
+
+    public function getContainerUrl($containerWidth, $containerHeight) {
+        $containerRatio = $containerWidth / $containerHeight;
+
+        if ($this->ratio > $containerRatio) {
+            $imageWidth = $containerWidth;
+            $imageHeight = round($containerWidth / $this->ratio, 0);
+        }   
+        else {  
+            $imageWidth = round($containerHeight * $this->ratio, 0);
+            $imageHeight = $containerHeight;
+        }       
+            
+        return $this->getSizeUrl($imageWidth, $imageHeight);
+    }
 }
 
 ?>

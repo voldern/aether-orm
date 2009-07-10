@@ -43,6 +43,13 @@
             <input type="hidden" name="selectedIds" value="" />
             <button id="buttonDelete">Delete</button>
         </form>
+        <form action="/products/?module=ImageEditor&service=showEditor"
+                method="post" id="image_edit">
+            <input type="hidden" name="eid" value="{$eid}" />
+            <input type="hidden" name="selectedIds" value="" />
+            <button id="buttonDelete">Edit</button>
+        </form>
+        <div id="editImages"></div>
         <div id="unpublishedImages"></div>
 
         <h3>Published Images <span id="textSelectedUnpublished"></span></h3>
