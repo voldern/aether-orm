@@ -39,7 +39,6 @@ class AetherModuleImageImport extends AetherModule {
                 $response = $this->servicePublish($GET);
                 break;
             case 'publish':
-                $GET = $_GET;
                 $response = $this->servicePublish($GET);
                 break;
             case 'connect':

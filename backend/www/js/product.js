@@ -107,8 +107,11 @@ dojo.addOnLoad(function() {
                 var pubImages = dojo.byId("publishedImages");
                 var eid = dojo.byId("eid").value;
 
+                dojo.byId('image_publish').selectedIds.value = '';
+                dojo.byId('image_depublish').selectedIds.value = '';
                 unpubImages.innerHTML = '';
                 pubImages.innerHTML = '';
+
                 var unpubOl = dojo.create("ol", {className:"imageList clearfix"});
                 var pubOl = dojo.create("ol", {className:"imageList clearfix"});
                 for (var i in resp.products[eid]) {
