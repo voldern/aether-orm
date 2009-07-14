@@ -31,7 +31,7 @@ dojo.declare("modules.ProductSearch",
                 dojo.xhrGet({
                     url: '/',
                     content: {
-                        module: 'ProductSearch',
+                        module: 'Search',
                         query: ev.target.value,
                         service: 'ProductTitle'
                     },

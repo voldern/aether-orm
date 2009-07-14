@@ -12,7 +12,7 @@
             <module provides="footer">PGFooter</module>
             <rule match="">
                 <template>generic.tpl</template>
-                <module>ProductSearch</module>
+                <module>Search</module>
                 <option name="loginRequired">false</option>
                 <option name="selectedSection">home</option>
             </rule>
