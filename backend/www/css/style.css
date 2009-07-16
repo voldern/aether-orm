@@ -475,3 +475,4 @@ div.imageProperties label {
     margin-right: 4px;
     text-align: right;
 }
+.imageList li { width: 150px; }

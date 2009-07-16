@@ -10,6 +10,7 @@
 require_once("/home/lib/Autoload.php");
 require_once(LIB_PATH . 'image/NewImage.php');
 require_once(LIB_PATH . 'upload/UploadManager.lib.php');
+require_once("../lib/Search.php");
 
 class AetherModuleImageImport extends AetherModule {
     /**
@@ -42,7 +43,7 @@ class AetherModuleImageImport extends AetherModule {
                 $response = $this->servicePublish($GET);
                 break;
             case 'connect':
-                $response = $this->serviceConnect($_GET);
+                $response = $this->serviceConnect($GET);
                 break;
             case 'unlink':
                 $response = $this->serviceUnlink($GET);
@@ -68,8 +69,26 @@ class AetherModuleImageImport extends AetherModule {
     private function serviceLookIn($GET) {
         // Check for valid input
         if ((!isset($GET['products']) || empty($GET['products'])) &&
-            (!isset($GET['articles']) || empty($GET['articles']))) {
-            return array('error' => 'Need list of products and/or articles');
+            (!isset($GET['articles']) || empty($GET['articles'])) &&
+            (!isset($GET['query']) || empty($GET['query']))) {
+            return array('error' => 'Need list of products and/or articles and/or query string');
+        }
+
+        // Do the search and populate the products/articles returned from search
+        if (isset($GET['query'])) {
+            $r = $this->search($GET['query'], 'products');
+            if ($r) {
+                if (strlen($GET['products']) > 0)
+                    $GET['products'] .= ",";
+                $GET['products'] .= join(",", $r);
+            }
+
+            $r = $this->search($GET['query'], 'articles');
+            if ($r) {
+                if (strlen($GET['articles']) > 0)
+                    $GET['articles'] .= ",";
+                $GET['articles'] .= join(",", $r);
+            }
         }
 
         $imgDB = new Database('images');
@@ -131,7 +150,24 @@ class AetherModuleImageImport extends AetherModule {
             $articleResult = $imgDB->query($qb->build());
 
             foreach ($articleResult as $art) {
-                $result['articles'][$art['articleId']][] = $art['imageId'];
+                $img = RecordFinder::locate("NewImage", array("id = {$art['imageId']}"));
+                $img = $img->first;
+                $res = array(
+                    'id' => $img->get('id'),
+                    'name' => $img->get('title'),
+                    'publishedAt' => $img->get('publishedAt'),
+                    'published' => $img->isPublished()
+                );
+                if (isset($GET['width'])) {
+                    if (!isset($GET['height'])) {
+                        $GET['height'] = false;
+                        $res['url'] = "http://img.gfx.no" . $img->getSizeUrl($GET['width'], $GET['height']);
+                    }
+                    else {
+                        $res['url'] = "http://img.gfx.no" . $img->getContainerUrl($GET['width'], $GET['height']);
+                    }
+                }
+                $result['articles'][$art['articleId']][] = $res;
             }
         }
 
@@ -168,45 +204,31 @@ class AetherModuleImageImport extends AetherModule {
     }
 
     private function serviceConnect($GET) {
-        $acceptedTypes = array('product' => 'Manifestation');
-
-        // Validate imageId, targetId and type
-        if (!isset($GET['imageId']) || empty($GET['imageId']) ||
-            !is_numeric($GET['imageId']))
-            return array('error' => 'No/Unknown imageIdd');
-        if (!isset($GET['targetId']) || empty($GET['targetId']) ||
-            !is_numeric($GET['targetId']))
-            return array('error' => 'No/Unknown targetId');
-        if (!isset($GET['type']) || empty($GET['type']) ||
-            !isset($acceptedTypes[$GET['type']]))
-            return array('error' => 'No/Unknown type');
+        // Validate imageId, eid
+        if (!isset($GET['imageIds']) || empty($GET['imageIds']) ||
+            !is_array($GET['imageIds']))
+            return array('error' => 'No/Unknown imageIds');
+        if (!isset($GET['eid']) || empty($GET['eid']) ||
+            !is_numeric($GET['eid']))
+            return array('error' => 'No/Unknown eid');
 
         // Check if the imageId exists
-		try {
-			$image = RecordFinder::locate('NewImage', array(
-											   "id = {$GET['imageId']}"));
-			$image = $image->getByPosition(0);
-		} catch (NoRecordsFoundException $e) {
-			return array('error' => 'Image not found');
-		}
+		$images = AetherORM::factory("Image")->in('id', $GET['imageIds'])->findAll();
 
-        // Check if the target exists
-		try {
-			$target = RecordFinder::locate($acceptedTypes[$GET['type']], array(
-											   "id = {$GET['targetId']}"));
-			$target = $target->getByPosition(0);
-		} catch (NoRecordsFoundException $e) {
-			return array('error' => 'Target not found');
-		}
+        $failedIds = array();
 
-		// Insert
-		$link = new EntityImage;
-		$link->set('imageId', $image->get('id'));
-		$link->set('entityId', $target->get('id'));
-		if ($link->save() !== false)
+        foreach ($images as $image) {
+            // Insert
+            $link = new EntityImage;
+            $link->set('imageId', $image->id);
+            $link->set('entityId', $GET['eid']);
+		    if ($link->save() === false)
+                $failedIds[] = $image->id;
+        }
+        if (count($failedIds) == 0)
 			return array('status' => 'success');
 		else
-			return array('error' => 'Unknown error, could not import image');
+			return array('error' => 'Unknown error, could not import imageIds: ' . join(", ", $failedIds));
     }
 
     /**
@@ -282,5 +304,22 @@ class AetherModuleImageImport extends AetherModule {
         }
 
         return true;
+    }
+
+    private function search($query, $type) {
+        $ids = array();
+
+        if ($type == 'products') {
+            $r = Search::productSearch($query);
+            foreach ($r['data']['products'] as $p)
+                $ids[] = $p['id'];
+        }
+        else if ($type == 'articles') {
+            $r = Search::articleSearch($query);
+            foreach ($r['data']['articles'] as $p)
+                $ids[] = $p['id'];
+        }
+
+        return $ids;
     }
 }

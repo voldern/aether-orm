@@ -75,7 +75,75 @@ dojo.addOnLoad(function() {
     fadePeriodCb({ target: exactDate[0] });
 
     /* Image Importer */
+    
+    /* 
+     * Quickly do a lookup and update image list after adding search string
+     * or product/article ids
+     */
+    dojo.query("#import_search").connect("onchange", updateProductArticleSearchImages);
+    dojo.query("#products_input").connect("onchange", updateProductArticleSearchImages);
+    dojo.query("#articles_input").connect("onchange", updateProductArticleSearchImages);
 
+    function updateProductArticleSearchImages() {
+        dojo.xhrGet({
+            url: '',
+            form: dojo.byId("image_import_search"),
+            content: {
+                module: 'ImageImport',
+                service: 'lookIn',
+                width: 150,
+                height: 150
+            },
+            handleAs: 'json',
+            load: function(resp, ioArgs) {
+                var imageResult = dojo.byId("imageImportResult");
+
+                dojo.byId('image_import_result').selectedIds.value = '';
+                imageResult.innerHTML = '';
+
+                var products = dojo.create("ol", {className:"imageList clearfix"});
+                var articles = dojo.create("ol", {className:"imageList clearfix"});
+                for (var aid in resp.articles) {
+                    var images = resp.articles[aid];
+                    for (var i in images) {
+                        var image = images[i];
+                        if (image.url == undefined)
+                            continue;
+                        var li = dojo.create('li', { className: 'fLeft' });
+                        li.appendChild(dojo.create("img", {src: image.url}));
+                        li.appendChild(dojo.create("p", {innerHTML: image.name, className: "alignCenter"}));
+                        li.selectionId = image.id;
+
+                        articles.appendChild(li);
+                        dojo.connect(li, "onclick", function(evt) {
+                            toggleDOM(this, [dojo.byId("image_import_result")]);
+                        });
+                    }
+                }
+                for (var eid in resp.products) {
+                    var images = resp.articles[aid];
+                    for (var i in resp.products[eid]) {
+                        var image = images[i];
+                        if (image.url == undefined)
+                            continue;
+                        var li = dojo.create('li', { className: 'fLeft' });
+                        li.appendChild(dojo.create("img", {src: image.url}));
+                        li.appendChild(dojo.create("p", {innerHTML: image.name, className: "alignCenter"}));
+                        li.selectionId = image.id;
+
+                        products.appendChild(li);
+                        dojo.connect(li, "onclick", function(evt) {
+                            toggleDOM(this, [dojo.byId("image_import_result")]);
+                        });
+                    }
+                }
+                dojo.create("h3", {innerHTML:"Product images"}, imageResult);
+                imageResult.appendChild(products);
+                dojo.create("h3", {innerHTML:"Article images"}, imageResult);
+                imageResult.appendChild(articles);
+            },
+        });
+    }
     function publishAndRemoveImageDOM(ev) {
         dojo.xhrGet({
             url: '',
@@ -141,19 +209,12 @@ dojo.addOnLoad(function() {
     dojo.query('#image_import_submit').connect(
         'onclick', dojo.hitch(this, function(e) {
             dojo.stopEvent(e);
-            var articles = dojo.byId('articles_input').value;
-            var products = dojo.byId('products_input').value;
 
             dojo.xhrGet({
-                url: '',
-                content: {
-                    module: 'ImageImport',
-                    service: 'lookIn',
-                    articles: articles,
-                    products: products,
-                },
+                form: dojo.byId("image_import_result"),
                 handleAs: 'json',
                 load: dojo.hitch(this, function(resp, ioArgs) {
+                    dojo.publish("imageList.changed", []);
                     console.log(resp);
                     console.log(ioArgs);
                 }),
@@ -245,4 +306,5 @@ dojo.addOnLoad(function() {
             });
         }
     ));
+
 });

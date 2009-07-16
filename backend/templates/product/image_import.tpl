@@ -2,33 +2,41 @@
     <fieldset>
         <legend>Images</legend>
 
-        <fieldset class="upload">
-            <legend>Upload images</legend>
-            <div dojoType="modules.Upload" uploadUrl="/products/?module=ImageImport&service=upload&eid={$eid}"></div>
-
-        </fieldset>
         <fieldset class="import">
             <legend>Import image</legend>
             <form action="/products/?module=ImageImport&service=lookIn"
                   method="post" id="image_import_search">
                 <input id="eid" type="hidden" name="eid" value="{$eid}" />
+                <label for="import_search">Freetext Search</label>
+                <input id="import_search" type="text" name="query" value="{$query}" />
                 <p>Comma seperated list of product- and articleids (123,452,169 etc)</p>
                 <ul>
                     <li>
-                        <label for="products_input">Products</label>
+                        <label for="products_input">ProductIds</label>
                         <input type="text" name="products" id="products_input" />
                     </li>
                     <li>
-                        <label for="articles_input">Articles</label>
+                        <label for="articles_input">ArticleIds</label>
                         <input type="text" name="articles" id="articles_input" />
-                    </li>
-                    <li>
-                        <input type="submit" value="Fetch" id="image_import_submit" />
                     </li>
                 </ul>
             </form>
-            <div id="image_import_result"></div>
+            <form action="/products/?module=ImageImport&service=connect"
+                  method="post" id="image_import_result">
+                <div id="imageImportResult"></div>
+                <input type="hidden" name="eid" value="{$eid}" />
+                <input type="hidden" name="selectedIds" value="" />
+                <input type="submit" value="Fetch" id="image_import_submit" />
+            </form>
         </fieldset>
+
+        <fieldset class="upload">
+            <legend>Upload images</legend>
+            <div dojoType="modules.Upload" uploadUrl="/products/?module=ImageImport&service=upload&eid={$eid}"></div>
+
+        </fieldset>
+
+        <div class="clearfix"></div>
 
         <h3>Unpublished Images <span id="textSelectedUnpublished"></span></h3>
         <form action="/products/?module=ImageImport&service=publish"
