@@ -1,6 +1,7 @@
 <fieldset>
     {% ifnotequal data.headline "" %}
     <h2>{{data.headline}}</h2>
+    <button class="reloader">Reload</button>
     <ul class="table">
     {% for item in data.records %}
         <li class="tr">
