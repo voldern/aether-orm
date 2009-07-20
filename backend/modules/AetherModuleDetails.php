@@ -261,11 +261,34 @@ class AetherModuleDetails extends AetherModule {
                 detail_detail_set.{$field} = $id";
             $db = new Database('pg2_backend');
             $res = $db->query($sql);
+            $selected = array();
+            $unselected = array();
+            $sorters = array(
+                'selName' => array(),
+                'unselName' => array()
+            );
+            /**
+             * Collect selected and unselected entries in respective
+             * arrays that will be sorted by title later and
+             * then joined into one array with the selected ones
+             * at the top
+             */
             foreach ($res as $k => $v) {
-                $res[$k]['selected'] = is_numeric($v['detail_set_id'])?true:false;
+                if (is_numeric($v['detail_set_id'])) {
+                    $res[$k]['selected'] = true;
+                    $selected[$k] = $res[$k];
+                    $sorters['selName'][$k] = $v['title'];
+                }
+                else {
+                    $res[$k]['selected'] = false;
+                    $unselected[$k] = $res[$k];
+                    $sorters['unselName'][$k] = $v['title'];
+                }
                 unset($res[$k]['detail_set_id']);
             }
-            return $res;
+            array_multisort($sorters['selName'], SORT_ASC, $selected);
+            array_multisort($sorters['unselName'], SORT_ASC, $unselected);
+            return array_merge($selected, $unselected);
         }
         else {
             return $this->error("Not implemented");
