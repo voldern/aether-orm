@@ -54,6 +54,12 @@ class AetherModuleDetails extends AetherModule {
                 $type = $_GET['type'];
                 $response = $this->deleteResource($id, $type);
                 break;
+            case 'SaveConnection':
+                $id = $_REQUEST['connect_to'];
+                $type = $_REQUEST['type'];
+                $typeTo = $_REQUEST['type_to'];
+                $response = $this->saveConnection($id, $type, $typeTo, $_POST);
+                break;
             case 'AddSet':
                 $response = $this->addSet($_GET);
                 break;
@@ -349,6 +355,53 @@ class AetherModuleDetails extends AetherModule {
                 return $this->success("Deleted $type::$id",array('id'=>$id));
             else
                 return $this->error("Failed to delete $type::$id for some unknown reason");
+        }
+        return $this->error("Cant delete $type without id");
+    }
+    
+    /**
+     * Save connection status
+     *
+     * @return array
+     * @param int $connectTo
+     * @param string $type
+     * @param string $typeTo
+     * @param array $data
+     */
+    private function saveConnection($id,$type,$typeTo,$data) {
+        if (is_numeric($id)) {
+            switch ($type) {
+                case 'set':
+                    $resource = new DetailSet($id);
+                    break;
+                case 'detail':
+                    $resource = new Detail($id);
+                    break;
+                case 'template':
+                default:
+                    return $this->error("Failed to connect for $type::$id");
+                    break;
+            }
+            // Store all states
+            foreach ($data['detail'] as $connectId => $state) {
+                switch ($typeTo) {
+                    case 'set':
+                        if ($state == 'on')
+                            $resource->connectSet($connectId);
+                        else
+                            $resource->disconnectSet($connectId);
+                        break;
+                    case 'detail':
+                        if ($state == 'on')
+                            $resource->connectDetail($connectId);
+                        else
+                            $resource->disconnectDetail($connectId);
+                        break;
+                    case 'template':
+                        break;
+                }
+            }
+            return $this->success("Saved states for $type::$id connections");
         }
         return $this->error("Cant delete $type without id");
     }

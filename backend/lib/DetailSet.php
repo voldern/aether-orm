@@ -79,4 +79,20 @@ class DetailSet extends ActiveRecord {
     public function save($idFromTable = 'detail_set') {
         parent::save($idFromTable);
     }
+    /**
+     * Connect/disconnect to detail
+     *
+     * @return bool
+     * @param int $id
+     */
+    public function connectDetail($id) {
+        $db = new Database($this->tableInfo['database']);
+        $db->queryf("INSERT INTO detail_detail_set (detail_id,detail_set_id)
+            VALUES(?,?)", $id, $this->get('id'));
+    }
+    public function disconnectDetail($id) {
+        $db = new Database($this->tableInfo['database']);
+        $db->queryf("DELETE FROM detail_detail_set WHERE 
+            detail_id = ? AND detail_set_id = ?", $id, $this->get('id'));
+    }
 }

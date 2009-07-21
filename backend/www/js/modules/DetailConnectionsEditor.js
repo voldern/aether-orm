@@ -54,6 +54,9 @@ dojo.declare("modules.DetailConnectionsEditor",
             type: cls,
             id: id,
         };
+        this.data.type = cls;
+        this.data.type_to = this.type;
+        this.data.id = id;
         switch (this.type) {
             case 'set':
                 this.data.headline = 'Sets';
@@ -78,6 +81,8 @@ dojo.declare("modules.DetailConnectionsEditor",
             load: dojo.hitch(this, function(r,ioArgs) {
                 this.data.records = r;
                 this.render();
+                auto.findNodes(this.domNode);
+                auto.attachEvents();
                 /*
                  * Attach event to a button that reloads the list
                  */
