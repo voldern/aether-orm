@@ -70,12 +70,12 @@ class AetherModuleDetails extends AetherModule {
             case 'GetSetsFor':
                 $id = $_GET['id'];
                 $type = $_GET['type'];
-                $response = $this->getSetsFor($type, $id);
+                $response = $this->getResourceFor($type, $id, 'set');
                 break;
             case 'GetDetailsFor':
                 $id = $_GET['id'];
                 $type = $_GET['type'];
-                $response = $this->getDetailsFor($type, $id);
+                $response = $this->getResourceFor($type, $id, 'detail');
                 break;
             default:
                 $response = $this->error('Invalid service');
@@ -258,47 +258,58 @@ class AetherModuleDetails extends AetherModule {
      * @param string $type
      * @param int $id
      */
-    private function getDetailsFor($type,$id) {
-        if ($type == 'set') {
-            $field = 'detail_set_id';
-            $sql = "SELECT id, title,detail_set_id FROM detail
-                LEFT OUTER JOIN detail_detail_set
-                ON detail.id = detail_detail_set.detail_id AND
-                detail_detail_set.{$field} = $id";
-            $db = new Database('pg2_backend');
-            $res = $db->query($sql);
-            $selected = array();
-            $unselected = array();
-            $sorters = array(
-                'selName' => array(),
-                'unselName' => array()
-            );
-            /**
-             * Collect selected and unselected entries in respective
-             * arrays that will be sorted by title later and
-             * then joined into one array with the selected ones
-             * at the top
-             */
-            foreach ($res as $k => $v) {
-                if (is_numeric($v['detail_set_id'])) {
-                    $res[$k]['selected'] = true;
-                    $selected[$k] = $res[$k];
-                    $sorters['selName'][$k] = $v['title'];
-                }
-                else {
-                    $res[$k]['selected'] = false;
-                    $unselected[$k] = $res[$k];
-                    $sorters['unselName'][$k] = $v['title'];
-                }
-                unset($res[$k]['detail_set_id']);
+    private function getResourceFor($type,$id,$resource) {
+        $test = array($type,$resource);
+        if ($type != $resource) {
+            if (array_diff($test,array('detail','set')) == array()) {
+                /**
+                 * If set <-> detail connections
+                 */
+                $field = 'detail_set_id';
+                $sql = "SELECT id, title,detail_set_id FROM detail
+                    LEFT OUTER JOIN detail_detail_set
+                    ON detail.id = detail_detail_set.detail_id AND
+                    detail_detail_set.{$field} = $id";
+                $db = new Database('pg2_backend');
+                $res = $db->query($sql);
             }
+            elseif (array_diff($test,array('detail','template')) == array()) {
+            }
+            elseif (array_diff($test,array('set','template')) == array()) {
+            }
+        }
+        $selected = array();
+        $unselected = array();
+        $sorters = array(
+            'selName' => array(),
+            'unselName' => array()
+        );
+        /**
+         * Collect selected and unselected entries in respective
+         * arrays that will be sorted by title later and
+         * then joined into one array with the selected ones
+         * at the top
+         */
+        foreach ($res as $k => $v) {
+            if (is_numeric($v['detail_set_id'])) {
+                $res[$k]['selected'] = true;
+                $selected[$k] = $res[$k];
+                $sorters['selName'][$k] = $v['title'];
+            }
+            else {
+                $res[$k]['selected'] = false;
+                $unselected[$k] = $res[$k];
+                $sorters['unselName'][$k] = $v['title'];
+            }
+            unset($res[$k]['detail_set_id']);
+        }
+        $return = array();
+        if (count($selected) > 0 || count($unselected) > 0) {
             array_multisort($sorters['selName'], SORT_ASC, $selected);
             array_multisort($sorters['unselName'], SORT_ASC, $unselected);
-            return array_merge($selected, $unselected);
+            $return = array_merge($selected, $unselected);
         }
-        else {
-            return $this->error("Not implemented");
-        }
+        return $return;
     }
 
     /**
