@@ -54,6 +54,12 @@ class AetherModuleDetails extends AetherModule {
                 $type = $_GET['type'];
                 $response = $this->deleteResource($id, $type);
                 break;
+            case 'SaveConnection':
+                $id = $_REQUEST['connect_to'];
+                $type = $_REQUEST['type'];
+                $typeTo = $_REQUEST['type_to'];
+                $response = $this->saveConnection($id, $type, $typeTo, $_POST);
+                break;
             case 'AddSet':
                 $response = $this->addSet($_GET);
                 break;
@@ -64,12 +70,12 @@ class AetherModuleDetails extends AetherModule {
             case 'GetSetsFor':
                 $id = $_GET['id'];
                 $type = $_GET['type'];
-                $response = $this->getSetsFor($type, $id);
+                $response = $this->getResourceFor($type, $id, 'set');
                 break;
             case 'GetDetailsFor':
                 $id = $_GET['id'];
                 $type = $_GET['type'];
-                $response = $this->getDetailsFor($type, $id);
+                $response = $this->getResourceFor($type, $id, 'detail');
                 break;
             default:
                 $response = $this->error('Invalid service');
@@ -252,24 +258,58 @@ class AetherModuleDetails extends AetherModule {
      * @param string $type
      * @param int $id
      */
-    private function getDetailsFor($type,$id) {
-        if ($type == 'set') {
-            $field = 'detail_set_id';
-            $sql = "SELECT id, title,detail_set_id FROM detail
-                LEFT OUTER JOIN detail_detail_set
-                ON detail.id = detail_detail_set.detail_id AND
-                detail_detail_set.{$field} = $id";
-            $db = new Database('pg2_backend');
-            $res = $db->query($sql);
-            foreach ($res as $k => $v) {
-                $res[$k]['selected'] = is_numeric($v['detail_set_id'])?true:false;
-                unset($res[$k]['detail_set_id']);
+    private function getResourceFor($type,$id,$resource) {
+        $test = array($type,$resource);
+        if ($type != $resource) {
+            if (array_diff($test,array('detail','set')) == array()) {
+                /**
+                 * If set <-> detail connections
+                 */
+                $field = 'detail_set_id';
+                $sql = "SELECT id, title,detail_set_id FROM detail
+                    LEFT OUTER JOIN detail_detail_set
+                    ON detail.id = detail_detail_set.detail_id AND
+                    detail_detail_set.{$field} = $id";
+                $db = new Database('pg2_backend');
+                $res = $db->query($sql);
             }
-            return $res;
+            elseif (array_diff($test,array('detail','template')) == array()) {
+            }
+            elseif (array_diff($test,array('set','template')) == array()) {
+            }
         }
-        else {
-            return $this->error("Not implemented");
+        $selected = array();
+        $unselected = array();
+        $sorters = array(
+            'selName' => array(),
+            'unselName' => array()
+        );
+        /**
+         * Collect selected and unselected entries in respective
+         * arrays that will be sorted by title later and
+         * then joined into one array with the selected ones
+         * at the top
+         */
+        foreach ($res as $k => $v) {
+            if (is_numeric($v['detail_set_id'])) {
+                $res[$k]['selected'] = true;
+                $selected[$k] = $res[$k];
+                $sorters['selName'][$k] = $v['title'];
+            }
+            else {
+                $res[$k]['selected'] = false;
+                $unselected[$k] = $res[$k];
+                $sorters['unselName'][$k] = $v['title'];
+            }
+            unset($res[$k]['detail_set_id']);
         }
+        $return = array();
+        if (count($selected) > 0 || count($unselected) > 0) {
+            array_multisort($sorters['selName'], SORT_ASC, $selected);
+            array_multisort($sorters['unselName'], SORT_ASC, $unselected);
+            $return = array_merge($selected, $unselected);
+        }
+        return $return;
     }
 
     /**
@@ -326,6 +366,53 @@ class AetherModuleDetails extends AetherModule {
                 return $this->success("Deleted $type::$id",array('id'=>$id));
             else
                 return $this->error("Failed to delete $type::$id for some unknown reason");
+        }
+        return $this->error("Cant delete $type without id");
+    }
+    
+    /**
+     * Save connection status
+     *
+     * @return array
+     * @param int $connectTo
+     * @param string $type
+     * @param string $typeTo
+     * @param array $data
+     */
+    private function saveConnection($id,$type,$typeTo,$data) {
+        if (is_numeric($id)) {
+            switch ($type) {
+                case 'set':
+                    $resource = new DetailSet($id);
+                    break;
+                case 'detail':
+                    $resource = new Detail($id);
+                    break;
+                case 'template':
+                default:
+                    return $this->error("Failed to connect for $type::$id");
+                    break;
+            }
+            // Store all states
+            foreach ($data['detail'] as $connectId => $state) {
+                switch ($typeTo) {
+                    case 'set':
+                        if ($state == 'on')
+                            $resource->connectSet($connectId);
+                        else
+                            $resource->disconnectSet($connectId);
+                        break;
+                    case 'detail':
+                        if ($state == 'on')
+                            $resource->connectDetail($connectId);
+                        else
+                            $resource->disconnectDetail($connectId);
+                        break;
+                    case 'template':
+                        break;
+                }
+            }
+            return $this->success("Saved states for $type::$id connections");
         }
         return $this->error("Cant delete $type without id");
     }

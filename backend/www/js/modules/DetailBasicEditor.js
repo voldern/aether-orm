@@ -6,6 +6,11 @@ dojo.provide("modules.DetailBasicEditor");
 dojo.require('dijit._Widget');
 dojo.require("dojox.dtl._DomTemplated");
 
+/**
+ * Renders the basic editor that allows you to change name of resource
+ * and delete it. Based on context this loads in a detail, a set or a template
+ * and renders a uniform UI
+ */
 dojo.declare("modules.DetailBasicEditor", 
     [dijit._Widget, dojox.dtl._DomTemplated], {
     templatePath: dojo.moduleUrl("modules.templates", "detail_basic_editor.html"),

@@ -1,22 +1,31 @@
 <fieldset>
     {% ifnotequal data.headline "" %}
     <h2>{{data.headline}}</h2>
+    <button class="reloader">Reload</button>
+    <form class="autosaveForm" method="post"
+        action="/details/?module=Details&amp;service=SaveConnection"
+        autocomplete="off">
+    <input type="hidden" name="type" value="{{data.type}}" class="autosave always" />
+    <input type="hidden" name="type_to" value="{{data.type_to}}" class="autosave always" />
+    <input type="hidden" name="connect_to" value="{{data.id}}" class="autosave always" />
     <ul class="table">
     {% for item in data.records %}
         <li class="tr">
             <label for="detail_{{item.id}}" class="th" style="min-width:100px;">
-                {{item.title}}
+                [#{{item.id}}] {{item.title}}
             </label>
+            <input type="hidden" name="detail[{{item.id}}]" value="off" class="bool autosave" />
         {% ifequal item.selected true %}
             <input type="checkbox" name="detail[{{item.id}}]" 
-                checked="checked" id="detail_{{item.id}}" class="td" />
+                checked="checked" id="detail_{{item.id}}" class="td bool autosave" />
         {% endifequal %}
         {% ifequal item.selected false %}
             <input type="checkbox" name="detail[{{item.id}}]" 
-                id="detail_{{item.id}}" class="td" />
+                id="detail_{{item.id}}" class="td bool autosave" />
         {% endifequal %}
         </li>
     {% endfor %}
     </ul>
+    </form>
     {% endifnotequal %}
 </fieldset>
