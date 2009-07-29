@@ -2,7 +2,7 @@
 require_once('/home/lib/Autoload.php');
 require_once('PHPUnit/Framework.php');
 
-class DetailTest extends PHPUnit_Framework_TestCase {
+class DetailSetTest extends PHPUnit_Framework_TestCase {
     public function testLoad() {
         $db = new Database('pg2_backend');
         $created = date('Y-m-d') . " 00:00:00";
@@ -30,6 +30,3 @@ class DetailTest extends PHPUnit_Framework_TestCase {
         $db->query("DELETE FROM detail_set WHERE id = $id");
     }
 }
-
-
-?>

@@ -14,14 +14,17 @@
             <label for="detail_{{item.id}}" class="th" style="min-width:100px;">
                 [#{{item.id}}] {{item.title}}
             </label>
-            <input type="hidden" name="detail[{{item.id}}]" value="off" class="bool autosave" />
-        {% ifequal item.selected true %}
+            <input type="hidden" name="detail[{{item.id}}]" value="off" 
+                class="bool autosave" autocomplete="off" />
+        {% ifequal item._selected true %}
             <input type="checkbox" name="detail[{{item.id}}]" 
-                checked="checked" id="detail_{{item.id}}" class="td bool autosave" />
+                checked="checked" id="detail_{{item.id}}" class="td bool autosave"
+                autocomplete="off" />
         {% endifequal %}
-        {% ifequal item.selected false %}
+        {% ifequal item._selected false %}
             <input type="checkbox" name="detail[{{item.id}}]" 
-                id="detail_{{item.id}}" class="td bool autosave" />
+                id="detail_{{item.id}}" class="td bool autosave"
+                autocomplete="off" />
         {% endifequal %}
         </li>
     {% endfor %}
