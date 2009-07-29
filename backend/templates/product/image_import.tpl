@@ -26,7 +26,7 @@
                 <div id="imageImportResult"></div>
                 <input type="hidden" name="eid" value="{$eid}" />
                 <input type="hidden" name="selectedIds" value="" />
-                <input type="submit" value="Fetch" id="image_import_submit" />
+                <input type="submit" value="Import" id="image_import_submit" />
             </form>
         </fieldset>
 

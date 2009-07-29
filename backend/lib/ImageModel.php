@@ -25,7 +25,19 @@ class ImageModel extends AetherORM {
         'image_photographer' => 'photographer',
         'image_created_by' => 'createdBy',
         'image_modified_by' => 'modifiedBy',
-        'image_original_source' => 'original'
+        'image_original_source' => 'original',
+        'image_license' => 'license'
+    );
+
+    protected $licenseTypes = array(
+        'attribution',
+        'attribution_share_alike',
+        'attribution_no_derivatives',
+        'attribution_non-commercial',
+        'attribution_non-commercial_share_alike',
+        'attribution_non-commercial_no_derivatives',
+        'all_rights_reserved',
+        'public_domain'
     );
 
     public function getSizeUrl($width, $height = false, $force = true) {
