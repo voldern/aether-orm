@@ -75,6 +75,15 @@ class ImageModel extends AetherORM {
             
         return $this->getSizeUrl($imageWidth, $imageHeight);
     }
+
+    public function __set($key, $value) {
+        if ($key == "license" && !in_array($value, $this->licenseTypes)) {
+            throw new InvalidArgumentException("License type not found \"" .
+                $value . "\". Must be one of (\"" . 
+                join("\", \"", $this->licenseTypes) . "\")");
+        }
+        parent::__set($key, $value);
+    }
 }
 
 ?>
