@@ -669,7 +669,9 @@ class AetherORM {
             }
             else {
                 $query = $this->db->insert($this->tableName, $data);
-                if ($query->count() > 0) {
+                // Changed to using insertId to better work with psql functions
+                //if ($query->count() > 0) {
+                if ($query->insertId() > 0) {
                     if (empty($this->object[$this->primaryKey])) {
                         // Load the insert id as the primary key
                         $this->object[$this->primaryKey] = $query->insertId();
