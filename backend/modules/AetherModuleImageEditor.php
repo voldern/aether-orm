@@ -14,7 +14,10 @@ class AetherModuleImageEditor extends AetherModule {
     public function service($name) {
         if ($name == "showEditor") {
             $tpl = $this->sl->getTemplate();
-            $tpl->set('images', $this->loadImages($_GET['selectedIds']));
+            if (isset($_GET['selectedIds']) && strlen($_GET['selectedIds']) > 0) {
+                $tpl->set('images', $this->loadImages($_GET['selectedIds']));
+                $tpl->set('licenseTypes', ImageModel::$licenseTypes);
+            }
             return new AetherTextResponse($tpl->fetch("image/editor.tpl"));
         }
         else if ($name == "saveImage") {
@@ -22,6 +25,7 @@ class AetherModuleImageEditor extends AetherModule {
             $image->title = $_GET['title'];
             $image->caption = $_GET['caption'];
             $image->photographer = $_GET['photographer'];
+            $image->license = $_GET['license'];
             $image->save();
             return new AetherJSONResponse(array("status" => "ok"));
         }

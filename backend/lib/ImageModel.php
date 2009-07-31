@@ -29,7 +29,7 @@ class ImageModel extends AetherORM {
         'image_license' => 'license'
     );
 
-    protected $licenseTypes = array(
+    static public $licenseTypes = array(
         'attribution',
         'attribution_share_alike',
         'attribution_no_derivatives',
@@ -77,10 +77,10 @@ class ImageModel extends AetherORM {
     }
 
     public function __set($key, $value) {
-        if ($key == "license" && !in_array($value, $this->licenseTypes)) {
+        if ($key == "license" && !in_array($value, self::$licenseTypes)) {
             throw new InvalidArgumentException("License type not found \"" .
                 $value . "\". Must be one of (\"" . 
-                join("\", \"", $this->licenseTypes) . "\")");
+                join("\", \"", self::$licenseTypes) . "\")");
         }
         parent::__set($key, $value);
     }

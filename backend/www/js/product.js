@@ -298,6 +298,7 @@ dojo.addOnLoad(function() {
                     dojo.query("#closeEdit").connect("onclick", 
                         function(e) { 
                             dojo.byId("editImages").innerHTML = '';
+                            dojo.publish("imageList.changed", []);
                         }
                     );
                     auto.findNodes(editImages);
