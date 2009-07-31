@@ -1,9 +1,6 @@
 <?php
-
-require_once('/home/lib/libDefines.lib.php');
+require_once('/home/lib/Autoload.php');
 require_once('PHPUnit/Framework.php');
-require_once(PG_PATH . 'backend/lib/Entity.php');
-
 class EntityTest extends PHPUnit_Framework_TestCase {
 
     /**
@@ -34,7 +31,7 @@ class EntityTest extends PHPUnit_Framework_TestCase {
                 )
             )
         );
-        $newArray = Entity::removeDeletedArrayMembers($array);
+        $newArray = EntityModel::removeDeletedArrayMembers($array);
         $this->assertEquals(2, count($newArray['manifestations']['records']));
     }
 }

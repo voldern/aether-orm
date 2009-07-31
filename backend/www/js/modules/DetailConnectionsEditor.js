@@ -79,7 +79,7 @@ dojo.declare("modules.DetailConnectionsEditor",
             content: content,
             handleAs: 'json',
             load: dojo.hitch(this, function(r,ioArgs) {
-                this.data.records = r;
+                this.data.records = r.records;
                 this.render();
                 auto.findNodes(this.domNode);
                 auto.attachEvents();
