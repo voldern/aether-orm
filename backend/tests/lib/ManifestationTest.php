@@ -1,9 +1,7 @@
 <?php
 
-require_once('/home/lib/libDefines.lib.php');
+require_once('/home/lib/Autoload.php');
 require_once('PHPUnit/Framework.php');
-require_once(PG_PATH . 'backend/lib/Manifestation.php');
-require_once(LIB_PATH . 'Database.php');
 
 class ManifestationTest extends PHPUnit_Framework_TestCase {
 
@@ -11,46 +9,44 @@ class ManifestationTest extends PHPUnit_Framework_TestCase {
      * Test the Manifestation::create function
      */
     public function testCreateManifestation() {
-        $db = new Database('pg2_backend');
+        $db = new AetherDatabase('prisguide');
         $title = 'GeForce 6600 512 MB';
-        $work = Work::create('GeForce 6600');
-        $manifestation = Manifestation::create($work, $title);
-        $id = $manifestation->get('id');
-        $workId = $work->get('id');
+        $work = WorkModel::create('GeForce 6600');
+        $manifestation = ManifestationModel::create($work, $title);
+        $id = $manifestation->id;
+        $workId = $work->id;
         // Get work
-        $this->assertEquals($workId, $manifestation->get('work')->get('id'));
+        $this->assertEquals($workId, $manifestation->work->id);
 
-        $entity = $db->queryRowf(
-            'SELECT * FROM manifestation_view WHERE id = ?',$id);
+        $entity = $db->where('id',$id)->get('manifestation_view');
 
-        $this->assertEquals($title, $entity['title']);
+        $this->assertEquals($title, $entity[0]->title);
         // Delete entry
-        $db->query("DELETE FROM entity WHERE id = $id");
-        $db->query("DELETE FROM entity WHERE id = $workId");
-        $db->query("DELETE FROM manifestation WHERE entity_id = $id");
-        $db->query("DELETE FROM work WHERE entity_id = $workId");
+        $db->delete('entity', array('id'=>$id));
+        $db->delete('entity', array('id'=>$workId));
+        $db->delete('manifestation', array('entity_id'=>$id));
+        $db->delete('work', array('entity_id'=>$workId));
     }
 
     public function testSaveManifestation() {
-        $db = new Database('pg2_backend');
+        $db = new AetherDatabase('prisguide');
         $title = 'GeForce 6600 512 MB';
-        $work = Work::create('GeForce 6600');
-        $manifestation = Manifestation::create($work, $title);
-        $id = $manifestation->get('id');
-        $workId = $work->get('id');
+        $work = WorkModel::create('GeForce 6600');
+        $manifestation = ManifestationModel::create($work, $title);
+        $id = $manifestation->id;
+        $workId = $work->id;
 
 
         $t2 = 'Hei';
-        $manifestation->set('title', $t2);
+        $manifestation->title = $t2;
         $manifestation->save();
 
-        $entity = $db->queryRowf(
-            'SELECT * FROM manifestation_view WHERE id = ?',$id);
-        $this->assertEquals($t2, $entity['title']);
+        $entity = $db->where('id',$id)->get('manifestation_view');
+        $this->assertEquals($t2, $entity[0]->title);
         // Delete entry
-        $db->query("DELETE FROM entity WHERE id = $id");
-        $db->query("DELETE FROM entity WHERE id = $workId");
-        $db->query("DELETE FROM manifestation WHERE entity_id = $id");
-        $db->query("DELETE FROM work WHERE entity_id = $workId");
+        $db->delete('entity', array('id'=>$id));
+        $db->delete('entity', array('id'=>$workId));
+        $db->delete('manifestation', array('entity_id'=>$id));
+        $db->delete('work', array('entity_id'=>$workId));
     }
 }
