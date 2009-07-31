@@ -194,7 +194,7 @@ dojo.addOnLoad(function() {
                             toggleDOM(this, [dojo.byId("image_publish"), dojo.byId("image_delete"), dojo.byId("image_edit")]);
                         });
                     }
-                    else {
+                    else if (resp.products[eid][i].published == true) {
                         pubOl.appendChild(li);
                         dojo.connect(li, "onclick", function(evt) {
                             toggleDOM(this, [dojo.byId("image_depublish")]);
