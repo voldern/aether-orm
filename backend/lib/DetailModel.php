@@ -1,15 +1,18 @@
 <?php
 
 class DetailModel extends AetherORM {
-    protected $db = 'pg2_backend';
+    protected $db = 'prisguide';
     protected $tableName = 'detail';
     protected $columnAlias = array(
         'created_at' => 'createdAt',
         'modified_at' => 'modifiedAt',
         'published_at' => 'publishedAt',
         'deleted_at' => 'deletedAt',
+        'type' => 'type',
+        'title' => 'title',
         'title_i18n' => 'titleI18N'
-        );
+    );
+    protected $hasMany = array('detail_value');
 
 
     /**
@@ -38,7 +41,7 @@ class DetailModel extends AetherORM {
      * @return bool
      */
     public function connectSet($setId) {
-        $db = new AetherDatabase('pg2_backend');
+        $db = new AetherDatabase('prisguide');
         $status = $db->set(array('detail_id' => $this->id, 'detail_set_id' => $setId))
             ->insert('detail_detail_set');
 
@@ -56,7 +59,7 @@ class DetailModel extends AetherORM {
      * @return bool
      */
     public function disconnectSet($setId) {
-        $db = new AetherDatabase('pg2_backend');
+        $db = new AetherDatabase('prisguide');
         $status = $db->delete('detail_detail_set', array(
                                   'detail_id' => $this->id,
                                   'detail_set_id' => $setId));

@@ -1,36 +1,38 @@
 <?php // 
-require_once('/home/lib/libDefines.lib.php');
+require_once('/home/lib/Autoload.php');
 require_once('PHPUnit/Framework.php');
-require_once(PG_PATH . 'backend/lib/Detail.php');
-require_once(LIB_PATH . 'Database.php');
+
 
 class DetailTest extends PHPUnit_Framework_TestCase {
     public function testLoad() {
-        $db = new Database('pg2_backend');
+        $db = new AetherDatabase('prisguide');
         $created = date('Y-m-d') . " 00:00:00";
         $title = 'Test';
-        $db->queryf("INSERT INTO detail (created_at,modified_at,type,title,
-            title_i18n) VALUES(?,?,?,?,?)",
-            $created,$created,'int',$title,$title);
-        $id = $db->getLastInsertId('id','detail');
+        $res = $db->insert("detail", array(
+            'created_at' => $created,
+            'modified_at' => $created,
+            'type' => 'int',
+            'title' => $title,
+            'title_i18n' => $title));
+        $id = $res->insertId();
         // Test
-        $detail = new Detail($id);
-        $this->assertEquals($created, $detail->get('createdAt'));
-        $this->assertEquals($title, $detail->get('title'));
-        $db->query("DELETE FROM detail WHERE id = $id");
+        $detail = new DetailModel($id);
+        $this->assertEquals($created, $detail->createdAt);
+        $this->assertEquals($title, $detail->title);
+        $db->delete("detail", array('id'=>$id));
     }
 
     public function testCreate() {
-        $db = new Database('pg2_backend');
+        $db = new AetherDatabase('prisguide');
         $title = 'test';
-        $detail = Detail::create($title,'int');
-        $id = $detail->get('id');
+        $detail = DetailModel::create($title,'int');
+        $id = $detail->id;
 
-        $row = $db->queryRow("SELECT * FROM detail WHERE id = $id");
-        $this->assertEquals($title, $row['title']);
-        $this->assertEquals('int', $row['type']);
+        $row = $db->where('id',$id)->get('detail');
+        $this->assertEquals($title, $row[0]->title);
+        $this->assertEquals('int', $row[0]->type);
 
-        $db->query("DELETE FROM detail WHERE id = $id");
+        $db->delete("detail", array('id'=>$id));
     }
 }
 

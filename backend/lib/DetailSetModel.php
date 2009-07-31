@@ -1,16 +1,17 @@
 <?php
 
 class DetailSetModel extends AetherORM {
-    protected $db = 'pg2_backend';
+    protected $db = 'prisguide';
     protected $tableName = 'detail_set';
     protected $columnAlias = array(
+        'id' => 'id',
         'created_at' => 'createdAt',
         'modified_at' => 'modifiedAt',
         'published_at' => 'publishedAt',
         'deleted_at' => 'deletedAt',
         'title' => 'title',
         'title_i18n' => 'titleI18N'
-        );
+    );
 
     protected $hasMany = array('details');
     protected $foreignKey = array(

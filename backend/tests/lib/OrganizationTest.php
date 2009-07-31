@@ -1,8 +1,6 @@
 <?php // 
-require_once('/home/lib/libDefines.lib.php');
+require_once('/home/lib/Autoload.php');
 require_once('PHPUnit/Framework.php');
-require_once(PG_PATH . 'backend/lib/Organization.php');
-require_once(LIB_PATH . 'Database.php');
 /**
  * 
  * Test Organizations
@@ -18,36 +16,34 @@ class OrganizationTest extends PHPUnit_Framework_TestCase {
      * Test the Organization::create function
      */
     public function testCreateOrganization() {
-        $db = new Database('pg2_backend');
+        $db = new AetherDatabase('prisguide');
         $title = 'Komplett.no';
-        $org = Organization::create($title);
-        $id = $org->get('id');
+        $org = OrganizationModel::create($title);
+        $id = $org->id;
 
-        $entity = $db->queryRowf(
-            'SELECT * FROM organization_view WHERE id = ?',$id);
+        $entity = $db->where('id',$id)->get('organization_view');
 
-        $this->assertEquals($title, $entity['title']);
+        $this->assertEquals($title, $entity[0]->title);
         // Delete entry
-        $db->query("DELETE FROM entity WHERE id = $id");
-        $db->query("DELETE FROM organization WHERE entity_id = $id");
+        $db->delete('entity',array('id'=>$id));
+        $db->delete('organization',array('entity_id'=>$id));
     }
 
     public function testSaveOrganization() {
-        $db = new Database('pg2_backend');
+        $db = new AetherDatabase('prisguide');
         $title = 'Komplett.no';
-        $org = Organization::create($title);
-        $id = $org->get('id');
+        $org = OrganizationModel::create($title);
+        $id = $org->id;
 
         $t2 = 'Hei';
-        $org->set('title', $t2);
+        $org->title = $t2;
         $org->save();
 
-        $entity = $db->queryRowf(
-            'SELECT * FROM organization_view WHERE id = ?',$id);
-        $this->assertEquals($t2, $entity['title']);
+        $entity = $db->where('id',$id)->get('organization_view');
+        $this->assertEquals($t2, $entity[0]->title);
         // Delete entry
-        $db->query("DELETE FROM entity WHERE id = $id");
-        $db->query("DELETE FROM organization WHERE entity_id = $id");
+        $db->delete('entity',array('id'=>$id));
+        $db->delete('organization',array('entity_id'=>$id));
     }
 }
 ?>
