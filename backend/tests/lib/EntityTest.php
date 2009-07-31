@@ -31,7 +31,7 @@ class EntityTest extends PHPUnit_Framework_TestCase {
                 )
             )
         );
-        $newArray = Entity::removeDeletedArrayMembers($array);
+        $newArray = EntityModel::removeDeletedArrayMembers($array);
         $this->assertEquals(2, count($newArray['manifestations']['records']));
     }
 }
