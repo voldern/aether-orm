@@ -1,1 +1,33 @@
-== PRIZGAID v1.359 ==
+AetherORM
+
+Database and QB usage:
+<?php
+require 'Config.php';
+spl_autoload_register('Config::autoLoad');
+
+$db = AetherDatabase::instance('prisguide');
+$result = $db->select('id, title')->from('manifestation_view')->limit(10)->get();
+print_r($result->asArray());
+?>
+
+
+For more usage examples please check out the Kohana documentation:
+http://docs.kohanaphp.com/libraries/database
+
+ORM usage:
+<?php
+require_once('Config.php');
+spl_autoload_register('Config::autoLoad');
+
+class PersonModel extends AetherORM {
+    protected $db = 'test_mysql';
+}
+
+$person = AetherORM::factory('person');
+$person->first_name = 'Jadda';
+$person->sur_name = 'Masa';
+$person->save();
+?>
+
+For more usage examples please check out the Kohana documentation:
+http://docs.kohanaphp.com/libraries/orm
