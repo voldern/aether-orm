@@ -18,35 +18,25 @@ class AetherModuleProductLatest extends AetherModule {
     public function run() {
         $tpl = $this->sl->getTemplate();
         $config = $this->sl->get('aetherConfig');
+        $works = AetherORM::factory('work')->where('deleted_at IS NOT NULL')
+            ->findAll();
         // Find works
-        $works = RecordFinder::locate('Work', array(
-            'deletedAt IS NULL',
-            'limit' => 25, 'order' => array(
-                'created_at' => 'desc')
-            )
-        );
         $wrks = array();
-        foreach ($works->getAll() as $w) {
+        foreach ($works as $w) {
             $manis = array();
-            try {
-                $manifestations = $w->get('manifestations')
-                    ->getBy('deletedAt',null)->getAll();
-                if (count($manifestations) > 1) {
-                    foreach ($manifestations as $m) {
-                        $manis[] = array(
-                            'id' => $m->get('id'),
-                            'title' => $m->get('title'),
-                            'created' => $m->get('createdAt'),
-                        );
-                    }
-                }
-            }
-            catch (Exception $e) {
+            foreach ($w->manifestations as $m) {
+                if ($m->deletedAt == NULL)
+                    echo 'fooo';
+                $manis[] = array(
+                    'id' => $m->id,
+                    'title' => $m->title,
+                    'created' => $m->createdAt,
+                );
             }
             $wrks[] = array(
-                'id' => $w->get('id'),
-                'title' => $w->get('title'),
-                'created' => $w->get('createdAt'),
+                'id' => $w->id,
+                'title' => $w->title,
+                'created' => $w->createdAt,
                 'manifestations' => $manis
             );
         }
