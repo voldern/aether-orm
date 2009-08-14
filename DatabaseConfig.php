@@ -3,6 +3,7 @@
 class AetherDatabaseConfig {
 
     private static $configuration = array();
+    public static $folder=null;
 
     /**
      *
@@ -15,13 +16,24 @@ class AetherDatabaseConfig {
 
         if (!isset(self::$configuration[$group])) {
             // Load the configuration group
-            $file = dirname(__FILE__) . '/config/' . $group . '.php';
+            $defaultFolder = dirname(__FILE__) . '/config/';
+            if (self::$folder==null)
+                self::$folder = $defaultFolder;
+            $file = self::$folder . $group . '.php';
+            $defaultFile = $defaultFolder . $group . '.php';
             
 
-            if (!file_exists($file) && $required === true)
-                throw new Exception("$file does not exists");
-            elseif (!file_exists($file))
-                return false;
+            if (!file_exists($file)) {
+                // Try default folder
+                if (!file_exists($defaultFile)) {
+                    if ($required === true)
+                        throw new Exception("$file does not exists");
+                    else
+                        return false;
+                }
+                else
+                    $file = $defaultFile;
+            }
 
             include($file);
 
