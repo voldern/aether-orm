@@ -358,6 +358,7 @@ class AetherORM {
      * @return void
      */
     public function __set($column, $value) {
+        $this->__initialize();
         if (isset($this->ignoredColumns[$column])) {
             return NULL;
         }
